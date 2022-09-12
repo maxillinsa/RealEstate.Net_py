@@ -1,0 +1,221 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.Customer>
+@{
+
+    Layout = null;
+    int j = 1;
+}
+<script>
+    $(document).ready(function () {
+
+        $(".send-sp").click(function () {
+            var customerId = $(this).attr("id").replace('send-', '');
+
+            var modalId = '#myModal-' + customerId;
+            $(modalId).modal();
+
+        });
+        $(".delete-sp").click(function () {
+            var customerId = $(this).attr("id").replace('delete-', '');
+            $("#maSPXoa").val(customerId);
+            $("#xoaModal").modal();
+        });
+
+        $("#xoaData").click(function () {
+            var customerId = $("#maSPXoa").val();
+            var xoaBtn = '#delete-' + customerId;
+            var trId = '#customer-' + customerId;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Delete", "Customer")",
+                data: { customerId: customerId },
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $(trId).addClass("daXoaSP");
+                    $(xoaBtn).hide(400);
+                    $("#xoaModal").modal("hide");
+                }
+            }); //end save call
+        });
+        $(".undelete-sp").click(function () {
+            var customerId = $(this).attr("id").replace('undelete-', '');
+            $("#maSPPhucHoi").val(customerId);
+            $("#phucHoiModal").modal();
+
+        });
+        $("#phucHoiData").click(function () {         
+            var customerId = $("#maSPPhucHoi").val();
+            var phBtn = '#undelete-' + customerId;
+            var trId = '#customer-' + customerId;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UnDelete", "Customer")",
+                data: { customerId: customerId },
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $(trId).removeClass("daXoaSP");
+                    $(phBtn).hide(400);
+                    $("#phucHoiModal").modal("hide");
+                }
+            }); //end save call
+        });
+    });
+</script>
+<div class="modal fade" id="xoaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure to delete this product? </h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="maSPXoa" name="maSPXoa" value="0" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="xoaData" class="btn btn-primary">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="phucHoiModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Please select action </h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="maSPPhucHoi" name="maSPPhucHoi" value="0" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>          
+                <button type="button" id="phucHoiData" class="btn btn-warning">Restore</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover" id="sanphams1">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th> Category</th>
+            <th>Customer name</th>
+            <th>Contact number</th>
+            <th> </th>
+        </tr>
+    </thead>
+    <tbody id="indexTbody">
+        @foreach (var item in Model)
+        {
+        <tr id="customer-@item.CustomerId">
+            <td>@j</td>
+            <td>
+                @if (@item.CustomerCategoryId != null)
+                {                   
+                    <label class="label label-success" title="@item.CustomerCategory.Name">@item.CustomerCategory.Name</label>                
+                }
+            </td>
+            <td>
+                @if (@item.CustomerName != null)
+                {
+                    if (item.CustomerName.Length > 55)
+                    {
+                        <label class="label label-primary" title="@item.CustomerName">@item.CustomerName.Substring(0, 55) ...</label>
+                    }
+                    else
+                    {
+                        <label class="label label-primary">@item.CustomerName</label>
+                    }
+                }
+            </td>
+            <td>
+                <a href="tel:@item.Mobile">@item.Mobile</a>
+            </td>
+
+            <td>
+                @if (item.IsDelete == false)
+                {
+                    <a id="delete-@item.CustomerId" href="#" class="btn btn-sm btn-danger padding-2 delete-sp" title=" Click to delete"> Delete</a>
+                    <a data-toggle="modal" onclick="RenderActions('/Customer/Edit/@item.CustomerId')" data-target="#modalCustomer" class="btn btn-sm padding-2 btn-success"> <i class="fa fa-edit"></i></a>
+                }
+                else
+                {
+                    <a id="undelete-@item.CustomerId" href="#" class="btn btn-sm btn-warning padding-2 undelete-sp" title="Deleted"> Restore</a>
+                }
+
+            </td>
+
+        </tr>
+            j++;
+        }
+    </tbody>
+</table>
+
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Customer", action = "Index" ,customerName = ViewBag.customerName , customerMobile = ViewBag.customerMobile , CustomerCategoryId  = ViewBag.CustomerCategoryId }))
+    <div class="well">
+        Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+        of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+    </div>
+    @using (Html.BeginForm("ExportCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="hidden" name="customerName" value="@ViewBag.customerName" />
+        <input type="hidden" name="customerMobile" value="@ViewBag.customerMobile" />
+        <input type="submit" name="Export" id="Export" value="Export Customers" />
+    }
+</div>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>
+
+<!-- DATA TABES SCRIPT -->
+@*<script src="@Url.Content("~/Content/AdminDashboard/js/plugins/datatables/jquery.dataTables.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Content/AdminDashboard/js/plugins/datatables/dataTables.bootstrap.js")" type="text/javascript"></script>*@
+<script type="text/javascript">
+
+    $(function () {
+        $('#sanphams1').dataTable({
+            "bPaginate": false,
+            "bAutoWidth": false,
+            "bFilter": true,
+
+        });
+    });
+</script>

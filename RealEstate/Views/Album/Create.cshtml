@@ -1,0 +1,283 @@
+﻿@model RealEstate.Models.AlbumImageView
+@{
+    ViewBag.Title = " Album";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function changeImageView(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imageUser').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        init();
+        initAlbumTags();
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    function initAlbumTags() {
+        var lst = '@Html.Raw(ViewBag.ListTags)';
+        lst = lst.split(',');
+        var jSon = [];
+        $.map(lst, function (item) {
+            if (item != "") {
+                jSon.push({ id: item, label: item, value: item });
+            }
+        });
+        $('#txtTag').tagsInput({
+            autocomplete_url: jSon
+        });
+    }
+</script>
+
+@using (Html.BeginForm("Create", "Album", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1"> Album</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab_image">Image</a></li>
+                    <li><a data-toggle="tab" href="#tab_2">SEO</a></li>
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+
+                                <div class="row">
+
+                                    <div class="col-md-12 form-group">
+                                        <label>Album Name</label>
+                                        @Html.TextBoxFor(model => model.album.Name, new { @class = "form-control", placeholder = "Input Name..." })
+                                        @Html.ValidationMessageFor(model => model.album.Name)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Tags</label>
+                                        @Html.TextBoxFor(model => model.album.Tags, new { @class = "form-control", placeholder = "Enter to input Tag...", id = "txtTag" })
+                                        @Html.ValidationMessageFor(model => model.album.Tags)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Profile Image</label>
+                                    <img src="~/Media/Images/noImage.jpg" id="imageUser" width="128" height="128" class="float-left" style="border-radius:50%" />
+                                    @*<input type="file" id="uploadFile" onchange="changeImageView(this)" value="" style="display:none" accept="image/x-png, image/jpeg" />*@
+                                    <input type="file" accept="jpg|png|jpeg" class="btn btn-primary" name="txtFile" id="uploadFile" size="40" onchange="changeImageView(this)" />
+                                    @Html.ValidationSummary(true)
+                                    @Html.ValidationMessage("txtFile")
+                                    @Html.ValidationMessageFor(model => model.album.Image)
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-Product Info -->
+                    <div id="tab_image" class="tab-pane">
+                        <div class="row">
+                            <table class="col-md-12 table table-hover" id="medias">
+                                <tbody class="body-Medias">
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Title</th>
+                                        <th>Link</th>
+                                        <th>Image</th>
+                                        <th> Handling</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-lg-4 col-xs-12 col-sm-4 text-center">
+                                <p>Title</p>
+                                <input class="form-control" type="text" id="txtTitle" value=" " />
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xs-12 col-sm-4 text-center">
+                                <p>Link</p>
+                                <input class="form-control" type="text" id="txtLink" value=" " />
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-xs-12 col-sm-4 text-center">
+                                <p>Image</p>
+                                <img src="~/Media/Images/noImage.jpg" id="uploadHighLightBanner" width="128" height="128" class="float-left" />
+                                <input type="file" id="uploadHighLightBanner" class="btn btn-primary file-upload-image-name" name="txtHighLightBanner" onchange="changeImageView(this,4)" value="" style="display:block" accept="image/x-png, image/jpeg" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-4" style="margin-top: 10px;">
+                                <span class="btn btn-danger btn-block" id="addMedia"> Image</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                    </div><!-- /.tab- Image for Album -->
+                    <div id="tab_2" class="tab-pane">
+                        <div class="box box-warning">
+                            <div class="box-header">
+                                <h3 class="box-title">SEO</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label>MetaTitle</label>
+                                            @Html.TextBoxFor(model => model.album.MetaTitle, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter MetaTitle  ..." })
+
+                                            @Html.ValidationMessageFor(model => model.album.MetaTitle)
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Alias</label>
+                                            @Html.TextBoxFor(model => model.album.Alias, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter Alias  ..." })
+                                            @Html.ValidationMessageFor(model => model.album.Alias)
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>MetaKeywords</label>
+                                            @Html.TextBoxFor(model => model.album.MetaKeywords, new { @class = "form-control", id = "MetaKeywords", placeholder = "Enter MetaKeywords  ..." })
+                                            @Html.ValidationMessageFor(model => model.album.MetaKeywords)
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <label>MetaDescription</label>
+                                            @Html.TextAreaFor(model => model.album.MetaDescription, new { @class = "form-control", id = "MetaDescription", placeholder = "Enter MetaDescription  ..." })
+                                            @Html.ValidationMessageFor(model => model.album.MetaDescription)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div><!-- /.tab-SEO -->
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+
+}
+<script>
+    var listMedias = [];
+    var listMedia = [];
+    var listFile = [];
+    var imageId = -1;
+    var gIndex = 0;
+    function removeRowTable(item, id) {
+        for (var i = listMedias.length - 1; i >= 0; i--) {
+            if (listMedias[i].Index == id) {
+                listMedias.splice(i, 1);
+                $(item).parent().parent().remove();
+            }
+        }
+        createTable(listMedias);
+    }
+    function removeItem(MediaTypeId) {
+        for (var i = listMedias.length - 1; i >= 0; i--) {
+            if (listMedias[i].MediaTypeId == MediaTypeId)
+                listMedias.splice(i, 1);
+        }
+    }
+    function changeImageView(input, number) {
+        if (window.File && window.FileList && window.FileReader) {
+            var files = input.files; //FileList object
+            var currentId = "#" + $(input).attr('id');
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                //Only pics
+                if (!file.type.match('image')) continue;
+                if (file.size / 1024 > 2000) continue;
+                var picReader = new FileReader();
+                picReader.addEventListener("load", function (event) {
+                    var picFile = event.target;
+                    $(currentId).attr('src', picFile.result);
+                    listMedia.push({  Name: picFile.result, Link: '', Title: '', ImageId: imageId.toString() });
+                    imageId--;
+                });
+                //Read the image
+                picReader.readAsDataURL(file);
+            }
+        } else {
+            console.log("Your browser does not support File API");
+        }
+    }
+    function init() {
+
+        createTable(listMedias);
+    }
+    function createTable(list) {
+        //listMedias.sort(function (a, b) {
+        //    return parseInt(a.MediaTypeId) - parseInt(b.MediaTypeId);
+        //});
+        $(".body-Medias").children().remove();
+        var tableRaw = "<tr><th>No.</th><th>Image</th><th>Title</th><th>Link</th><th> Handling</th></tr>";
+        $.each(list, function (index, ele) {
+            var Row_raw = "<tr>"
+                 + "<td>" + (index + 1) + "</td>";
+            if (ele.ImageId > 0) {
+                Row_raw += "<td><img src=" + ele.Name + "/" + ele.Name + " alt=" + ele.Name + " title=" + ele.Name + " width='50' height='40' /></td>"
+                 + "<td>" + ele.Title + "</td>";
+            }
+
+            else {
+                Row_raw += "<td><img src=" + ele.Name + " alt=" + ele.Name + " title=" + ele.Name + " width='50' height='40' /></td>"
+                 + "<td>" + ele.Title + "</td>";
+            }
+
+            Row_raw += "<td>" + ele.Link + "</td>"
+                 + "<td><a class='glyphicon glyphicon-remove' id='remove-row-table-content' style='cursor: pointer;' onclick='removeRowTable(this," + ele.Index + ");' title='Click Delete'></a></td>"
+                 + '@Html.Hidden("Images[_indexJS_].ImageId", "_ele.ImageId")'
+                 + '@Html.Hidden("Images[_indexJS_].Name", "_ele.Name")'
+                 + '@Html.Hidden("Images[_indexJS_].Title", "_ele.Title_")'
+                 + '@Html.Hidden("Images[_indexJS_].Link", "_ele.Link_")'
+
+             + "</tr>";
+            Row_raw = Row_raw.replace("_ele.ImageId", ele.ImageId);
+            Row_raw = Row_raw.replace("_ele.Name", ele.Name);
+            Row_raw = Row_raw.replace("_ele.Title_", ele.Title);
+            Row_raw = Row_raw.replace("_ele.Link_", ele.Link);
+
+
+            Row_raw = Row_raw.replace("_indexJS_", index).replace("_indexJS_", index);
+            Row_raw = Row_raw.replace("_indexJS_", index).replace("_indexJS_", index);
+            Row_raw = Row_raw.replace("_indexJS_", index).replace("_indexJS_", index);
+            Row_raw = Row_raw.replace("_indexJS_", index).replace("_indexJS_", index);
+
+
+            tableRaw += Row_raw;
+        });
+        $(".body-Medias").append(tableRaw);
+    }
+    $(document).ready(function () {
+       
+        init();
+        $("#addMedia").click(function () {
+            if (listMedia.length > 0)
+                $.each(listMedia, function (index, ele) {
+                    listMedias.push({ ImageId: ele.ImageId,  Name: ele.Name, Title: $("#txtTitle").val(), Link: $("#txtLink").val(), Index: gIndex });
+                });
+            else {
+                listMedias.push({ ImageId: ele.ImageId,  Name: ele.Name, Title: $("#txtTitle").val(), Link: $("#txtLink").val(), Index: gIndex });
+            }
+            gIndex++;
+            listMedia.splice(0, listMedia.length);
+            createTable(listMedias);
+            $(".file-upload-image-name").val("");
+        });
+    });
+</script>
+

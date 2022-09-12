@@ -1,0 +1,96 @@
+﻿@model Web.Models.Article
+@{
+    ViewBag.Title = @Model.Title;
+}
+<div class="container">
+    <div class="page-header">
+        <h1>@Model.Category.CategoryName </h1>
+        <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Pages</a></li>
+            <li class="active">Section Topic Details</li>
+        </ol>
+    </div>
+</div>
+<section>
+    <div class="container ">
+        <div class="row ">
+            <!-- left sec Start -->
+            <div class="col-md-11 col-sm-11">
+                <div class="row">
+                    <!-- post details start -->
+                    <div class="col-sm-16">
+                        <div class="row">
+                            <div class="sec-topic col-sm-16  wow fadeInDown animated " data-wow-delay="0.5s">
+                                <div class="row">
+                                    <div class="col-sm-16"> <img width="800" height="300" alt="" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@Model.Image" class="img-thumbnail"> </div>
+                                    <div class="col-sm-16 sec-info">
+                                        <h3>@Model.Title</h3>
+                                        <div class="text-danger sub-info-bordered">
+                                            <div class="author"><span class="ion-person icon"></span>By: @Model.CreateBy</div>
+                                            <div class="time"><span class="ion-android-data icon"></span>@Model.CreateDate</div>
+                                            <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                            <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                        </div>
+                                         @MvcHtmlString.Create(@Model.Contents)
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-16 author-box">
+                                <div class="row">
+                                    <div class=" col-xs-4 col-sm-2"><img class="img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/account/")@ViewBag.accDetail.Image" width="128" height="128" alt="" /></div>
+                                    <div class="col-xs-12 col-sm-14">
+                                        <h4><a href="/Account/Detail/@ViewBag.accDetail.FirstName">@ViewBag.accDetail.FirstName </a></h4>
+                                       @MvcHtmlString.Create(@ViewBag.accDetail.Detail)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-16 comments-area">
+                                <div class="main-title-outer pull-left">
+                                    <div class="main-title">comments</div>
+                                </div>
+                               
+                                    <div class="fb-comments" data-href="http://batdongsandaiphat.vn/Article/Detail/@Model.ArticleId" data-numposts="10"></div>
+                               
+                            </div>
+                            <div class="col-sm-16 related">
+                                <div class="main-title-outer pull-left">
+                                    <div class="main-title">Cùng Danh Mục</div>
+                                </div>
+                                <div class="row">
+                                    @foreach (var item in ViewBag.lstModel)
+                                    { 
+                                    <div class="item topic col-sm-5 col-xs-16">
+                                        <a href="/Article/Detail/@item.ArticleId">
+                                            <img class="img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@item.Image" height="180" width="220" alt="@item.Title" />
+                                            <h4>@item.Title</h4>
+                                            <div class="text-danger sub-info-bordered remove-borders">
+                                                <div class="time"><span class="ion-android-data icon"></span>@item.CreateDate</div>
+                                                <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                                <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        
+                          
+                        </div>
+                    </div>
+                    <!-- post details end -->
+
+                </div>
+            </div>
+            <!-- left sec End -->
+
+
+            <!-- right sec Start -->
+            @{Html.RenderAction("RightSidePartial", "Home");}
+            <!-- Right Sec End --> 
+
+        </div>
+    </div>
+</section>
+<!-- Data End -->

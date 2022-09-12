@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5f87d4a095f94f489d143b4804c95488" Name="Diagram1">
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Account" Width="1.5" PointX="5.25" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.AccountRole" Width="1.5" PointX="7.5" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Album" Width="1.5" PointX="21" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Article" Width="1.5" PointX="20.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Category" Width="1.5" PointX="18" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.CategoryType" Width="1.5" PointX="15.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Certificate_Types" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Comment" Width="1.5" PointX="10.5" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Company" Width="1.5" PointX="0.75" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Country" Width="1.5" PointX="6.75" PointY="27.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Customer" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.CustomerCategory" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Department" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.District" Width="1.5" PointX="11.25" PointY="27.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate_Groups" Width="1.5" PointX="11.25" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate_Images" Width="1.5" PointX="15.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate_Investors" Width="1.5" PointX="9" PointY="38.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate_Projects" Width="1.5" PointX="11.25" PointY="38.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate_Statuses" Width="1.5" PointX="11.25" PointY="43.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate_Types" Width="1.5" PointX="11.25" PointY="47" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Estate" Width="1.5" PointX="13.5" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.GroupCategory" Width="1.5" PointX="15.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Image" Width="1.5" PointX="23.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.LoginLog" Width="1.5" PointX="7.5" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Notification" Width="1.5" PointX="7.5" PointY="23.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Product" Width="1.5" PointX="23.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Province" Width="1.5" PointX="9" PointY="27.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.RentUnit" Width="1.5" PointX="11.25" PointY="50" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Role" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.SaleUnit" Width="1.5" PointX="11.25" PointY="52.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Street" Width="1.5" PointX="11.25" PointY="55" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.sysdiagram" Width="1.5" PointX="2.75" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Town" Width="1.5" PointX="11.25" PointY="58.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Vendor" Width="1.5" PointX="21" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PerfectRealWebV2Model.Ward" Width="1.5" PointX="11.25" PointY="61.875" IsExpanded="true" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Account_Departments" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_AccountRoles_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Comment_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_LoginLog_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Notifications_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_AccountRoles_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Images_Albums" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Products_Albums" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Articles_Articles" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Category_CategoryType" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Category_GroupCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Product_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Comment_Estates" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Departments_Companies" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Provinces_Countries" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Customer_CustomerCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Districts_Provinces" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estate_Projects_Districts" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Districts" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Street_Districts" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Wards_Districts" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Estate_Groups" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estate_Images_Estates" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estate_Projects_Estate_Investors" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Estate_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_KhuPho_Estate_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Estate_Statuses" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Estate_Types" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Provinces" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_RentUnit" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_SaleUnit" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Street" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Town" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Wards" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Products_Vendors" ManuallyRouted="false" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Estates_Certificate_Types" />
+        <AssociationConnector Association="PerfectRealWebV2Model.FK_Comment_Notifications" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

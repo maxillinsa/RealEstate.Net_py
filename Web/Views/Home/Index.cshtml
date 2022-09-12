@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Trang Chủ- Bất Động Sản Đại Phát";
+}
+
+
+ <!-- top sec start -->
+
+<div class="container">
+    <div class="row">
+
+        <!-- hot news start -->
+        @{Html.RenderAction("HotNewsPartial", "Home");}
+        <!-- hot news end -->
+        <!-- banner outer start -->
+        @{Html.RenderAction("BannerOuterPartial", "Home");}
+        <!-- banner outer end -->
+
+    </div>
+</div>
+<!-- top sec end -->
+<!-- data start -->
+
+<div class="container ">
+    <div class="row ">
+        <!-- left sec start -->
+        @{Html.RenderAction("LeftSidePartial", "Home");}
+        <!-- left sec end -->
+        <!-- right sec start -->
+        @{Html.RenderAction("RightSidePartial", "Home");}
+        <!-- right sec end -->
+    </div>
+</div>
+<div id="cfacebook">
+    <a href="javascript:;" onclick="return false" class="chat_fb"><i class="fa fa-facebook-square"></i> Phản hồi của bạn</a>
+    <div class="fchat">
+        <div class="fb-page" data-tabs="messages" data-href="https://www.facebook.com/batdongsandaiphat.vn" data-width="250" data-height="400" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"></div>
+    </div>
+</div>
+
+
+<!-- data end -->

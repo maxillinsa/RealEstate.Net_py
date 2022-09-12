@@ -1,0 +1,32 @@
+﻿
+<!DOCTYPE html>
+<html class="bg-blue">
+<!-- I. Head: Include (1) Library css, (2) Javascript -->
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewBag.Title</title>
+    <!-- jQuery 2.0.2 -->
+    <script src="@Url.Content("~/Content/AdminDashboard/js/jquery.min.js")" type="text/javascript"></script>
+
+    <!-- Bootstrap -->
+    <script src="@Url.Content("~/Content/AdminDashboard/js/bootstrap.min.js")" type="text/javascript"></script>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- bootstrap 3.0.2 -->
+    <link href="@Url.Content("~/Content/AdminDashboard/css/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <!-- font Awesome -->
+    <link href="@Url.Content("~/Content/AdminDashboard/css/font-awesome.min.css")" rel="stylesheet" type="text/css" />
+    <!-- Theme style -->
+    <link href="@Url.Content("~/Content/AdminDashboard/css/AdminLTE.css")" rel="stylesheet" type="text/css" />   
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+</head>
+<!-- II. Body: Include (1)Render Body -->
+<body class="bg-blue" >
+
+    @RenderBody()
+
+</body>
+</html>

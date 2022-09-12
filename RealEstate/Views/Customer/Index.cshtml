@@ -1,0 +1,247 @@
+﻿@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model  MvcPaging.IPagedList<RealEstate.Models.Customer>
+<script>
+    $(document).ready(function () {
+        //$('.khu-pho').select2();
+        $('.customer-name').focus();
+        $("#searchItem").click(function () {
+            $("#formCustomer").submit();
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajaxSetup({ cache: false });
+    });
+    function RenderActions(renderActionstring) {
+        $("#OpenDialog").load(renderActionstring);
+    };
+    function showError(txt) {
+        $("#showError").show();
+        var errorTxt = '<strong>Error! </strong>' + txt;
+        $("#ErrorTxt").fadeIn(400).html(errorTxt);
+    };
+    function CreateNew() {
+        if (!ValidateInputs())
+            return;
+        var customer = {
+            customerName: $('#CustomerName').val(),
+            mobile: $('#Mobile').val(),
+            CustomerCategoryId: $('#CustomerCategoryId').val()
+        }
+        $.ajax({
+            url: '/Customer/Create',
+            type: 'POST',
+            data: JSON.stringify(customer),
+            contentType: "application/json;charset=utf-8",
+            success: function (response) {
+                if (response.CustomerId == 0) {
+                    var customerName = $('#CustomerName');
+                    if ($.trim(customerName.val()) != '') {
+                        customerName.closest('.form-group').addClass('has-error');
+                        customerName.closest('.form-group').addClass('has-error');
+                    }
+                    var mobile = $('#Mobile');
+                    if ($.trim(mobile.val()) != '') {
+                        mobile.closest('.form-group').addClass('has-error');
+                        mobile.closest('.form-group').addClass('has-error');
+                    }
+                    showError("Duplicated customer. please check again!");
+                    return;
+                }
+                Clean();
+                $('#btnCloseModal').click();
+                var raw = '';
+                raw += "<tr id=customer-" + response.Customer.CustomerId + '>';
+                raw += "<td>" + 0 + "</td>";
+                raw += "<td>" + response.Customer.CustomerName + "</td>";
+                raw += "<td>" + response.Customer.Mobile + "</td>";
+                raw +=
+                    " <td>  <button type=\"button\" title=\"Active \" class=\"btn btn-sm btn-success\"><i class=\"ion-checkmark-circled\"" +
+                    "></i></button> " +
+                    "<button class = \"btn btn-sm btn-primary\" data-toggle=\"modal\" data-target=\"#modalCustomer\" onclick=\"RenderActions('~/Customer/Edit/" +
+                    response.Customer.CustomerId + ")\">Edit</button>" + " </td>";
+                raw += "</tr>";
+                $('#indexTbody').prepend(raw);
+            },
+            error: function (err) { alert("Error: " + err.responseText); }
+        });
+    };
+    function Edit() {
+        if (!ValidateInputs())
+            return;
+        var customer = {
+            customerId: $('#CustomerId').val(),
+            customerName: $('#CustomerName').val(),
+            mobile: $('#Mobile').val(),
+            CustomerCategoryId: $('#CustomerCategoryId').val()
+        }
+        $.ajax({
+            url: '/Customer/Edit',
+            type: 'POST',
+            data: JSON.stringify(customer),
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.Customer.CustomerId == 0) {
+                    showError("Dupplicated customer, please check again !)");
+                    return;
+                }
+                console.log(response);
+                var raw = '';
+                raw += "<tr id=customer-" + response.Customer.CustomerId + '>';
+                raw += "<td>" + 0 + "</td>";
+                raw += "<td>" + response.Customer.CustomerName + "</td>";
+                raw += "<td>" + response.Customer.Mobile + "</td>";
+                raw +=
+                    " <td>  <button type=\"button\" title=\"Active \" class=\"btn btn-sm btn-success\"><i class=\"ion-checkmark-circled\"" +
+                    "></i></button> " +
+                    "<button class = \"btn btn-sm btn-primary\" data-toggle=\"modal\" data-target=\"#modalCustomer\" onclick=\"RenderActions('~/Customer/Edit/" +
+                response.Customer.CustomerId + ")\">Edit</button>" + " </td>";
+
+                raw += "</tr>";
+                $('#customer-' + response.Customer.CustomerId).replaceWith(raw);
+                $('#btnCloseModal').click();
+            },
+            error: function (err) { alert("Error: " + err.responseText); }
+        });
+    }
+    function Clean() {
+        $('#modalCustomer').find('textarea,input').val('');
+    };
+    function ValidateInputs() {
+        var flag = true;
+     
+        var customerName = $('#CustomerName');
+        if ($.trim(customerName.val()) != '') {
+            customerName.closest('.form-group').removeClass('has-error');
+        }
+        if ($.trim(customerName.val()) === '') {
+            customerName.closest('.form-group').addClass('has-error');
+            flag = false;
+        }
+        var mobile = $('#Mobile');
+        if ($.trim(mobile.val()) != '') {
+            mobile.closest('.form-group').removeClass('has-error');
+        }
+        if ($.trim(mobile.val()) === '') {
+            mobile.closest('.form-group').addClass('has-error');
+            flag = false;
+        }       
+        return flag;
+    };
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Customers</h3>      
+        <a class="btn btn-success  text-yellow pull-right" href="/Customer/ImportCustomer">Import Customers</a>
+    </div><!-- /.box-header -->
+
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        @using (Ajax.BeginForm("Index", "Customer", new { flag = false },
+                   new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, new { id = "formCustomer" }))
+        {
+            <div class="box-body col-lg-12 col-md-12 col-xs-12">
+
+                <div id="searchBox" class="col-md-12 col-xs-12 form-group">
+                    <div class="col-md-3 col-xs-6 form-group" style="padding-left: 0px">
+                        <select class="form-control" name="CustomerCategoryId">
+                            <option value="0"> -- All Categories --</option>
+                            @foreach (var i in (SelectList)ViewBag.CustomerCategories)
+                            {
+                                if (i.Value != null)
+                                {
+                                    <option value="@i.Value">@i.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-xs-6 form-group" style="padding-left: 0px">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input class=" form-control customer-name" type="text" name="customerName" value="@ViewBag.customerName" placeholder="Input name ..." />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 col-xs-6 form-group" style="padding-left: 0px">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input class=" form-control customer-mobile" type="text" name="customerMobile" value="@ViewBag.customerMobile" placeholder="Input contact number ..." />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-12 form-group " style="padding-left: 0px;">
+                        <a data-toggle="modal" onclick="RenderActions('/Customer/Create')" data-target="#modalCustomer" class="btn btn-success pull-right">Create new <i class="fa fa-arrow-circle-right"></i></a>
+                        <button id="searchItem" type="button" class="btn btn-danger pull-left"> Search <i class="fa fa-search-plus"></i> </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body no-padding" id="grid-list">
+                @{ Html.RenderPartial("AjaxCustomer", Model); }
+            </div>
+        }
+      
+
+    </div><!-- /.box-body -->
+</div>
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#grid-list').fadeOut('normal');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#grid-list').fadeIn('normal');
+        $('a').tooltip();
+    }
+
+    function failurePaging() {
+        alert("Error. can not access data, please contact administrator for support..");
+    }
+
+</script>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>
+
+<div id="modalCustomer" class="modal fade" role="dialog" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="OpenDialog" class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

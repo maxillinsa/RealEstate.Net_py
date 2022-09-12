@@ -1,0 +1,125 @@
+﻿@model RealEstate.Models.Role
+@{
+    ViewBag.Title = " Role";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("Create", "Roles", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">Edit access role</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success">SAVE</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-header">
+                                <h3 class="box-title"> Role </h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Product ID</label>
+                                        @Html.TextBoxFor(model => model.RoleName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoleName)
+                                    </div>
+
+                                </div>
+
+
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title"> Role Descriptions<small>Role descriptions</small></h3>
+                                        <!-- tools box -->
+                                        <div class="pull-right box-tools">
+                                            <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                        </div><!-- /. tools -->
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body pad">
+                                        @Html.TextAreaFor(model => model.Description, new { @id = "Description" })
+                                    </div>
+                                </div><!-- /.box -->
+                                <div class="clearfix"></div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-SanPham Info -->
+                  
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+        $(function () {
+            tinyMCE.init({
+                selector: '#Decription',
+                height: 300,
+                theme: 'modern',
+                plugins: [
+                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                     "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                content_css: "css/content.css",
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                style_formats: [
+                     { title: 'Bold text', inline: 'b' },
+                     { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } },
+                     { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } },
+                     { title: 'Example 1', inline: 'span', classes: 'example1' },
+                     { title: 'Example 2', inline: 'span', classes: 'example2' },
+                     { title: 'Table styles' },
+                     { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+                ], file_browser_callback: RoxyFileBrowser
+            });
+
+        });
+        function RoxyFileBrowser(field_name, url, type, win) {
+            var roxyFileman = '@Url.Content("~/Content/AdminDashboard/filebrowser/index.html")';
+            if (roxyFileman.indexOf("?") < 0) {
+                roxyFileman += "?type=" + type;
+            }
+            else {
+                roxyFileman += "&type=" + type;
+            }
+            roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+            tinyMCE.activeEditor.windowManager.open({
+                file: roxyFileman,
+                title: 'File manager',
+                width: 850,
+                height: 650,
+                resizable: "yes",
+                plugins: "media",
+                inline: "yes",
+                close_previous: "no"
+            }, { window: win, input: field_name });
+            return false;
+        }
+    </script>
+}

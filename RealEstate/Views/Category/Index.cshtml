@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@model PagedList.IPagedList<RealEstate.Models.Category>
+@using PagedList;
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Category</h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/Category/Create"> category</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-Category-content">
+        <table class="table table-hover" id="Categorys">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>ID Category</th>
+                    <th>Level</th>
+                    <th>Order</th>
+                    <th>Category name</th>
+                    <th>Images</th>
+                    <th>Category group</th>
+                    <th>Category type</th>
+                    <th>Status</th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>@item.CategoryId</td>
+                        <td>
+                            @if(item.CateLevel ==1 )
+                                {
+                                <p>Level 1</p>
+                                }
+                        @if (item.CateLevel == 2)
+                            {
+                            <p>Level 2</p>
+                            }
+                        @if (item.CateLevel == 3)
+                            {
+                            <p>Level 3</p>
+                            }
+                        </td>
+                        <td>@item.OrderNumber</td>
+                        <td>
+                            @if (@item.CategoryName != null)
+                            {
+                                if (item.CategoryName.Length > 55)
+                                {
+                                    <label class="label label-primary" title="@item.CategoryName">@item.CategoryName.Substring(0, 55) ...</label>
+                                }
+                                else
+                                {
+                                    <label class="label label-primary">@item.CategoryName</label>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                <img src="/Media/Images/category/@item.Image" alt="@item.CategoryName" height="50" width="50" />
+                            }
+                        </td>
+                        <td>
+                            @foreach (RealEstate.Models.GroupCategory item1 in ViewBag.GroupCategory)
+                            {
+                                if (item1.GroupCategoryId == item.GroupCategoryId)
+                                {
+                                    @item1.GroupCategoryName.ToString()
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            
+                            @if(item.CategoryTypeId != null)
+                            { 
+                            @item.CategoryType.Name
+                            }
+
+                        </td>
+                        <td>
+                            @if (item.IsDelete == false)
+                            {
+                                <label class="label label-success">
+                                    Normal
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    Deleted
+                                </label>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.CategoryId})" class="btn btn-primary padding-2" title="Edit">Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.CategoryId })" class="btn btn-danger padding-2" title="Delete category" onclick="return confirm('Delete category này?')"> Delete</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("UnDelete", new { id = item.CategoryId })" class="btn btn-warning padding-2" title="Restore category" onclick="return confirm('Restore category này?')"> Restore</a>
+                            }
+
+                        </td>
+                    </tr>
+                            j++;
+                }
+            </tbody>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

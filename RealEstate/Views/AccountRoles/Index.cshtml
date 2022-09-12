@@ -1,0 +1,94 @@
+﻿@model IEnumerable<RealEstate.Models.AccountRole>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Access Role Management </h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/AccountRoles/Create"> Role</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="SanPhams">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Role Name</th>
+                    <th>Account Name</th>
+                    <th>Created date</th>
+                    <th>Deleted?</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>
+                            @if (item.RoleId != null)
+                            {
+                                @item.Role.RoleName
+
+                            }
+                        </td>
+                        <td>
+                            @item.Account.UserName
+                        </td>
+                        <td>
+                            @item.CreateDate
+                        </td>
+
+                        <td>
+                            @if (item.IsDelete == true)
+                            {
+                                <label class="label label-danger">
+                                    
+                                </label>
+                            }
+
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.AccountRoleId})" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.AccountRoleId })" title="Delete" class="btn btn-danger padding-2" onclick="return confirm('Delete this role?')"> Delete</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("UnDelete", new { id = item.AccountRoleId })" title="Restore " class="btn btn-warning padding-2" onclick="return confirm('Restore this role?')"> Restore</a>
+                            }
+                        </td>
+
+                    </tr>
+                            j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>Role Name</th>
+                    <th>Account Name</th>
+                    <th>Created date</th>
+                    <th>Deleted?</th>
+                    <th>Action</th>
+                </tr>
+
+            </tfoot>
+        </table>
+
+
+    </div><!-- /.box-body -->
+</div>

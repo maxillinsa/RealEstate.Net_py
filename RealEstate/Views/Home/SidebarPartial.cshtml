@@ -1,0 +1,113 @@
+﻿@model RealEstate.Models.Account
+<section class="sidebar">
+
+    <ul class="sidebar-menu">
+        <li class="active">
+            <a href="@Url.Action("Index","Home")">
+                <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            </a>
+        </li>
+
+
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-folder"></i> <span>Products - Real Estate</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="@Url.Action("Index", "Estates")"><i class="fa fa-circle-o text-red"></i>Listing Management</a></li>
+                
+            </ul>
+
+        </li>
+        <li class="treeview">
+            <a href="#">
+                <i class="fa fa-calendar"></i> <span>Properties Listing</span>
+                <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+                <li><a href="@Url.Action("Index", "Estate_Projects")"><i class="fa fa-circle-o text-red"></i>Project Management</a></li>
+                <li><a href="@Url.Action("Index", "Estate_Investors")"><i class="fa fa-circle-o text-red"></i>Investors Management</a></li>
+                <li><a href="@Url.Action("Index", "Estate_Statuses")"><i class="fa fa-circle-o text-red"></i>Product Status Management</a></li>
+                <li><a href="@Url.Action("Index", "Certificate_Types")"><i class="fa fa-circle-o text-red"></i>Certificates Management</a></li>
+                <li><a href="@Url.Action("Index", "Estate_Groups")"><i class="fa fa-circle-o text-red"></i>Estate Group Management</a></li>
+
+            </ul>
+        </li>
+        @if (@ViewBag.admin == 1)
+        {
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-th"></i> <span>Management</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index", "Notification")"><i class="fa fa-angle-double-right"></i> Notification Management</a></li>
+                    <li><a href="@Url.Action("Index", "Departments")"><i class="fa fa-angle-double-right"></i> Department Management</a></li>
+                    <li><a href="@Url.Action("Index", "Estate_Types")"><i class="fa fa-angle-double-right"></i> Estate Type Management</a></li>
+                    <li><a href="@Url.Action("Index", "Town")"><i class="fa fa-angle-double-right"></i> Town Mangement</a></li>
+                    <li><a href="@Url.Action("Index", "SaleUnit")"><i class="fa fa-angle-double-right"></i> Sale Unit Management</a></li>
+                    <li><a href="@Url.Action("Index", "RentUnit")"><i class="fa fa-angle-double-right"></i> Rent Unit Management</a></li>
+                    <li><a href="@Url.Action("Comments", "Home")"><i class="fa fa-angle-double-right"></i> Comment Managements</a></li>
+                    <li><a href="@Url.Action("Index", "Countries")"><i class="fa fa-angle-double-right"></i> Country Management</a></li>
+                    <li><a href="@Url.Action("Index", "Provinces")"><i class="fa fa-angle-double-right"></i> State/City Management</a></li>
+                    <li><a href="@Url.Action("Index", "Districts")"><i class="fa fa-angle-double-right"></i> District Management</a></li>
+                    <li><a href="@Url.Action("Index", "Wards")"><i class="fa fa-angle-double-right"></i> Ward Management</a></li>
+                    <li><a href="@Url.Action("Index", "Streets")"><i class="fa fa-angle-double-right"></i> Street Management</a></li>
+                    <li><a href="@Url.Action("Index", "CustomerCategories")"><i class="fa fa-angle-double-right"></i> Customer Group Management</a></li>
+                    <li><a href="@Url.Action("Index", "Customer")"><i class="fa fa-angle-double-right"></i>Customer Management</a></li>
+
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder"></i> <span>Account Management</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index","Account")"><i class=" fa fa-angle-double-right"></i> User Account</a></li>
+                    <li><a href="@Url.Action("ListingTransfer","Account")"><i class=" fa fa-angle-double-right"></i> Transfer Product </a></li>
+                    <li><a href="@Url.Action("Index","Roles")"><i class=" fa fa-angle-double-right"></i> Access Role</a></li>
+                    <li><a href="@Url.Action("Index","AccountRoles")"><i class="fa fa-angle-double-right"></i>Account Roles</a></li>
+                    <li><a href="@Url.Action("Index","LoginLog")"><i class="fa fa-angle-double-right"></i>Login Management</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder"></i> <span>Reports</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index", "Report")"><i class="fa fa-angle-double-right"></i> System Data Report</a></li>
+                </ul>
+            </li>
+        }
+        @*<li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder"></i> <span>Quản Trị Website</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index","Website")"><i class=" fa fa-angle-double-right"></i> Management </a></li>
+                    <li><a href="@Url.Action("QuanLyDanhMuc", "Website")"><i class=" fa fa-angle-double-right"></i> Category Management</a></li>
+                    <li><a href="@Url.Action("QuanLySanPham", "Website")"><i class="fa fa-angle-double-right"></i>Listing Management</a></li>
+                    <li><a href="@Url.Action("QuanLyTinBai", "Website")"><i class="fa fa-angle-double-right"></i>Notification Management</a></li>
+                    <li><a href="@Url.Action("QuanLyLoaiDanhMuc", "Website")"><i class="fa fa-angle-double-right"></i>Category Type Management</a></li>
+                    <li><a href="@Url.Action("QuanLyNhomDanhMuc", "Website")"><i class="fa fa-angle-double-right"></i>Category Group Management</a></li>
+                    <li><a href="@Url.Action("Index","Album")"><i class=" fa fa-angle-double-right"></i> Album Management </a></li>
+                </ul>
+            </li>*@
+        @if (@ViewBag.admin == 1)
+        {
+            <li class="active">
+                <a href="/Companies">
+                    <i class="glyphicon glyphicon-cog"></i> <span>System Settings</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-green">new</small>
+                    </span>
+                </a>
+            </li>
+        }
+    </ul>
+</section>

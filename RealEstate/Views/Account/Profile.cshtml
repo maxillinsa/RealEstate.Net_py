@@ -1,0 +1,180 @@
+﻿@model RealEstate.Models.ViewModels.ProfileViewModel
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function changeImageView(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imageUser').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormAccCreate").submit();
+        });
+
+    });
+</script>
+<section class="content">
+
+    <div class="row">
+        <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    @if (Model.Image == null)
+                    {
+                        <img class="profile-user-img img-responsive img-circle" src="~/Content/logo.jpg" alt="User profile picture">
+
+                    }
+                    else
+                    {
+                        <img class="profile-user-img img-responsive img-circle" src="~/Media/Images/account/@Model.Image" alt="User profile picture">
+
+                    }
+
+                    <h3 class="profile-username text-center">@Model.UserName</h3>
+
+                    <p class="text-muted text-center">@Model.Department.DepartmentName</p>
+
+                    <ul class="list-group list-group-unbordered">
+                        <li class="list-group-item">
+                            <b>Total Estates</b> <a class="pull-right">@Model.TotalEstates</a>
+                        </li>
+
+                    </ul>                    
+                    <a href="tel:@Model.Mobile" class="btn btn-primary btn-block"><b>@Model.Mobile</b></a>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+            <!-- About Me Box -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">About</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <strong><i class="fa fa-book margin-r-5"></i> Department</strong>
+                    <p class="text-muted">
+                       @Model.Department.DepartmentName
+                    </p>
+
+                    <hr>
+                    <strong><i class="fa fa-map-marker margin-r-5"></i> Joined</strong>
+                    <p class="text-muted">@Model.Created</p>
+
+                    <hr>
+                    <strong><i class="fa fa-file-text-o margin-r-5"></i> Descriptions</strong>
+                    <p>@Model.Detail</p>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    @using (Html.BeginForm("Profile", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormAccCreate" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <input type="hidden" value="@Model.AccountId" name="AccountId" />
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label>Select Department</label>
+                                    @Html.DropDownList("Department.DepartmentId", (SelectList)ViewBag.DepartmentName, " -- Select Department-- ", new { id = "combo-SanPham", @class = "form-control", @readonly = "true" })
+                                    @Html.ValidationMessageFor(model => model.Department.DepartmentId)
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <label>Name</label>
+                                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", placeholder = "First Name..." })
+                                    @Html.ValidationMessageFor(model => model.FirstName)
+                                </div>
+
+                                <div class="col-md-12 form-group">
+                                    <label>Last Name</label>
+                                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", placeholder = "Last Name..." })
+                                    @Html.ValidationMessageFor(model => model.LastName)
+                                </div>
+
+                                <div class="col-md-6 form-group">
+                                    <label>Email</label>
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Email ..." })
+                                    @Html.ValidationMessageFor(model => model.Email)
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label>Mobile</label>
+                                    @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", placeholder = "Phone No..." })
+                                    @Html.ValidationMessageFor(model => model.Mobile)
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-xs-12 form-group">
+                                    <label>Note</label>
+                                    @Html.TextAreaFor(model => model.Detail, new { @class = "form-control", placeholder = "Note..." })
+                                    @Html.ValidationMessageFor(model => model.Detail)
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <label for="IsDelete" style="color:red">?</label>
+
+                                    @if (Model.IsDelete == null || Model.IsDelete == false)
+                                    {
+                                        @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true }) <span>Delete</span>
+                                        @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false, @checked = "checked" }) <span>No</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true, @checked = "checked" }) <span>Delete</span>
+                                        @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false }) <span>No</span>
+                                    }
+                                </div>
+                                <div class="col-md-12 -group">
+                                    @if (Model.Image != null)
+                                    {
+                                        <img style="float:left; margin-right:20px" id="imageUser" src="/Media/Images/account/@Model.Image" alt="@Model.Image" height="100" width="100" />
+
+                                    }
+                                    else
+                                    {
+                                        <img style="float:left; margin-right:20px" id="imageUser" src="~/Content/logo.jpg" alt="No image" height="100" width="100" />
+
+                                    }
+                                    <label for="exampleInputFile">Avatar</label>
+                                    <input type="file" accept="jpg|png|jpeg" class="btn btn-primary" name="txtFile" id="uploadFile" size="40" onchange="changeImageView(this)" />
+                                    @Html.ValidationSummary(true)
+                                    @Html.ValidationMessage("txtFile")
+                                    @Html.ValidationMessageFor(model => model.Image)
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-offset-2 col-sm-10 " >
+                                    <button type="button" id="Save" class="btn btn-success pull-right">Save</button>
+
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                    }
+                    </div>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+</section>
+

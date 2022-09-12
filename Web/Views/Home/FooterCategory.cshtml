@@ -1,0 +1,28 @@
+﻿
+@model List<Web.Models.Category>
+<div class="row">
+    <div class="col-sm-16">
+        <div class="row">
+            <div class="col-sm-10 col-xs-16 f-nav wow fadeInDown animated" data-wow-delay="0.5s" data-wow-offset="10">
+                <ul class="list-inline ">
+                    @foreach(var i in Model)
+                    {
+                        <li> <a href="/Category/@i.CategoryId"> @i.CategoryName</a> </li>
+                    }
+                    
+                    
+                </ul>
+            </div>
+            <div class="col-sm-6 col-xs-16 copyrights text-right wow fadeInDown animated" data-wow-delay="0.5s" data-wow-offset="10">© 2012 BẤT ĐỘNG SẢN ĐẠI PHÁT - ALL RIGHTS RESERVED</div>
+        </div>
+    </div>
+    <div class="col-sm-16 f-social  wow fadeInDown animated" data-wow-delay="1s" data-wow-offset="10">
+        <ul class="list-inline">
+            
+            <li> <a href="https://www.youtube.com/BatDongSanDaiPhat.vn"><span class="ion-social-youtube"></span></a> </li>
+            <li> <a href="https://www.facebook.com/DaiPhatPMH"><span class="ion-social-facebook"></span></a> </li>
+            <li> <a href="https://www.instagram.com/BatDongSanDaiPhat.vn"><span class="ion-social-instagram"></span></a> </li>
+            <li> <a href=""><span class="ion-social-twitter"></span></a> </li>
+        </ul>
+    </div>
+</div>

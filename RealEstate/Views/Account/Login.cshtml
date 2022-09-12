@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Login To Admin System";
+    Layout = "~/Views/Shared/_MLayoutLogin.cshtml";
+}
+
+@model RealEstate.Models.LoginModel
+
+
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <input type="hidden" name="showCaptchaText" value="@ViewBag.ShowCaptchaText " />
+            <div class="card card-login card-hidden">
+                <div class="card-header card-header-rose text-center">
+                    <h4 class="card-title">Login</h4>
+                    <div class="social-line">
+                        <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                            <i class="fa fa-facebook-square"></i>
+                        </a>
+                        <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body ">
+                    <span class="bmd-form-group">
+                        <span class="has-error text-danger">@Html.ValidationMessageFor(model => model.Email)</span>
+                        <span class="has-error text-danger"> @Html.ValidationMessageFor(m => m.Password) </span>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="material-icons">email</i>
+                                </span>
+                            </div>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Email ..." })
+
+                            @*<input asp-for="Input.Email" placeholder="Email..." class="form-control" />*@
+                        </div>
+                    </span>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    <span class="bmd-form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="material-icons">lock_outline</i>
+                                </span>
+                            </div>
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password ..." })
+                           
+                            @*<input asp-for="Input.Password" placeholder="Password..." class="form-control" />*@
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </span>
+                    <span class="bmd-form-group">
+                        @if (ViewBag.ShowCaptchaText == 1)
+                        {
+                            <div class="form-group">
+                                <img src="@Url.Content("~/Account/ShowCaptchaImage")" style="margin: 10px 0" alt="captchar" />
+                                <input id="captchaText" class="form-control input-signIn-User bder-radius-0" maxlength="6" name="CaptchaText" onfocus="focusInputSignIn(this)" onblur="blurInputSignIn(this)" placeholder="Capcha" required="" type="text">
+                                <span class="status" style="color:red">@ViewBag.CaptchaText</span>
+                            </div>
+                        }
+                        @Html.HiddenFor(model => model.FirstName)
+                        @Html.HiddenFor(model => model.LastName)
+                        @Html.HiddenFor(model => model.RememberMe)
+                    </span>
+                </div>
+                <div class="card-footer text-right pull-right ">
+                    @*<div class="form-check mr-auto">
+                        <label class="form-check-label">
+                            <input asp-for="Input.RememberMe" class="form-check-input" type="checkbox" value="" aria-required="true"> Remember me
+                            <span class="form-check-sign">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>*@
+                    <button type="submit" class="btn btn-rose btn-block">Login</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+@*<div class="form-box" id="login-box">
+    <div class="header">Login</div>
+    <h3 style="color:red">@ViewBag.Error</h3>
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+    <input type="hidden" name="showCaptchaText" value="@ViewBag.ShowCaptchaText " />
+        <div class="body bg-gray">
+            <div class="form-group has-error">
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Email ..." })                
+                <span class="help-block">@Html.ValidationMessageFor(model => model.Email)</span>  
+            </div>
+            <div class="form-group has-error">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password ..." })
+                <span class="help-block"> @Html.ValidationMessageFor(m => m.Password) </span>
+            </div>
+            @if (ViewBag.ShowCaptchaText == 1)
+            {
+                <div class="form-group">
+                    <img src="@Url.Content("~/Account/ShowCaptchaImage")" style="margin: 10px 0" alt="captchar" />
+                    <input id="captchaText" class="form-control input-signIn-User bder-radius-0" maxlength="6" name="CaptchaText" onfocus="focusInputSignIn(this)" onblur="blurInputSignIn(this)" placeholder="Input capcha" required="" type="text">
+                    <span class="status" style="color:red">@ViewBag.CaptchaText</span>
+                </div>
+            }
+            @Html.HiddenFor(model=> model.FirstName)
+            @Html.HiddenFor(model => model.LastName)
+            @Html.HiddenFor(model => model.RememberMe)
+        </div>
+        <div class="footer">
+            <button type="submit" class="btn bg-olive btn-block">Login</button>
+            <p><a href="/Account/ForgotPassword">Quên mật khẩu?</a></p>
+        </div>
+    }
+    <div class="margin text-center">
+        <span>Sign in using social networks</span>
+        <br />
+        <button class="btn bg-light-blue btn-circle"><i class="fa fa-facebook"></i></button>
+        <button class="btn bg-aqua btn-circle"><i class="fa fa-twitter"></i></button>
+        <button class="btn bg-red btn-circle"><i class="fa fa-google-plus"></i></button>
+    </div>
+</div>*@

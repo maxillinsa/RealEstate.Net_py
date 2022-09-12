@@ -1,0 +1,100 @@
+﻿@model RealEstate.Models.Account
+
+
+@{
+    ViewBag.Title = " Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#Password").val() = "";
+        //$("#Email").val() = "";
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormAccCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("Create", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormAccCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <h5 style="color:red">@ViewBag.error</h5>
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1"> Account</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success">Save</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Select Department</label>
+                                        @Html.DropDownList("DepartmentId", (SelectList)ViewBag.DepartmentName, " -- Select department-- ", new { id = "combo-SanPham", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.DepartmentId)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>First Name</label>
+                                        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", placeholder = "Input first name..." })
+                                        @Html.ValidationMessageFor(model => model.FirstName)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Last Name</label>
+                                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", placeholder = "Input last name..." })
+                                        @Html.ValidationMessageFor(model => model.LastName)
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label>Email</label>
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Email ..." })
+                                        @Html.ValidationMessageFor(model => model.Email)
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label>Mobile</label>
+                                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", placeholder = "Input phone number..." })
+                                        @Html.ValidationMessageFor(model => model.Mobile)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Password</label>
+                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password ..." })
+                                        @Html.ValidationMessageFor(model => model.Password)
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label for="IsDelete" style="color:red">d?</label>
+                                        <div class="form-control">
+                                            @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true }) <span>Yes</span>
+                                            @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false, @checked = "checked" }) <span>No</span>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12 col-xs-12 form-group">
+                                        <label>Notes</label>
+                                        @Html.TextAreaFor(model => model.Detail, new { @class = "form-control", placeholder = "Input note..." })
+                                        @Html.ValidationMessageFor(model => model.Detail)
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-SanPham Info -->
+
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+
+}
+

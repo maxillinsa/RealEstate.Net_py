@@ -1,0 +1,62 @@
+﻿@model List<RealEstate.Models.Estate>
+
+<!-- User Account: style can be found in dropdown.less -->
+
+<li class="dropdown notifications-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-warning"></i>
+        <span class="label label-warning">@Model.Count</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">We have @Model.Count New product</li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;">
+                <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+                    @foreach (var item in Model)
+                    {
+                        <li>
+                            <a href="/Estates/Detail/@item.Id">
+                                <i class="ion ion-ios7-people info"></i> 
+                                @if (!string.IsNullOrEmpty(item.Code))
+                                {
+                                    <span>@item.Code - </span>
+                                }
+                                @if (item.TownId != null)
+                                {
+                                    @item.Town.Name
+                                }
+                                else
+                                {
+                                    <span>Sqrt: @item.LandArea (m2) </span>  
+                                    if(item.Number_Lot > 0 && item.Number_Paper > 0)
+                                    {
+                                        <span>Paper No.:(@item.Number_Paper/@item.Number_Lot)</span>
+                                    }
+                                }
+                                Price:
+                                @if (item.SalePrice != 0)
+                                {
+                                    @item.SalePrice
+                                    if (item.SaleUnitId != null)
+                                    {
+                                        @item.SaleUnit.Name
+                                    }
+                                }
+                                else
+                                {
+                                    @item.RentPrice
+                                    if (item.RentUnitId != null)
+                                    {
+                                        @item.RentUnit.Name
+                                    }
+                                }
+                            </a>
+                        </li>
+                    }
+                </ul><div class="slimScrollBar" style="background: rgb(0, 0, 0); width: 3px; position: absolute; top: 0px; opacity: 0.4; display: block; border-radius: 0px; z-index: 99; right: 1px;"></div><div class="slimScrollRail" style="width: 3px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+            </div>
+        </li>
+        <li class="footer"><a href="/Estates/Index/?isNew=true">View all</a></li>
+    </ul>
+</li>

@@ -1,0 +1,893 @@
+﻿
+@model RealEstate.Models.ViewModels.EstateViewModel
+@using RealEstate.Models.ViewModels;
+@{
+    ViewBag.Title = "Quick Create Product";
+    Layout = null;
+}
+<!-- Google Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+<!-- Theme style for MAP Google -->
+<link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+<style type="text/css">
+    .advanced-info {
+        display: none;
+        overflow: hidden;
+    }
+
+    #map {
+        height: 300px;
+    }
+
+    .pac-container {
+        z-index: 1051 !important;
+    }
+
+    .map-modal {
+        z-index: 20;
+    }
+
+    .modal-backdrop {
+        z-index: 10;
+    }
+
+    .modal_loading {
+        position: fixed;
+        z-index: 999;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background-color: Black;
+        filter: alpha(opacity=60);
+        opacity: 0.6;
+        -moz-opacity: 0.8;
+    }
+
+    .center {
+        z-index: 1000;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        background-color: transparent;
+        border-radius: 10px;
+        filter: alpha(opacity=100);
+        opacity: 1;
+        -moz-opacity: 1;
+    }
+
+        .center img {
+            height: 50px;
+            width: 50px;
+        }
+
+    .decimal-input {
+    }
+
+    .non-decimal-input {
+    }
+</style>
+<script src="@Url.Content("~/Content/AdminDashboard/js/bignumber.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Content/AdminDashboard/js/jquery.numeric.js")" type="text/javascript"></script>
+@{
+    var config = (CompanyViewModel)HttpContext.Current.Cache.Get("MyConfig");
+    var exchangeRateUSD = config.ExchageRateUSD ?? 1;
+}
+<script>
+    $(document).ready(function () {
+        // Class add select2
+        $('.select2').select2();
+        $('#ProvinceId option[value=79]').attr('selected', 'selected');
+        // Set default SaleUnit
+        $('#SaleUnitId option[value=3]').attr('selected', true);
+        $(".decimal-input").numeric({ altDecimal: '.', decimal: ".", negative: false, scale: 3 });
+        $('.non-decimal-input').numeric(
+            false,
+            function () {
+            }
+        );
+        provinceChange(79); //hcm
+        districtChangeFirstTime(760); //quan 1
+
+        $("#TownId").closest(".form-group").css('display', 'none');
+        /** Price change */
+        $('#SalePrice').keyup(function (e) {
+            var salePrice = new BigNumber($("#SalePrice").val().replace(/,/g, ""));
+            var saleUnitId = $("#SaleUnitId").find(":selected").val();
+            var finalPrice = CalculateFinalPrice(salePrice, 0, saleUnitId);
+        });
+        $('#RentPrice').keyup(function (e) {
+            var rentPrice = new BigNumber($("#RentPrice").val().replace(/,/g, ""));
+            var rentUnitUnitId = $("#RentUnitId").find(":selected").val();
+            var finalPrice = CalculateFinalPrice(rentPrice, 1, rentUnitUnitId);
+        });
+
+        /** Area change */
+        $('#LandArea').keyup(function (e) {
+            var salePrice = new BigNumber($("#SalePrice").val().replace(/,/g, ""));
+            var rentPrice = new BigNumber($("#RentPrice").val().replace(/,/g, ""));
+            var saleUnitId = $("#SaleUnitId").find(":selected").val();
+            var rentUnitId = $("#RentUnitId").find(":selected").val();
+            var finalSalePrice = CalculateFinalPrice(salePrice, 0, saleUnitId);
+            var finalRentPrice = CalculateFinalPrice(rentPrice, 1, rentUnitId);
+        });
+
+        /** Unit change */
+        $("#SaleUnitId").change(function () {
+            var salePrice = new BigNumber($("#SalePrice").val().replace(/,/g, ""));
+            var saleUnitId = $("#SaleUnitId").find(":selected").val();
+            var finalPrice = CalculateFinalPrice(salePrice, 0, saleUnitId);
+        });
+
+        $("#RentUnitId").change(function () {
+            var rentPrice = new BigNumber($("#RentPrice").val().replace(/,/g, ""));
+            var rentUnitId = $("#RentUnitId").find(":selected").val();
+            var finalPrice = CalculateFinalPrice(rentPrice, 1, rentUnitId);
+        });
+        $("#ProjectId").change(function () {
+            var selectProject = $("#ProjectId").val();
+            var hasSelectProject = typeof selectProject !== "undefined" && selectProject != "";
+            if (hasSelectProject) {
+                $("#TownId").closest(".form-group").css('display', 'block');
+            }
+        });
+
+        $("#GroupId").change(function () {
+            var groupId = $("#GroupId").find(":selected").val();
+            $("#salePriceLabel i").remove();
+            $("#rentPriceLabel i").remove();
+
+            if (typeof groupId === "undefined" || groupId == "") {
+                $("#salePriceLabel").append(" <i class='fa fa-asterisk text-red'></i>");
+                $("#rentPriceLabel").append(" <i class='fa fa-asterisk text-red'></i>");
+            } else {
+                switch (groupId) {
+                    case "1":
+                        $("#salePriceLabel").append(" <i class='fa fa-asterisk text-red'></i>");
+                        break;
+                    case "2":
+                        $("#rentPriceLabel").append(" <i class='fa fa-asterisk text-red'></i>");
+                        break;
+                    case "3":
+                        $("#salePriceLabel").append(" <i class='fa fa-asterisk text-red'></i>");
+                        $("#rentPriceLabel").append(" <i class='fa fa-asterisk text-red'></i>");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        $("#showAdvancedInfo").click(function (e) {
+            var advancedArea = $("#advancedArea");
+            var displayType = $(advancedArea).css("display");
+            if (displayType === "block") {
+                $(advancedArea).css("display", "none");
+                $("#showAdvancedInfo i").remove();
+                $("#showAdvancedInfo").append("<i class='fa fa-arrow-circle-o-down'></i>");
+            } else {
+                $(advancedArea).css("display", "block");
+                $("#showAdvancedInfo i").remove();
+                $("#showAdvancedInfo").append("<i class='fa fa-arrow-circle-o-up'></i>");
+            }
+        });
+        function CalculateFinalPrice(price, unitType, unitIdText) {
+            var totalPrice = new BigNumber(0);
+            var area = $("#LandArea").val().replace(/,/g, "");
+            var alreadyShowMessage = false;
+            var message = "";
+            if (!isNaN(unitIdText)) {
+                var unitId = parseInt(unitIdText);
+                switch (unitType) {
+                    case 0: //sale unit
+                        switch (unitId) {
+                            case 1: //Thỏa thuận
+                                if (!isNaN(price)) {
+                                    if (parseInt(price) > 0) {
+                                        //$("#TotalSalePrice").text("Price Unit can not be agreement");
+                                        message = "Price Unit can not be agreement";
+                                        alreadyShowMessage = true;
+                                    }
+                                    else {
+                                        $("#TotalSalePrice").text("");
+                                        message = "";
+                                        alreadyShowMessage = true;
+                                    }
+                                }
+                                break;
+                            case 2: // Milions
+                                totalPrice = new BigNumber(price.toFixed() * 1000000).toNumber();
+                                break;
+                            case 3: //Billion
+                                totalPrice = new BigNumber(price.toFixed() * 1000000000).toNumber();
+                                break;
+                            case 4: //Hundred thousand/m2
+                                if (!isNaN(area)) {
+                                    totalPrice = new BigNumber('100000').multipliedBy(price * area).toNumber();
+                                }
+                                break;
+                            case 5: // Milions/m2
+                                if (!isNaN(area)) {
+                                    totalPrice = new BigNumber(1000000 * parseFloat(price) * parseInt(area)).toNumber();
+                                }
+                                break;
+                            case 6: //USD
+                                break;
+                            default: //USD/m2
+                                break;
+                        }
+                        if (!alreadyShowMessage) {
+                            $("#FinalSalePrice").val(totalPrice);
+                            message = "Total Price: " + FormatPrice(new BigNumber(totalPrice).toNumber());
+                            $("#TotalSalePrice").text(message);
+                        }
+                        else {
+                            $("#FinalSalePrice").val(0);
+                            $("#SalePrice").val(0);
+                            $("#TotalSalePrice").text(message);
+                        }
+                        break;
+                    case 1: //rent unit
+                        switch (unitId) {
+                            case 1: //Thỏa thuận
+                                if (!isNaN(price)) {
+                                    if (parseInt(price) > 0) {
+                                        //$("#TotalRentPrice").text("Price Unit can not be agreement");
+                                        message = "Price Unit can not be agreement";
+                                        alreadyShowMessage = true;
+                                    }
+                                    else {
+                                        //$("#TotalRentPrice").text("");
+                                        message = "";
+                                        alreadyShowMessage = true;
+                                    }
+                                }
+                                break;
+                            case 2: // Tram nghin/Thang
+                                totalPrice = new BigNumber(price.toFixed() * 100000).toNumber();
+                                break;
+                            case 3: //Trieu/Thang
+                                totalPrice = new BigNumber(price.toFixed() * 1000000).toNumber();
+                                break;
+                            case 4: //Hundred thousand/m2/Thang
+                                if (!isNaN(area)) {
+                                    totalPrice = new BigNumber(100000).multipliedBy(price * area).toNumber();
+                                }
+                                break;
+                            case 5: // Milions/m2/Thang
+                                if (!isNaN(area)) {
+                                    totalPrice = new BigNumber(1000000 * parseFloat(price) * parseInt(area)).toNumber();
+                                }
+                                break;
+                            case 6: //Nghin/m2/thang
+                                if (!isNaN(area)) {
+                                    totalPrice = new BigNumber(1000 * parseFloat(price) * parseInt(area)).toNumber();
+                                }
+                                break;
+                            case 7: //USD/Thang
+                                totalPrice = new BigNumber(price.toFixed() * @exchangeRateUSD).toNumber();
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if (!alreadyShowMessage) {
+                            $("#FinalRentPrice").val(totalPrice);
+                            message = "Total Price: " + FormatPrice(new BigNumber(totalPrice).toNumber()) + (totalPrice > 0 ? "/month" : "");
+                            $("#TotalRentPrice").text(message);
+                        }
+                        else {
+                            $("#FinalRentPrice").val(0);
+                            $("#RentPrice").val(0);
+                            $("#TotalRentPrice").text(message);
+                        }
+                        break;
+                }
+            }
+            return "";
+        }
+        function FormatCurrency(num) {
+            if (isNaN(num)) {
+                num = "";
+                return 0;
+            }
+            return parseFloat(num).toLocaleString();
+        }
+        function FormatPrice(price) {
+            if (new BigNumber(price / 1000000000).toNumber() >= 1) {
+                return FormatCurrency(price / 1000000000) + " Billion";
+            }
+            else if (new BigNumber(price / 1000000).toNumber() >= 1) {
+                return FormatCurrency(new BigNumber(price / 1000000)) + " Milions";
+            }
+            else if (new BigNumber(price / 100000).toNumber() >= 1) {
+                if (new BigNumber(price / 100000).toNumber() == 1)
+                    return "100 thousands";
+                else
+                    return FormatCurrency(new BigNumber(price / 100000).toNumber()) + " Hundred thousand";
+            }
+            else if (new BigNumber(price / 1000).toNumber() >= 1) {
+                return FormatCurrency(new BigNumber(price / 1000).toNumber()) + " Thousand";
+            }
+            else {
+                return price;
+            }
+        }
+        $(function () {          
+
+            var files2D = $("#files2d")
+            files2D.change(function () {
+                return onFileSelect(files2D);
+            });
+
+            var certificateImages = $("#certificateImages");
+            certificateImages.change(function () {
+                return onFileSelect(certificateImages);
+            });
+
+            var otherImages = $("#otherImages")
+            otherImages.change(function () {
+                return onFileSelect(otherImages);
+            });
+
+            var files3d = $("#files3d");
+            files3d.change(function () {
+                return onFileSelect(files3d);
+            });
+
+        });
+    });
+    function onFileSelect(e) {
+        var files = e.prop('files');
+        for (var i = 0; i < files.length; i++) {
+            if (files[i].size / 1024 > 5000) {
+                alert('File size exceed 5 MByte.')
+                e.val(null);
+                return false;
+            }
+        }
+        return true;
+    }
+    var myLatLng = { lat: 10.762622, lng: 106.660172 };
+    var geocoder;
+
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 13,
+            zIndex: 500
+        });
+        geocoder = new google.maps.Geocoder();
+        var input = document.getElementById('searchInput');
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+
+        var infowindow = new google.maps.InfoWindow();
+        
+        var marker = new google.maps.Marker({
+            draggable: true,
+            map: map,
+            position: myLatLng,
+            title: 'Drag me to mark point!',
+            anchorPoint: new google.maps.Point(0, -29),
+            zIndex: 100
+        });
+        // Thay đổi Lat and lng khi Dragable địa điểm
+        google.maps.event.addListener(marker, 'dragend', function (evt) {
+            // document.getElementById('location').innerHTML = evt.latLng.address();
+            setLatLng(evt.latLng);
+        });
+        map.addListener('click', function (e) {
+            placeMarkerAndPanTo(e.latLng, map);
+        });
+        function placeMarkerAndPanTo(latLng, map) {
+            //geocoder.geocode({ 'latLng': latLng }, function (results, status) {
+            //    if (status == google.maps.GeocoderStatus.OK) {
+            //        if (results[1]) {
+            //            console.log(results[1]);
+            //        }
+            //    }
+            //    else {
+            //        console.log('Geocoder failed due to: ' + status);
+            //    }
+            //});
+            setLatLng(latLng);
+            marker.setPosition(latLng);
+            map.setCenter(latLng);
+        }
+        function setLatLng(latLng) {
+            $("#Latitude").val(latLng.lat());
+            $("#Longitude").val(latLng.lng());
+            document.getElementById('latLng').innerHTML = 'Lat: ' + latLng.lat().toFixed(3) + ' Lng: ' + latLng.lng().toFixed(3);
+        }
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+            marker.setIcon(({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+            infowindow.open(map, marker);
+
+
+            $('#Estate_Address').val(place.formatted_address);
+            document.getElementById('latLng').innerHTML = '<p> Lat: ' + place.geometry.location.lat().toFixed(3) + '  Lng: ' + place.geometry.location.lng().toFixed(3) + '</p>';
+            $('#Latitude').val(place.geometry.location.lat());
+            $('#Longitude').val(place.geometry.location.lng());
+        });
+    }
+
+
+</script>
+@using (Html.BeginForm("CreateEstate", "Estates", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <input type="hidden" value="@ViewBag.manv" name="AccountId" id="AccountId" />
+    <input type="hidden" value="0" id="FinalSalePrice" />
+    <input type="hidden" value="0" id="FinalRentPrice" />
+    <div class="row">
+        <div class="box box-tools">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">Product Details</a></li>
+                    <li class="pull-right">
+                        <button class="btn btn-sm pull-right btn-danger" type="button" id="btnCloseModal" data-dismiss="modal">X</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <br />
+                        <div id="Loader" style="display:none" class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <i class="fa fa-refresh fa-spin"></i>
+                            <p id="LoaderTxt"> </p>
+                        </div>
+
+                        <div id="showError" style="display:none" class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <p id="ErrorTxt"></p>
+                        </div>
+                        <h5 class="alert alert-warning" id="validae-message" style="display:none"> Items with * * <i class="fa fa-asterisk text-red"></i> is required</h5>
+
+                        <div class="col-md-12 col-xs-12 form-group">
+                            <div class="nav-tabs-custom ">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#media_tab_1">Generic</a></li>
+                                    <li><a data-toggle="tab" href="#media_tab_2">Images </a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="media_tab_1">
+                                        <div class="box box-success">
+                                            <div class="box-body">
+                                                <div class="row ">
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>State/Province <i class="fa fa-asterisk text-red"></i></label>
+                                                        @Html.DropDownList("ItemId", (SelectList)ViewBag.Provinces, " -- Select State/City-- ", new { id = "ProvinceId", @class = "form-control", @onchange = "provinceChange(this.value)" })
+                                                        @Html.ValidationMessageFor(model => model.ProvinceId)
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>State/District <i class="fa fa-asterisk text-red"></i></label>
+
+                                                        <select class="form-control select2" id="DistrictId" name="DistrictId" onchange="districtChange(this.value)">
+                                                            <option value="">-- Select State First -- </option>
+                                                        </select>
+
+                                                        @Html.ValidationMessageFor(model => model.DistrictId)
+                                                    </div>
+                                                </div>
+                                                <div class="row ">
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>Street </label>
+                                                        <select class="form-control select2" id="StreetId" name="StreetId">
+                                                            <option value="">-- Select Street -- </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>Ward/Commune</label>
+                                                        <select class="form-control select2" id="WardId" name="WardId">
+                                                            <option value="">-- Select District/Ward First -- </option>
+                                                        </select>
+                                                        @Html.ValidationMessageFor(model => model.WardId)
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6 form-group">
+                                                        <label>Project</label>
+                                                        <select class="form-control select2" id="ProjectId" name="ProjectId" onchange="projectChange(this.value)">
+                                                            <option value="">-- Select Investor first -- </option>
+                                                        </select>
+                                                    </div>
+                                                    @*<div class="col-md-6 col-sm-12 form-group">
+                                                        <label>Investor</label>
+                                                        @Html.DropDownList("InvestorId", (SelectList)ViewBag.Investors, " -- Investor- ", new { id = "InvestorId", @class = "form-control select2", @onchange = "investorChange(this.value)" })
+
+                                                    </div>*@
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col-md-6 col-sm-6 form-group">
+                                                        <label id="townLabel">Town</label>
+                                                        <select class="form-control select2" id="TownId" name="TownId">
+                                                            <option value="">-- Select Project First -- </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label id="productCodeLabel">Product ID</label>
+                                                        @Html.TextBoxFor(model => model.Code, new { @class = "form-control", maxlength = "10", placeholder = "Input ID..." })
+                                                        @Html.ValidationMessageFor(model => model.Code)
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label>Sqrt (m2) <i class="fa fa-asterisk text-red"></i></label>
+                                                        <div class="input-group">
+                                                            @Html.TextBoxFor(model => model.LandArea, new { @class = "required numeric form-control decimal-input", maxlength = "7", onkeyup = "return FormatNumber(this);", id = "LandArea", placeholder = " ... (m2)" })
+                                                            <span class="input-group-addon" id="basic-addon1"> m2</span>
+                                                        </div>
+                                                        @Html.ValidationMessageFor(model => model.LandArea)
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>Group <i class="fa fa-asterisk text-red"></i></label>
+                                                        @Html.DropDownList("GroupId", (SelectList)ViewBag.Groups, " -- For Sale - For rent -- ", new { id = "GroupId", @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.Estate_GroupId)
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>Type <i class="fa fa-asterisk text-red"></i></label>
+                                                        @Html.DropDownList("Estate_TypeId", (SelectList)ViewBag.Estate_Types, " -- Estate Type -- ", new { id = "Estate_TypeId", @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.Estate_TypeId)
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label id="salePriceLabel">Sale Price <i class="fa fa-asterisk text-red"></i></label>
+
+                                                        @Html.TextBoxFor(model => model.SalePrice, new { @class = "required numeric form-control decimal-input", maxlength = "12", onkeyup = "return FormatNumber(this);", id = "SalePrice", @Value = "0", placeholder = "Input sale price ..." })
+
+                                                        <span id="TotalSalePrice" class="text-red"></span>
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label>Sale Unit</label>
+                                                        @Html.DropDownList("SaleUnitId", (SelectList)ViewBag.Donviban, new { @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.SaleUnitId)
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label id="rentPriceLabel">Rent Price <i class="fa fa-asterisk text-red"></i></label>
+
+                                                        @Html.TextBoxFor(model => model.RentPrice, new { @class = "required numeric form-control decimal-input", maxlength = "12", onkeyup = "return FormatNumber(this);", id = "RentPrice", @Value = "0", placeholder = "Input rent price ..." })
+
+                                                        <span id="TotalRentPrice" class="text-red"></span>
+                                                    </div>
+                                                    <div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label>Rent Unit</label>
+                                                        @Html.DropDownList("RentUnitId", (SelectList)ViewBag.Donvithue, new { @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.RentUnitId)
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        <label>House No.</label>
+                                                        @Html.TextBoxFor(model => model.HouseNo, new { @class = "form-control", maxlength = "10", placeholder = "Input house no....." })
+                                                        @Html.ValidationMessageFor(model => model.HouseNo)
+                                                    </div>
+                                                    @*<div class="col-md-6 col-xs-6 col-sm-6 form-group">
+                                                        <label>Position</label>
+                                                        @Html.DropDownList("DriectionOfTheHouse", (SelectList)ViewBag.Directions, " -- Position-- ", new { id = "HouseDirectionId", @class = "form-control select2" })
+                                                        @Html.ValidationMessageFor(model => model.SaleUnitId)
+                                                    </div>*@
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        <label>Paper No.</label>
+                                                        @Html.TextBoxFor(model => model.Number_Paper, new { @id = "Number_Paper_Id", @class = "form-control non-decimal-input", maxlength = "10", placeholder = "Input paper no....", onkeyup = "return FormatNumber(this);" })
+                                                        @Html.ValidationMessageFor(model => model.Number_Paper)
+
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        <label>Lot No.</label>
+                                                        @Html.TextBoxFor(model => model.Number_Lot, new { @id = "Number_Lot_Id", @class = "form-control non-decimal-input", maxlength = "10", placeholder = "Input lot no....", onkeyup = "return FormatNumber(this);" })
+                                                        @Html.ValidationMessageFor(model => model.Number_Lot)
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        <label for="IsDelete">Co-Business:</label>
+                                                        <div class="form-control">
+                                                            @Html.RadioButtonFor(model => model.IsOutSide, true) Yes
+                                                            @Html.RadioButtonFor(model => model.IsOutSide, false, new { @checked = "checked" }) No
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12 form-group">
+                                                        <label>Certificates Type </label>
+                                                        @Html.DropDownList("Certificate_TypeId", (SelectList)ViewBag.Certificates, " -- Certificates -- ", new { id = "CertificateId", @class = "form-control" })
+                                                        @Html.ValidationMessageFor(model => model.Certificate_TypeId)
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-6 form-group">
+                                                        <label>Owner Contact No. <i class="fa fa-asterisk text-red"></i></label>
+                                                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", onkeypress = "return isNumberKey(event)", maxlength = "24", placeholder = "Input Phone No...." })
+                                                        @Html.ValidationMessageFor(model => model.Mobile)
+                                                    </div>
+                                                    <div class="col-md-6 form-group">
+                                                        <label>Properties Owner Name</label>
+                                                        @Html.TextBoxFor(model => model.OwnerName, new { @class = "form-control", placeholder = "Properties Owner Name..." })
+                                                        @Html.ValidationMessageFor(model => model.OwnerName)
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12 form-group">
+                                                        <label>Address <i class="fa fa-asterisk text-red"></i></label>
+                                                        <input name="Estate_Address" id="Estate_Address" type="text" placeholder="Input address or auto pick location." class="form-control" />
+                                                        <input id="searchInput" class="  form-control" style="width:70%" type="text" placeholder="search ...">
+                                                        <input name="Latitude" id="Latitude" type="hidden" class="form-control" />
+                                                        <input name="Longitude" id="Longitude" type="hidden" class="form-control" />
+                                                        <div id="map"></div>
+                                                        <label id="latLng" class="control-label">Latitude Longitude: <sup><i class="fa fa-star text-red"></i> </sup> </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12 col-xs-12 col-sm-12 form-group">
+                                                        <a id="showAdvancedInfo" class="btn btn-warning btn-block margin-bottom">Details information <i class="fa fa-arrow-circle-o-down"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div id="advancedArea" class="advanced-info">
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Construction Sqrt </label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.ConstructionArea, new { @class = "required numeric form-control decimal-input", maxlength = "6", onkeyup = "return FormatNumber(this);", id = "ConstructionArea", placeholder = " ... (m2)" })
+                                                                <span class="input-group-addon" id="basic-addon1"> m2</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.ConstructionArea)
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Usable sqrt (m2)</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.AreaOffUse, new { @class = "required numeric form-control decimal-input", maxlength = "6", onkeyup = "return FormatNumber(this);", id = "AreaOffUse", placeholder = " ... (m2)" })
+                                                                <span class="input-group-addon" id="basic-addon1"> m2</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.AreaOffUse)
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Street descriptions (m)</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.FrontOfHouse, new { @class = "form-control decimal-input", maxlength = "10", placeholder = "...(m)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> meters</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.FrontOfHouse)
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Street size (m)</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.AlleyOfHouse, new { @class = "form-control decimal-input", maxlength = "10", placeholder = "...(m)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> meters</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.AlleyOfHouse)
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Width (m)</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.Frontispiece, new { @class = "form-control decimal-input", maxlength = "10", placeholder = "...(m)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> meters</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.Frontispiece)
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Long (Height) (m)</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.LotLength, new { @class = "form-control decimal-input", maxlength = "10", placeholder = "...(m)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> meters</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.LotLength)
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Bed room qty </label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.Number_Bedrooms, new { @class = "form-control non-decimal-input", maxlength = "10", placeholder = "... (room)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> room</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.Number_Bedrooms)
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Living room qty</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.Number_Livingrooms, new { @class = "form-control non-decimal-input", maxlength = "10", placeholder = "... (room)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> room</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.Number_Livingrooms)
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Bath room qty (room)</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.Number_Toilets, new { @class = "form-control non-decimal-input", maxlength = "10", placeholder = "... (room)", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> room</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.Number_Toilets)
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Floors/ Levels</label>
+                                                            <div class="input-group">
+                                                                @Html.TextBoxFor(model => model.Number_Floors, new { @class = "form-control non-decimal-input", maxlength = "10", placeholder = "Input floor quantity....", onkeyup = "return FormatNumber(this);" })
+                                                                <span class="input-group-addon" id="basic-addon1"> floor</span>
+                                                            </div>
+                                                            @Html.ValidationMessageFor(model => model.Number_Floors)
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label>Position</label>
+                                                            @Html.DropDownList("DriectionOfTheHouse", (SelectList)ViewBag.Directions, " -- Position-- ", new { id = "HouseDirectionId", @class = "form-control" })
+                                                            @Html.ValidationMessageFor(model => model.SaleUnitId)
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 form-group">
+                                                            <label for="ExpandAfter">Rear Expanding</label>
+                                                            <div class="form-control">
+                                                                @Html.RadioButtonFor(model => model.ExpandAfter, true) Yes
+                                                                @Html.RadioButtonFor(model => model.ExpandAfter, false, new { @checked = "checked" }) No
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 form-group">
+                                                            <label for="IsDelete">Is Hot</label>
+                                                            <div class="form-control">
+                                                                @Html.RadioButtonFor(model => model.IsHot, true) Yes
+                                                                @Html.RadioButtonFor(model => model.IsHot, false, new { @checked = "checked" }) No
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-xs-12 form-group">
+
+                                                            <label>Note</label>
+                                                            @Html.TextAreaFor(model => model.Note, new { @class = "form-control", placeholder = "Input note..." })
+                                                            @Html.ValidationMessageFor(model => model.Note)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="media_tab_2">
+                                        <div class="box box-warning">
+                                            <div class="box-body">
+
+                                                <div class="nav-tabs-custom">
+                                                    <ul class="nav nav-tabs">
+                                                        <li class="active"><a href="#images" data-toggle="tab" aria-expanded="true">Images & Certificates </a></li>
+                                                        <li class=""><a href="#images3d" data-toggle="tab" aria-expanded="false">3D Images</a></li>
+                                                        @*<li class=""><a href="#certiface-image" data-toggle="tab" aria-expanded="false">Giấy tờ chủ quyền</a></li>*@
+                                                        <li class=""><a href="#image2d-floorplan" data-toggle="tab" aria-expanded="false">2D Floor Plan</a></li>
+                                                        @*<li class=""><a href="#google-map" data-toggle="tab" aria-expanded="false">Google map</a></li>*@
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane active" id="images">
+                                                            <label for="exampleInputFile">Property Images</label>
+                                                            @Html.TextBoxFor(model => model.OtherImages, "", new { @id = "otherImages", @type = "file", @multiple = "multiple" })
+                                                            <p></p>
+
+                                                            <label for="exampleInputFile">Certificates Image</label>
+                                                            @Html.TextBoxFor(model => model.CertificateImages, "", new { @id = "certificateImages", @type = "file", @multiple = "multiple" })
+
+                                                        </div>
+                                                        <!-- /.tab-pane -->
+                                                        <div class="tab-pane" id="images3d">
+                                                            <b><label for="exampleInputFile">3D Images</label></b>
+                                                            @Html.TextBoxFor(model => model.Files3D, "", new { @id = "files3d", @type = "file", @multiple = "multiple" })
+
+                                                        </div>
+                                                        <!-- /.tab-pane -->
+                                                        @*<div class="tab-pane" id="certiface-image">
+                                                            <label for="exampleInputFile">Certificates Image</label>
+                                                            @Html.TextBoxFor(model => model.CertificateImages, "", new { @id = "certificateImages", @type = "file", @multiple = "multiple" })
+                                                            <p class="help-block">Certificates Image.</p>
+
+                                                        </div>*@
+                                                        <div class="tab-pane" id="image2d-floorplan">
+                                                            <label for="exampleInputFile">2D Image</label>
+                                                            @Html.TextBoxFor(model => model.Files2D, "", new { @id = "files2d", @type = "file", @multiple = "multiple" })
+
+                                                        </div>
+                                                        @*<div class="tab-pane" id="google-map">
+                                                            <div class="row">
+                                                                <label>ress <i class="fa fa-asterisk text-red"></i></label>
+                                                                <input name="Estate_Address" id="Estate_Address" type="text" placeholder="Input address or auto pick location." class="form-control" />
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <input id="searchInput" class="  form-control" style="width:70%" type="text" placeholder="search ...">
+                                                                <input name="Latitude" id="Latitude" type="hidden" class="form-control" />
+                                                                <input name="Longitude" id="Longitude" type="hidden" class="form-control" />
+                                                                <div id="map"></div>
+                                                            </div>
+
+                                                            <label id="latLng" class="control-label">ress <sup><i class="fa fa-star text-red"></i> </sup>: </label>
+                                                        </div>*@
+                                                        <!-- /.tab-pane -->
+                                                    </div>
+                                                    <!-- /.tab-content -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal_loading" style="display: none">
+                            <div class="center">
+                                <img alt="" src="~/Content/loading.gif" />
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @{
+            var mapApi = config.GoogleMapAPI;
+            var scr = mapApi + "&libraries=places&callback=initMap";
+        }
+        <script src="https://maps.googleapis.com/maps/api/js?key=@scr" async defer></script>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button class="btn btn-success" type="button" onclick="CreateNew()"> Save </button>
+        </div>
+    </div>
+
+}

@@ -1,0 +1,19 @@
+﻿@model List<Web.Models.Article>
+
+
+
+<div class="col-sm-16 hot-news hidden-xs">
+    <div class="row">
+        <div class="col-sm-15">
+            <span class="ion-ios7-timer icon-news pull-left"></span>
+            <ul id="js-news" class="js-hidden">
+                @foreach(var i in Model)
+                { 
+                <li class="news-item"><a href="/Article/Detail/@i.ArticleId">@i.Title</a></li>
+                }
+            </ul>
+        </div>
+        <div class="col-sm-1 shuffle text-right"><a href="#"><span class="ion-shuffle"></span></a></div>
+    </div>
+</div>
+

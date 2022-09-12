@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "List";
+}
+@using MvcPaging
+@model  MvcPaging.IPagedList<Web.Models.Article>
+
+<div class="container">
+
+    <!-- bage header start -->
+    <div class="page-header">
+        @if(ViewBag.cate != null)
+        { 
+            <h1>@ViewBag.cate.CategoryName </h1>
+        }
+        <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">pages</a></li>
+            <li class="active">section page style 2</li>
+        </ol>
+    </div>
+
+    <!-- bage header end -->
+
+</div>
+
+<!-- data start -->
+<section>
+    <div class="container ">
+        <div class="row ">
+            <!-- left sec start -->
+            <div id="grid-list" class="col-md-11 col-sm-11">
+                @if(Model != null)
+                { 
+                    { Html.RenderPartial("AjaxArticle", Model); }
+                }
+            </div>
+            <!-- left sec end -->
+
+
+        </div>
+    </div>
+</section>
+<!-- data end -->
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#grid-list').fadeOut('normal');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#grid-list').fadeIn('normal');
+        $('a').tooltip();
+    }
+
+    function failurePaging() {
+        alert("Could not retrieve list.");
+    }
+
+</script>

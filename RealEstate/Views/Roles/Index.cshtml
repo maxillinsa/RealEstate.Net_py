@@ -1,0 +1,71 @@
+﻿@model IEnumerable<RealEstate.Models.Role>
+
+@{
+    ViewBag.Title = "Index";
+    int j = 1;
+}
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Role Lists</h3>
+    </div><!-- /.box-header -->
+    <p>
+        @*<a class="btn btn-success" href="/Roles/Create"> Role</a>*@
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="SanPhams">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Role Name</th>
+                    <th>Created Date</th>
+                    <th>Deleted</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>@item.RoleName</td>
+                        <td>
+                           @item.CreateDate
+                        </td>
+                       
+                      
+                        <td>
+                            @if (item.IsDelete == true)
+                            {
+                               <label class="label label-danger">
+                                   Deleted
+                                </label>
+                            }
+                           
+                        </td>
+                     
+                    </tr>
+                            j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>Role Name</th>
+                    <th>Created Date</th>
+                    <th>Deleted</th>
+                </tr>
+
+            </tfoot>
+        </table>
+    
+
+    </div><!-- /.box-body -->
+</div>

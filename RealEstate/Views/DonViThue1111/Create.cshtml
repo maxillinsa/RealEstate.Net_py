@@ -1,0 +1,57 @@
+﻿@model RealEstate.Models.DonViThue
+@{
+    ViewBag.Title = " Unit for Price";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("Create", "DonViThue", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1"> Rent Unit</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Rent Unit Name</label>
+                                        @Html.TextBoxFor(model => model.Ten, new { @class = "form-control", placeholder = "Input Name..." })
+                                        @Html.ValidationMessageFor(model => model.Ten)
+                                    </div>
+                                                              
+
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div><!-- /.tab-Product Info -->
+
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+
+}

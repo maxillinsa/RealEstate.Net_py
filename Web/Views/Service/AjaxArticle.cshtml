@@ -1,0 +1,97 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<Web.Models.Article>
+@{
+
+    Layout = null;
+   
+}
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="sec-topic col-sm-16 wow fadeInDown animated " data-wow-delay="0.5s">
+            <div class="row">
+                <div class="col-sm-7">
+                    <img width="1000" height="606" alt="" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@item.Image" class="img-thumbnail"></div>
+                <div class="col-sm-9">
+                    <a href="/Article/Detail/@item.ArticleId">
+                        <div class="sec-info">
+                            <h3>@item.Title</h3>
+                            <div class="text-danger sub-info-bordered">
+                                <div class="time"><span class="ion-android-data icon"></span>@item.CreateDate</div>
+                                <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                            </div>
+                        </div>
+                    </a>
+                    @if (item.Short != null)
+                    {
+                        if (item.Short.Length > 250)
+                        {
+                            <p>@MvcHtmlString.Create(item.Short.Substring(0, 250))...</p>
+                        }
+                        else
+                        {
+                            <p>@MvcHtmlString.Create(item.Short)</p>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    @*<div class="col-sm-16">
+        <hr>
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>*@
+</div>
+
+
+<div class="col-sm-16">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Article", action = "List", id = ViewData["id"] }))
+    @*<div class="well">
+            Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+            of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+        </div>*@
+</div>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>

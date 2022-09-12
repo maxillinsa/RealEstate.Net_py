@@ -1,0 +1,156 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = ViewBag.Title;
+}
+@model  MvcPaging.IPagedList<RealEstate.Models.ViewModels.ProvinceViewModel>
+
+<script>
+    $(document).ready(function () {        
+        $.ajaxSetup({ cache: false });
+        $('.name').focus();
+        $("#searchItem").click(function () {
+            $("#formList").submit();
+        });  
+       
+    });       
+        // Click button or tag a to call function Create
+        function CreateAjax() {
+            if (!ValidateProvinceInputs())
+                return;
+            var model = {
+                Name: $('#Name').val(),
+                Content: $('#Content').val()
+            }
+            $.ajax({
+                url: '/Provinces/CreateAjax',
+                type: 'POST',
+                dataType: 'json',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(model),
+                success: function (response) {
+                    if (response.isExit) {
+                        /// Notyfy khi lỗi
+                        $.notify({
+                            icon: 'glyphicon glyphicon-star',
+                            title: "<strong>Error:</strong> ",
+                            message: "Data already existed in the system - Please check again!"
+                        }, {
+                                type: 'danger'
+                            });
+                        var name = $('#Name');
+                        name.closest('.form-group').addClass('has-error');
+                        name.closest('.form-group').addClass('has-error');
+                        return;
+                    }
+                    Clean();
+                    $('#btnCloseModal').click();
+                    var raw = '';
+                    raw += "<tr id=ItemId-" + response.Province.ItemId + '>';
+                    raw += "<td>" + 0 + "</td>";
+                    raw += "<td>" + response.Province.Name + "</td>";
+                    raw += "<td>" + "</td>";
+                    raw += "<td>" + "</td>";
+                    raw += "<td>" +                
+
+
+                        + " </td>";
+                    raw += "</tr>";
+                    $('#indexTbody').prepend(raw);
+                    notifyer();
+                },
+                error: function (err) { alert("Error: " + err.responseText); }
+            });
+        };
+        // Click button or tag a to call funcction Edit
+        function EditAjax() {
+            if (!ValidateProvinceInputs())
+                return;
+            var model = {
+                ItemId: $('#ItemId').val(),
+                Name: $('#Name').val(),
+                Content: $('#Content').val(),
+            }
+            $.ajax({
+                url: '/Provinces/EditAjax',
+                type: 'POST',
+                dataType: 'json',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(model),
+                success: function (response) {
+                    if (response.isExit) {
+                        /// Notyfy khi lỗi
+                        $.notify({
+                            icon: 'glyphicon glyphicon-star',
+                            title: "<strong>Error:</strong> ",
+                            message: "Data already existed in the system - Please check again!"
+                        }, {
+                                type: 'danger'
+                            });
+                        var name = $('#Name');
+                        name.closest('.form-group').addClass('has-error');
+                        name.closest('.form-group').addClass('has-error');
+                        return;
+                    }
+                    Clean();
+                    $('#btnCloseModal').click();
+                    var raw = '';
+                    raw += "<tr id=ItemId-" + response.Province.ItemId + '>';
+                    raw += "<td>" + 0 + "</td>";
+                    raw += "<td>" + response.Province.Name + "</td>";
+                    raw += "<td>" + response.Province.Content + "</td>";
+                    raw += "<td>" +
+
+
+
+                        + " </td>";
+                    raw += "</tr>";
+                    $('#ItemId-' + response.Province.ItemId).replaceWith(raw);
+                    notifyer();
+                },
+                error: function (err) { alert("Error: " + err.responseText); }
+            });
+        };
+
+   
+</script>
+<div class="clearfix">
+</div>
+<div class="box box-success">
+    @using (Ajax.BeginForm("Index", "Provinces", new { flag = false },
+                    new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, new { id = "formList" }))
+    {
+        <div class="box-body col-lg-12 col-md-12 col-xs-12">
+
+            <div id="searchBox" class="col-md-12 col-xs-12 form-group">
+                <div class="col-md-2 col-xs-12 form-group " style="padding-left: 0px;">
+                    <a data-toggle="modal" onclick="RenderActions('/Provinces/CreateAjax')" data-target="#modalCrud" class="btn btn-success pull-right"><i class="glyphicon glyphicon-plus"></i></a>
+                </div>
+                <div class="col-md-2 col-xs-12 form-group" style="padding-left: 0px">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input class=" form-control name" type="text" name="name" value="@ViewBag.name" placeholder="Name ..." />
+                    </div>
+                </div>
+                <div class="col-md-2 col-xs-12 form-group " style="padding-left: 0px;">
+                    <a href="/Provinces/Create" class="btn btn-success pull-right">Create new <i class="fa fa-arrow-circle-right"></i></a>
+                    <button id="searchItem" type="button" class="btn btn-danger pull-left"> Search <i class="fa fa-search-plus"></i> </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="box-body no-padding" id="grid-list">
+            @{ Html.RenderPartial("AjaxList", Model); }
+        </div>
+    }
+</div>
+<div id="modalCrud" class="modal fade" role="dialog" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="OpenDialog" class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

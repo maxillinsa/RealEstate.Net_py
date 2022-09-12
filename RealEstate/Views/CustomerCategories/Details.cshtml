@@ -1,0 +1,41 @@
+﻿@model RealEstate.Models.ViewModels.CustomerCategoryViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">@ViewBag.Title</a></li>                 
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Name..." })
+                                        @Html.ValidationMessageFor(model => model.Name)
+                                    </div>                                   
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.IsDelete, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.IsDelete)
+                                            @Html.ValidationMessageFor(model => model.IsDelete)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!-- /.tab-Product Info -->
+
+            </div><!-- /.tab-content -->
+        </div>
+    </div>
+

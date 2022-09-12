@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "Unit Managment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@using PagedList.Mvc;
+@model PagedList.IPagedList<RealEstate.Models.SaleUnit>
+@using PagedList;
+<div class="box">
+    <a class="btn btn-success" href="/SaleUnit/Create"> Sale Unit</a>
+    <div class="box-header">
+        <h3 class="box-title">Sale Unit</h3>
+    </div><!-- /.box-header -->
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="products">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Sale Unit Name</th>
+                   
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>
+                            @if (item.Name != null)
+                            {
+                                if (item.Name.Length > 55)
+                                {
+                                    <label class="label label-primary" title="@item.Name">@item.Name.Substring(0, 55) ...</label>
+                                }
+                                else
+                                {
+                                    <label class="label label-primary">@item.Name</label>
+                                }
+                            }
+                        </td>
+                     
+                        <td>
+                            <a href="@Url.Action("Index", "SanPhams", new { donViBanId = item.SaleUnitId })" class="btn btn-primary padding-2" title="Edit"> Product Lists</a>
+                            <a href="@Url.Action("Edit", "SaleUnit", new { id = item.SaleUnitId })" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", "SaleUnit", new { id = item.SaleUnitId })" class="btn btn-warning padding-2" title="Delete" onclick="return confirm('Delete this unit ?')"> Delete</a>
+                            }
+                            @if (item.IsDelete == null || item.IsDelete == true)
+                            {
+                                <a href="@Url.Action("Delete", "SaleUnit", new { id = item.SaleUnitId })" class="btn btn-danger padding-2" title="Restore" onclick="return confirm('Restore this unit?')"> Deleted</a>
+                            }
+                        </td>
+                    </tr>
+                            j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>Unit Name</th>
+
+                    <th> </th>
+                </tr>
+
+            </tfoot>
+        </table>
+        @*@Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)*@
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+    </div><!-- /.box-body -->
+</div>
+

@@ -1,0 +1,16 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = ViewBag.Title;
+}
+@model  MvcPaging.IPagedList<RealEstate.Models.ViewModels.CompanyViewModel>
+
+<div class="box box-success">
+    @using (Ajax.BeginForm("Index", "Companies", new { flag = false },
+                    new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, new { id = "formList" }))
+    {
+
+        <div class="box-body no-padding" id="grid-list">
+            @{ Html.RenderPartial("AjaxList", Model); }
+        </div>
+    }
+</div>

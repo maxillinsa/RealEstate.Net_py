@@ -1,0 +1,47 @@
+﻿
+@model RealEstate.Models.ImportExcel
+@{ ViewBag.Title = "Import Excel File into Database Table using SqlBulkCopy Class";}
+<script>
+    $(document).ready(function () {     
+        $("#btnSubmit").click(function () {
+            $("#formImport").submit();
+            showLoader("Import customer....");
+            $(this).hide();
+        });
+
+        function showLoader(txt) {
+            $("#Loader").show();
+            var loaderTxt = txt;
+            $("#LoaderTxt").fadeIn(400).html(loaderTxt);
+        };       
+
+    });
+</script>
+<h3>Import khách hàng từ file Excel (định dạng file .xls hoặc .xlsx)</h3>
+@using (Html.BeginForm("ImportCustomer", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" , id = "formImport" }))
+{
+    <div class="box box-warning">       
+        <div id="Loader" style="display:none" class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <i class="fa fa-refresh fa-spin"></i>
+            <p id="LoaderTxt"> </p>
+        </div>
+        <div id="showError" style="display:none" class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <p id="ErrorTxt"></p>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12 col-xs-12 form-group">
+                    <div class="col-md-6"> Please select Excel file with following format - CustomerCategoryId - CustomerNam - Mobile: <a href="~/Content/Upload/ImportCustomer.xlsx"> File Mẫu</a> </div>
+                    <div class="col-md-3">
+                        <input class="btn btn-block form-control" type="file" id="FileUpload" name="FileUpload" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" value="Upload and Import" id="btnSubmit" class="btn btn-primary pull-right" />
+                    </div>
+                </div>              
+            </div>
+        </div>
+    </div>
+}

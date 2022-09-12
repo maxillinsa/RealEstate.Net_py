@@ -1,0 +1,120 @@
+﻿@model PagedList.IPagedList<RealEstate.Models.Article>
+
+@{
+    ViewBag.Title = "Articles Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@using PagedList;
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Articles</h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/Article/Create"> Article</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-Category-content">
+        <table class="table table-hover" id="Categorys">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Title</th>
+                    <th>Category name</th>
+                    <th>Avatar</th>
+                    <th>Allow Comment</th>                    
+                    <th>Status</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>
+                            @if (item.Title != null)
+                            {
+                                if (item.Title.Length > 55)
+                                {
+                                    <label class="label label-primary" title="@item.Title">@item.Title.Substring(0, 55) ...</label>
+                                }
+                                else
+                                {
+                                    <label class="label label-primary">@item.Title</label>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @foreach (RealEstate.Models.Category item1 in ViewBag.lstCategory)
+                            {
+                                if (item1.CategoryId == item.CategoryId)
+                                {
+                                    @item1.CategoryName.ToString()
+                                }
+                            }
+                        
+                        </td>
+                        <td>
+                            @{
+                                <img src="~/Media/Images/article/@item.Image" alt="@item.Image" height="50" width="50" />
+                            }
+                        </td>
+                        <td>
+                            @if (item.AllowComments == false)
+                            {
+                                <label class="label label-success">
+                                   No
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                   Allow
+                                </label>
+                            }
+                           
+                        </td>
+                        <td>
+                            @if (item.IsDelete == false)
+                            {
+                                <label class="label label-success">
+                                    Normal
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    Deleted
+                                </label>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.ArticleId})" class="btn btn-primary padding-2" title="Edit">Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.ArticleId })" class="btn btn-danger padding-2" title="Delete category" onclick="return confirm('Delete this article?')"> Delete</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("UnDelete", new { id = item.ArticleId })" class="btn btn-warning padding-2" title="Restore category" onclick="return confirm('Restore this post?')"> Restore</a>
+                            }
+
+                        </td>
+                    </tr>
+                            j++;
+                }
+            </tbody>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

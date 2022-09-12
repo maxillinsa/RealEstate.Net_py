@@ -1,0 +1,147 @@
+﻿@model RealEstate.Models.Vendor
+@{
+    ViewBag.Title = "Edit Vendor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("Edit", "Vendor", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model=>model.VendorId)
+    <input type="hidden" name="page" value="@ViewBag.page" />
+   
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1"> Vendor</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Vendor Name</label>
+                                        @Html.TextBoxFor(model => model.VendorName, new { @class = "form-control", placeholder = "Input Name..." })
+                                        @Html.ValidationMessageFor(model => model.VendorName)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Address</label>
+                                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Input address..." })
+                                        @Html.ValidationMessageFor(model => model.Address)
+                                    </div>
+                                  
+                                    <div class="col-md-12 form-group">
+                                        <label>Email</label>
+                                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Email ..." })
+                                        @Html.ValidationMessageFor(model => model.Email)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Contact number</label>
+                                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", placeholder = "Contact number ..." })
+                                        @Html.ValidationMessageFor(model => model.Mobile)
+                                    </div>
+                                
+                                </div>
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title"> Category descriptions<small>Descriptions</small></h3>
+                                        <!-- tools box -->
+                                        <div class="pull-right box-tools">
+                                            <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                        </div><!-- /. tools -->
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body pad">
+                                        @Html.TextAreaFor(model => model.Description, new { @id = "Description" })
+                                    </div>
+                                </div><!-- /.box -->
+                                <div class="col-md-12 form-group">
+                                    <label for="IsDelete" style="color:red">Is Delete</label>
+
+                                    @if (Model.IsDelete == null || Model.IsDelete == false)
+                                    {
+                                        @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true }) <span>Delete</span>
+                                        @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false, @checked = "checked" }) <span>No</span>
+                                    }
+                                    else
+                                    {
+                                        @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true, @checked = "checked" }) <span>Delete</span>
+                                        @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false }) <span>No</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-Product Info -->
+
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+    
+}
+<script>
+        $(function () {
+            tinyMCE.init({
+                selector: '#Description',
+                height: 300,
+                theme: 'modern',
+                plugins: [
+                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                     "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                content_css: "css/content.css",
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                style_formats: [
+                     { title: 'Bold text', inline: 'b' },
+                     { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } },
+                     { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } },
+                     { title: 'Example 1', inline: 'span', classes: 'example1' },
+                     { title: 'Example 2', inline: 'span', classes: 'example2' },
+                     { title: 'Table styles' },
+                     { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+                ], file_browser_callback: RoxyFileBrowser
+            });
+
+        });
+        function RoxyFileBrowser(field_name, url, type, win) {
+            var roxyFileman = '@Url.Content("~/Content/AdminDashboard/filebrowser/index.html")';
+            if (roxyFileman.indexOf("?") < 0) {
+                roxyFileman += "?type=" + type;
+            }
+            else {
+                roxyFileman += "&type=" + type;
+            }
+            roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+            tinyMCE.activeEditor.windowManager.open({
+                file: roxyFileman,
+                title: 'File manager',
+                width: 850,
+                height: 650,
+                resizable: "yes",
+                plugins: "media",
+                inline: "yes",
+                close_previous: "no"
+            }, { window: win, input: field_name });
+            return false;
+        }
+</script>

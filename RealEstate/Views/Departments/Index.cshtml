@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Department";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@model PagedList.IPagedList<RealEstate.Models.Department>
+@using PagedList;
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Department Management </h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/Departments/Create"> Department</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="SanPhams">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th> Created Date </th>
+                    <th>Deleted</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td><label class="label label-primary">@item.DepartmentName</label></td>
+                        <td>
+                            @if (item.CompanyId != null)
+                            {
+                                <label class=" label label-success">
+                                    @item.Company.CompanyName
+                                </label>
+                            }
+                            else
+                            {
+                                <label class=" label label-info">
+                                    Non-organized
+                                </label>
+                            }
+
+                        </td>
+                        <td>
+                            @item.CreatDate
+                        </td>
+                        <td>
+                            @if (item.IsDelete == true)
+                            {
+                                <label class="label label-danger">
+                                    Deleted
+                                </label>
+                            }
+
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.DepartmentId})" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.DepartmentId })" class="btn btn-danger padding-2" title="Delete" onclick="return confirm('Delete this department ?')"><i class="fa fa-trash-o"></i>Delete</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("UnDelete", new { id = item.DepartmentId })" class="btn btn-primary padding-2" title="Restore" onclick="return confirm('Restore this department ?')"> Restore</a>
+                            }
+
+                        </td>
+                    </tr>
+                    j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Company</th>
+                    <th> Created Date </th>
+                    <th>Deleted</th>
+                    <th> </th>
+                </tr>
+
+            </tfoot>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

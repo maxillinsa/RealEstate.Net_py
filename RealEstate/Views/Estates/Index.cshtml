@@ -1,0 +1,370 @@
+﻿@{
+    ViewBag.Title = "Product Listing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.ViewModels.EstateViewModel>
+<script>
+    $(document).ready(function () {
+        $('.ky-hieu').focus();
+        $("#searchItem").click(function () {
+            $("#formEstate").submit();
+        });
+        PriceDropDownList(1)
+    });
+    function ShowAdvanceSearch() {
+        $("#formAdvanceSearch").show(300);
+        $("#btnHideAdvanceSearch").show(300);
+        $("#btnShowAdvanceSearch").hide(300);
+
+    }
+    function HideAdvanceSearch() {
+        $("#formAdvanceSearch").hide(300);
+        $("#btnHideAdvanceSearch").hide(300);
+        $("#btnShowAdvanceSearch").show(300);
+
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajaxSetup({ cache: false });
+        $("#Estate_GroupId").change(function () {
+            var estateGroupId = $(this).find(":selected").val();
+            $("#typePriceList").empty();
+            PriceDropDownList(estateGroupId);
+        });
+
+    });
+
+    function GetFormData() {
+        var formData = new FormData();
+
+        var files2D = $("#files2d").prop('files');
+        for (var i = 0; i < files2D.length; i++) {
+            formData.append("2D" + files2D[i].name, files2D[i]);
+        }
+
+        var files3D = $("#files3d").prop('files');
+        for (var i = 0; i < files3D.length; i++) {
+            formData.append("3D" + files3D[i].name, files3D[i]);
+        }
+
+        var certificateImages = $("#certificateImages").prop('files');
+        for (var i = 0; i < certificateImages.length; i++) {
+            formData.append("CE" + certificateImages[i].name, certificateImages[i]);
+        }
+
+        var otherImages = $("#otherImages").prop('files');
+        for (var i = 0; i < otherImages.length; i++) {
+            formData.append("NO" + otherImages[i].name, otherImages[i]);
+        }
+
+        formData.append("Id", $('#Id').val());
+        formData.append("ProvinceId", $('#ProvinceId').val());
+        formData.append("DistrictId", $('#DistrictId').val());
+        formData.append("WardId", $('#WardId').val());
+        formData.append("Certificate_TypeId", $('#CertificateId').val());
+        formData.append("DriectionOfTheHouse", $('#HouseDirectionId').val());
+        formData.append("Number_Lot", $('#Number_Lot_Id').val());
+        formData.append("Number_Paper", $('#Number_Paper_Id').val());
+        formData.append("LandArea", $('#LandArea').val());
+        formData.append("AreaOffUse", $('#AreaOffUse').val());
+        formData.append("ConstructionArea", $('#ConstructionArea').val());
+        formData.append("FrontOfHouse", $('#FrontOfHouse').val());
+        formData.append("AlleyOfHouse", $('#AlleyOfHouse').val());
+        formData.append("Frontispiece", $('#Frontispiece').val());
+        formData.append("LotLength", $('#LotLength').val());
+        formData.append("ExpandAfter", $('#ExpandAfter:checked').val());
+        formData.append("Number_Bedrooms", $('#Number_Bedrooms').val());
+        formData.append("Number_Livingrooms", $('#Number_Livingrooms').val());
+        formData.append("Number_Toilets", $('#Number_Toilets').val());
+        formData.append("Number_Floors", $('#Number_Floors').val());
+        formData.append("kyHieu", $('#KyHieu').val());
+        formData.append("TownId", $('#TownId').val());
+        formData.append("Estate_ProjectId", $('#ProjectId').val());
+        formData.append("Estate_GroupId", $('#GroupId').val());
+        formData.append("Estate_StatusId", $('#StatusId').val());
+        formData.append("Estate_TypeId", $('#Estate_TypeId').val());
+        formData.append("StreetId", $('#StreetId').val());
+        formData.append("accountId", $('#AccountId').val());
+        formData.append("soNha", $('#HouseNo').val());
+        formData.append("giaBan", $('#FinalSalePrice').val());
+        formData.append("giaThue", $('#FinalRentPrice').val());
+        formData.append("donViBanId", $('#SaleUnitId').val());
+        formData.append("donViThueId", $('#RentUnitId').val());
+        formData.append("soDienThoai", $('#Mobile').val());
+        formData.append("tenChuNha", $('#TenChuNha').val());
+        formData.append("ghiChu", $('#GhiChu').val());
+        formData.append("isHot", $('#IsHot:checked').val());
+        formData.append("isOutSide", $('#IsOutSide:checked').val());
+        formData.append("Latitude", $('#Latitude').val());
+        formData.append("Longitude", $('#Longitude').val());
+        formData.append("Estate_Address", $('#Estate_Address').val());
+        return formData;
+    }
+    function CreateNew() {
+        if (!ValidateInputsEstate())
+            return;
+
+        var formData = GetFormData();
+        $.ajax({
+            url: '/Estates/CreateEstate',
+            type: 'POST',
+            beforeSend: function () {
+                $(".modal_loading").show();
+
+            },
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Id == 0) {
+                    var kyHieu = $('#KyHieu');
+                    if ($.trim(kyHieu.val()) != '') {
+                        kyHieu.closest('.form-group').addClass('has-error');
+                        kyHieu.closest('.form-group').addClass('has-error');
+                    }
+                    var soNha = $('#HouseNo');
+                    if ($.trim(soNha.val()) != '') {
+                        soNha.closest('.form-group').addClass('has-error');
+                        soNha.closest('.form-group').addClass('has-error');
+                    }
+                    showError("Duplicated product. please check again!");
+                    return;
+                }
+
+                Clean();
+                $('#btnCloseModal').click();
+                location.reload();
+            },
+            complete: function () {
+                $(".modal_loading").hide();
+            },
+            error: function (err) {  }
+        });
+    };
+    function Edit() {
+        if (!ValidateInputsEstate())
+            return;
+        var formData = GetFormData();
+        $.ajax({
+            url: '/Estates/EditEstate',
+            type: 'POST',
+            beforeSend: function () {
+                $(".modal_loading").show();
+            },
+            data: formData,
+            contentType: false,
+            dataType: "json",
+            processData: false,
+            success: function (response) {
+                if (response.Id == 0) {
+                    showError("Duplicated product. please check again! ");
+                    return;
+                }
+                Clean()
+                $('#btnCloseModal').click();
+            },
+            complete: function () {                
+                $(".modal_loading").hide();
+            },
+            error: function (err) { alert("Error: " + err.responseText); }
+        });
+    }   
+
+</script>
+
+<div class="row">
+    @using (Ajax.BeginForm("Index", "Estates", new { flag = false },
+                       new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, new { id = "formEstate" }))
+    {
+        <div class=" col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <a data-toggle="modal" onclick="RenderActions('/Estates/CreateEstate')" data-target="#modalCrud" class="btn btn-success btn-block margin-bottom">Create new <i class="fa fa-arrow-circle-right"></i></a>
+            <br />
+            <input type="hidden" name="accountId" value="@ViewData["accountId"]" />
+            <div class="box box-success">
+                <div class="box-header">
+                    <i class="fa fa-search"></i>
+                    <h3 class="box-title">Search</h3>
+                    <div class="box-tools pull-right" data-toggle="tooltip" title="Create new">
+                        <div class="btn-group" data-toggle="btn-toggle">
+                            @*     <a data-toggle="modal" onclick="RenderActions('/Estates/CreateEstate')" data-target="#modalCrud" class="pull-left btn btn-success"> <i class="fa fa-plus-square"></i></a>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body chat" id="chat-box" style="width: auto; height: 250px;">
+                    <div class="col-lg-12  col-md-12  col-xs-12 form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input class=" form-control ky-hieu" type="text" name="kyHieu" placeholder="ID ..." />
+                        </div>
+                    </div>
+                    <div class="col-lg-12  col-md-12  col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <select class="form-control select2" data-val="true" data-val-number="The field TownId must be a number." name="khuPho">
+                                <option value=""> -- Town -- </option>
+                                @foreach (var i in ViewBag.Khupho)
+                                {
+                                    <option value="@i.TownId">@i.Name</option>
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-lg-6  col-md-6 col-xs-6 col-sm-6 form-group">
+                        <select class="form-control" data-val="true" data-val-number="The field Estate_TypeId must be a number." name="Estate_TypeId">
+                            <option value=""> -- Estate Type -- </option>
+                            @foreach (var i in ViewBag.Estate_Types)
+                            {
+                                <option value="@i.ItemId">@i.Name</option>
+
+                            }
+                        </select>
+                    </div>
+                    <div class=" col-lg-6  col-md-6 col-xs-6 col-sm-6 form-group">
+                        <select class="form-control" id="Estate_GroupId" name="Estate_GroupId">
+                            <option value="0"> --Select all-- </option>
+                            @foreach (var i in ViewBag.Estate_Groups)
+                            {
+                                <option value="@i.ItemId">@i.Name</option>
+
+                            }
+                        </select>
+                    </div>
+                    <div class=" col-lg-12  col-md-12 col-xs-12 form-group">
+                        <select class="form-control " id="acreage" name="acreage">
+                            <option value="0"> -- Select sqrt -- </option>
+                            <option value="1"> <= 30 m2</option>
+                            <option value="2">  30 - 80 m2</option>
+                            <option value="3">  80 - 100 m2</option>
+                            <option value="4">  100 - 150 m2</option>
+                            <option value="5">  150 - 200 m2</option>
+                            <option value="6">  200 - 300 m2</option>
+                            <option value="7">  300 - 500 m2</option>
+                            <option value="8">  500 - 800 m2</option>
+                            <option value="9"> >= 800 m2</option>
+                        </select>
+                    </div>
+                    <div class=" col-lg-12  col-md-12 col-xs-12 form-group">
+                        <select class="form-control" id="typePriceList" name="typePriceList"></select>
+
+                    </div>
+                    <div class=" col-lg-12  col-md-12 col-xs-12 form-group">
+                        <select class="form-control " id="SortId" name="SortId">
+                            <option value="0"> 0- Active Product </option>
+                            <option value="1"> 1- On Expring  </option>
+                            <option value="2">  2- Expired </option>
+                            <option value="3">  3- Deleted </option>
+                            <option value="4">  4- All </option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="formAdvanceSearch" style="display:none ">
+                        <div class="col-lg-12  col-md-12  col-xs-12 form-group">
+                            <select class="form-control" name="Estate_StatusId">
+                                <option value="0"> -- Select status -- </option>
+                                @foreach (var i in ViewBag.Estate_Statuses)
+                                {
+                                    <option value="@i.ItemId">@i.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-lg-12  col-md-12  col-xs-12 form-group">
+                            <select class=" form-control select2" name="Estate_ProjectId">
+                                <option value="0"> -- Select project -- </option>
+                                @foreach (var i in ViewBag.Estate_Projects)
+                                {
+                                    <option value="@i.ItemId">@i.Name</option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="col-lg-12  col-md-12  col-xs-12 form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input class=" form-control" type="text" name="houseNumber" id="houseNumber" placeholder="House No. ..." />
+                            </div>
+                        </div>
+                        <div class="col-lg-6  col-md-6  col-xs-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Paper No.</span>
+                                <input class=" form-control" type="text" name="Number_Paper" id="Number_Paper" placeholder=" ..." />
+                            </div>
+                        </div>
+                        <div class="col-lg-6  col-md-6  col-xs-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">Lot</span>
+                                <input class=" form-control" type="text" name="Number_Lot" id="Number_Lot" placeholder=" ..." />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label for="ExpandAfter">Hot?</label>
+                            <div class="form-control">
+                                <input data-val="true"
+                                       data-val-required="The isNewlyEnrolled field is required."
+                                       id="IsHot"
+                                       name="IsHot"
+                                       type="checkbox"
+                                       value="true" />
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="IsDelete">Coperate?</label>
+                            <div class="form-control">
+                                <input data-val="true"
+                                       data-val-required="The isNewlyEnrolled field is required."
+                                       id="isOutSide"
+                                       name="isOutSide"
+                                       type="checkbox"
+                                       value="true" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div><!-- /.search -->
+                <div class="clearfix"></div>
+                <div class="box-footer clearfix">
+                    <button class=" pull-right btn btn-danger" type="submit" name="SearchBtn"> Search <i class="fa fa-search-plus"></i> </button>
+
+                </div>
+                <a onclick="HideAdvanceSearch()" style="display:none" id="btnHideAdvanceSearch" class="btn btn-danger btn-block margin-bottom"> Hide Advance Search <i class="fa fa-arrow-circle-o-up"></i></a>
+
+                <a onclick="ShowAdvanceSearch()" id="btnShowAdvanceSearch" class="btn btn-warning btn-block margin-bottom"> Advance Search <i class="fa fa-arrow-circle-o-down"></i></a>
+
+            </div>
+
+
+
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <div class="box box-success">
+
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-list-ol text-primary"></i> <span>Listing management</span></h3>
+
+                </div>
+
+                <div class="box-body no-padding" id="grid-list">
+                    @{ Html.RenderPartial("AjaxEstates", Model); }
+                </div>
+
+            </div>
+
+
+        </div>
+
+    }
+
+</div>
+
+
+<div id="modalCrud" class="modal fade" role="dialog"  data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="OpenDialog" class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

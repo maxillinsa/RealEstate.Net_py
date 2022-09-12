@@ -1,0 +1,71 @@
+﻿@model List<RealEstate.Models.Comment>
+
+<!-- User Account: style can be found in dropdown.less -->
+
+<li class="dropdown messages-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-envelope"></i>
+        <span class="label label-danger">@Model.Count</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">Yes @Model.Count comments today</li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+
+            <ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">
+                @foreach (var item in Model)
+                {
+                    <li>
+                        <!-- start message -->
+                        @if (item.NotificationId != null)
+                        {
+                            <a href="/Notification/Detail/@item.NotificationId">
+                                <div class="pull-left">
+                                    <img src="~/Content/logo.jpg" class="img-circle" alt="User Image">
+                                </div>
+                                <h4>
+                                    @item.Account.Email
+                                    <small><i class="fa fa-clock-o"></i> @item.CreateDate</small>
+                                </h4>
+
+                                @if (item.Contents.Length > 35)
+                                {
+                                    <p> @item.Contents.Substring(0, 35) ...</p>
+                                }
+                                else
+                                {
+                                    <p>@item.Contents</p>
+                                }
+
+
+                            </a>
+                        }
+                        @if (item.EstateId != null)
+                        {
+                        <a href="/Estates/Detail/@item.EstateId">
+                            <div class="pull-left">
+                                <img src="~/Content/logo.jpg" class="img-circle" alt="User Image">
+                            </div>
+                            <h4>
+                                @item.Account.Email
+                                <small><i class="fa fa-clock-o"></i> @item.CreateDate</small>
+                            </h4>
+                            @if (item.Contents.Length > 35)
+                            {
+                                <p> @item.Contents.Substring(0, 35) ...</p>
+                            }
+                            else
+                            {
+                                <p>@item.Contents</p>
+                            }
+                        </a>
+                        }
+
+                    </li><!-- end message -->
+                }
+            </ul>
+
+        </li>
+        <li class="footer"><a href="/Home/Comments/">View all comment</a></li>
+    </ul>
+</li>

@@ -1,0 +1,1564 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="db_bdsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentId" Type="bigint" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Email" Type="nvarchar" MaxLength="150" />
+          <Property Name="Password" Type="nvarchar" MaxLength="150" />
+          <Property Name="LastSignIn" Type="smalldatetime" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="Image" Type="nvarchar" MaxLength="250" />
+          <Property Name="Detail" Type="nvarchar(max)" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="AccountRoles">
+          <Key>
+            <PropertyRef Name="AccountRoleId" />
+          </Key>
+          <Property Name="AccountRoleId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleId" Type="bigint" />
+          <Property Name="AccountId" Type="bigint" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Albums">
+          <Key>
+            <PropertyRef Name="AlbumId" />
+          </Key>
+          <Property Name="AlbumId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Image" Type="nvarchar" MaxLength="250" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="500" />
+          <Property Name="MetaTitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="MetaKeywords" Type="nvarchar" MaxLength="500" />
+          <Property Name="MetaDescription" Type="nvarchar(max)" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Articles">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+          </Key>
+          <Property Name="ArticleId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateBy" Type="bigint" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" />
+          <Property Name="Image" Type="nvarchar" MaxLength="500" />
+          <Property Name="CategoryId" Type="bigint" />
+          <Property Name="Short" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Contents" Type="nvarchar(max)" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="500" />
+          <Property Name="AllowComments" Type="bit" />
+          <Property Name="MetaKeywords" Type="nvarchar" MaxLength="500" />
+          <Property Name="MetaDescription" Type="nvarchar(max)" />
+          <Property Name="MetaTitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="Tags" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryTypeId" Type="bigint" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="CateLevel" Type="int" />
+          <Property Name="ParentCategoryId" Type="bigint" />
+          <Property Name="Image" Type="nvarchar" MaxLength="250" />
+          <Property Name="GroupCategoryId" Type="bigint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="MetaTitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="400" />
+          <Property Name="MetaKeywords" Type="nvarchar" MaxLength="500" />
+          <Property Name="MetaDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="OrderNumber" Type="int" />
+        </EntityType>
+        <EntityType Name="CategoryTypes">
+          <Key>
+            <PropertyRef Name="CategoryTypeId" />
+          </Key>
+          <Property Name="CategoryTypeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Contents" Type="nvarchar" MaxLength="500" />
+          <Property Name="CreateById" Type="bigint" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="SanPhamId" Type="bigint" />
+          <Property Name="ThongBaoId" Type="bigint" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="350" />
+          <Property Name="LicensePlates" Type="nvarchar" MaxLength="150" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreatDate" Type="smalldatetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="DonViBan">
+          <Key>
+            <PropertyRef Name="DonViBanId" />
+          </Key>
+          <Property Name="DonViBanId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ten" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="DonViThue">
+          <Key>
+            <PropertyRef Name="DonViThueId" />
+          </Key>
+          <Property Name="DonViThueId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ten" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="GroupCategories">
+          <Key>
+            <PropertyRef Name="GroupCategoryId" />
+          </Key>
+          <Property Name="GroupCategoryId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupCategoryName" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreateBy" Type="bigint" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Images">
+          <Key>
+            <PropertyRef Name="ImageId" />
+          </Key>
+          <Property Name="ImageId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AlbumId" Type="bigint" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" />
+          <Property Name="Link" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="CreateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="KhuPho">
+          <Key>
+            <PropertyRef Name="KhuPhoId" />
+          </Key>
+          <Property Name="KhuPhoId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ten" Type="nvarchar" MaxLength="150" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="LoginLog">
+          <Key>
+            <PropertyRef Name="LoginLogId" />
+          </Key>
+          <Property Name="LoginLogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" />
+          <Property Name="IPAddress" Type="nvarchar" MaxLength="250" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="bigint" />
+          <Property Name="VendorId" Type="bigint" />
+          <Property Name="AlbumId" Type="bigint" />
+          <Property Name="ProductCode" Type="nvarchar" MaxLength="250" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Image" Type="nvarchar" MaxLength="250" />
+          <Property Name="BasePrice" Type="float" />
+          <Property Name="SalePrice" Type="float" />
+          <Property Name="Detail" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="bigint" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedBy" Type="bigint" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="MetaKeywords" Type="nvarchar" MaxLength="500" />
+          <Property Name="MetaDescription" Type="nvarchar(max)" />
+          <Property Name="MetaTitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="400" />
+          <Property Name="AllowComments" Type="bit" />
+          <Property Name="Tags" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="SanPham">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" />
+          <Property Name="KhuPhoId" Type="bigint" />
+          <Property Name="BanChoThue" Type="int" />
+          <Property Name="KyHieu" Type="nvarchar" MaxLength="150" />
+          <Property Name="DienTich" Type="nvarchar" MaxLength="250" />
+          <Property Name="GiaBan" Type="float" />
+          <Property Name="DonViBanId" Type="bigint" />
+          <Property Name="GiaThue" Type="float" />
+          <Property Name="DonViThueId" Type="bigint" />
+          <Property Name="SoNha" Type="nvarchar" MaxLength="150" />
+          <Property Name="MaLo" Type="nvarchar" MaxLength="150" />
+          <Property Name="SoDienThoai" Type="nvarchar" MaxLength="150" />
+          <Property Name="TenChuNha" Type="nvarchar" MaxLength="150" />
+          <Property Name="NgayNhap" Type="smalldatetime" />
+          <Property Name="NgaySua" Type="smalldatetime" />
+          <Property Name="GhiChu" Type="nvarchar(max)" />
+          <Property Name="IsHot" Type="bit" />
+          <Property Name="LogBy" Type="nvarchar(max)" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="ThongBao">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TieuDe" Type="nvarchar" MaxLength="150" />
+          <Property Name="NoiDung" Type="nvarchar(max)" />
+          <Property Name="AccountId" Type="bigint" />
+          <Property Name="CreateDate" Type="smalldatetime" />
+          <Property Name="AllowComment" Type="bit" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <EntityType Name="Vendors">
+          <Key>
+            <PropertyRef Name="VendorId" />
+          </Key>
+          <Property Name="VendorId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VendorName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Email" Type="nvarchar" MaxLength="250" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="250" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="IsDelete" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Account_Departments">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountRoles_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="AccountRoles" Type="Self.AccountRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="AccountRoles">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountRoles_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="AccountRoles" Type="Self.AccountRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="AccountRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Articles_Articles">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Articles" Type="Self.Articles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Articles">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_CategoryType">
+          <End Role="CategoryTypes" Type="Self.CategoryTypes" Multiplicity="0..1" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryTypes">
+              <PropertyRef Name="CategoryTypeId" />
+            </Principal>
+            <Dependent Role="Categories">
+              <PropertyRef Name="CategoryTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_GroupCategory">
+          <End Role="GroupCategories" Type="Self.GroupCategories" Multiplicity="1" />
+          <End Role="Categories" Type="Self.Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GroupCategories">
+              <PropertyRef Name="GroupCategoryId" />
+            </Principal>
+            <Dependent Role="Categories">
+              <PropertyRef Name="GroupCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="CreateById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_SanPham">
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="SanPhamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_ThongBao">
+          <End Role="ThongBao" Type="Self.ThongBao" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThongBao">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="ThongBaoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Images_Albums">
+          <End Role="Albums" Type="Self.Albums" Multiplicity="0..1" />
+          <End Role="Images" Type="Self.Images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginLog_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="LoginLog" Type="Self.LoginLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="LoginLog">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Albums">
+          <End Role="Albums" Type="Self.Albums" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Vendors">
+          <End Role="Vendors" Type="Self.Vendors" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendors">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_DonViBan">
+          <End Role="DonViBan" Type="Self.DonViBan" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonViBan">
+              <PropertyRef Name="DonViBanId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="DonViBanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_DonViThue">
+          <End Role="DonViThue" Type="Self.DonViThue" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonViThue">
+              <PropertyRef Name="DonViThueId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="DonViThueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_KhuPho">
+          <End Role="KhuPho" Type="Self.KhuPho" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KhuPho">
+              <PropertyRef Name="KhuPhoId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="KhuPhoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThongBao_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="ThongBao" Type="Self.ThongBao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="ThongBao">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_bdsModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountRoles" EntityType="Self.AccountRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Albums" EntityType="Self.Albums" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Articles" EntityType="Self.Articles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CategoryTypes" EntityType="Self.CategoryTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DonViBan" EntityType="Self.DonViBan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DonViThue" EntityType="Self.DonViThue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupCategories" EntityType="Self.GroupCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KhuPho" EntityType="Self.KhuPho" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoginLog" EntityType="Self.LoginLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThongBao" EntityType="Self.ThongBao" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendors" EntityType="Self.Vendors" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Account_Departments" Association="Self.FK_Account_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountRoles_Account" Association="Self.FK_AccountRoles_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="AccountRoles" EntitySet="AccountRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountRoles_Roles" Association="Self.FK_AccountRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="AccountRoles" EntitySet="AccountRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Articles_Articles" Association="Self.FK_Articles_Articles">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Articles" EntitySet="Articles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_CategoryType" Association="Self.FK_Category_CategoryType">
+            <End Role="CategoryTypes" EntitySet="CategoryTypes" />
+            <End Role="Categories" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_GroupCategory" Association="Self.FK_Category_GroupCategory">
+            <End Role="GroupCategories" EntitySet="GroupCategories" />
+            <End Role="Categories" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Account" Association="Self.FK_Comment_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_SanPham" Association="Self.FK_Comment_SanPham">
+            <End Role="SanPham" EntitySet="SanPham" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_ThongBao" Association="Self.FK_Comment_ThongBao">
+            <End Role="ThongBao" EntitySet="ThongBao" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Images_Albums" Association="Self.FK_Images_Albums">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginLog_Account" Association="Self.FK_LoginLog_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="LoginLog" EntitySet="LoginLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Albums" Association="Self.FK_Products_Albums">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Vendors" Association="Self.FK_Products_Vendors">
+            <End Role="Vendors" EntitySet="Vendors" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_Account" Association="Self.FK_SanPham_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="SanPham" EntitySet="SanPham" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_DonViBan" Association="Self.FK_SanPham_DonViBan">
+            <End Role="DonViBan" EntitySet="DonViBan" />
+            <End Role="SanPham" EntitySet="SanPham" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_DonViThue" Association="Self.FK_SanPham_DonViThue">
+            <End Role="DonViThue" EntitySet="DonViThue" />
+            <End Role="SanPham" EntitySet="SanPham" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_KhuPho" Association="Self.FK_SanPham_KhuPho">
+            <End Role="KhuPho" EntitySet="KhuPho" />
+            <End Role="SanPham" EntitySet="SanPham" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThongBao_Account" Association="Self.FK_ThongBao_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="ThongBao" EntitySet="ThongBao" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_bdsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentId" Type="Int64" />
+          <Property Name="UserName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LastSignIn" Type="DateTime" Precision="0" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Account_Departments" FromRole="Account" ToRole="Departments" />
+          <NavigationProperty Name="AccountRoles" Relationship="Self.FK_AccountRoles_Account" FromRole="Account" ToRole="AccountRoles" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_Account" FromRole="Account" ToRole="Comment" />
+          <NavigationProperty Name="LoginLogs" Relationship="Self.FK_LoginLog_Account" FromRole="Account" ToRole="LoginLog" />
+          <NavigationProperty Name="SanPhams" Relationship="Self.FK_SanPham_Account" FromRole="Account" ToRole="SanPham" />
+          <NavigationProperty Name="ThongBaos" Relationship="Self.FK_ThongBao_Account" FromRole="Account" ToRole="ThongBao" />
+          <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AccountRole">
+          <Key>
+            <PropertyRef Name="AccountRoleId" />
+          </Key>
+          <Property Name="AccountRoleId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleId" Type="Int64" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_AccountRoles_Account" FromRole="AccountRoles" ToRole="Account" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_AccountRoles_Roles" FromRole="AccountRoles" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="Album">
+          <Key>
+            <PropertyRef Name="AlbumId" />
+          </Key>
+          <Property Name="AlbumId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Alias" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MetaTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MetaKeywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MetaDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Tags" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Images" Relationship="Self.FK_Image_Album" FromRole="Albums" ToRole="Images" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Albums" FromRole="Albums" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleId" />
+          </Key>
+          <Property Name="ArticleId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int64" />
+          <Property Name="Short" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Contents" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Alias" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AllowComments" Type="Boolean" />
+          <Property Name="MetaKeywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MetaDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MetaTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Tags" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Articles_Categories" FromRole="Articles" ToRole="Categories" />
+          <Property Name="CreateBy" Type="Int64" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryTypeId" Type="Int64" />
+          <Property Name="CategoryName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CateLevel" Type="Int32" />
+          <Property Name="ParentCategoryId" Type="Int64" />
+          <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="GroupCategoryId" Type="Int64" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="MetaTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Alias" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="MetaKeywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MetaDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="OrderNumber" Type="Int32" />
+          <NavigationProperty Name="Articles" Relationship="Self.FK_Articles_Categories" FromRole="Categories" ToRole="Articles" />
+          <NavigationProperty Name="CategoryType" Relationship="Self.FK_Category_CategoryType" FromRole="Categories" ToRole="CategoryTypes" />
+          <NavigationProperty Name="GroupCategory" Relationship="Self.FK_Category_GroupCategory" FromRole="Categories" ToRole="GroupCategories" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Product_Category" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="CategoryType">
+          <Key>
+            <PropertyRef Name="CategoryTypeId" />
+          </Key>
+          <Property Name="CategoryTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Categories" Relationship="Self.FK_Category_CategoryType" FromRole="CategoryTypes" ToRole="Categories" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Contents" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreateById" Type="Int64" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="SanPhamId" Type="Int64" />
+          <Property Name="ThongBaoId" Type="Int64" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Comment_Account" FromRole="Comment" ToRole="Account" />
+          <NavigationProperty Name="SanPham" Relationship="Self.FK_Comment_SanPham" FromRole="Comment" ToRole="SanPham" />
+          <NavigationProperty Name="ThongBao" Relationship="Self.FK_Comment_ThongBao" FromRole="Comment" ToRole="ThongBao" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="LicensePlates" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepartmentName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreatDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK_Account_Departments" FromRole="Departments" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="DonViBan">
+          <Key>
+            <PropertyRef Name="DonViBanId" />
+          </Key>
+          <Property Name="DonViBanId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ten" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SanPhams" Relationship="Self.FK_SanPham_DonViBan" FromRole="DonViBan" ToRole="SanPham" />
+        </EntityType>
+        <EntityType Name="DonViThue">
+          <Key>
+            <PropertyRef Name="DonViThueId" />
+          </Key>
+          <Property Name="DonViThueId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ten" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SanPhams" Relationship="Self.FK_SanPham_DonViThue" FromRole="DonViThue" ToRole="SanPham" />
+        </EntityType>
+        <EntityType Name="GroupCategory">
+          <Key>
+            <PropertyRef Name="GroupCategoryId" />
+          </Key>
+          <Property Name="GroupCategoryId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupCategoryName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreateBy" Type="Int64" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Categories" Relationship="Self.FK_Category_GroupCategory" FromRole="GroupCategories" ToRole="Categories" />
+        </EntityType>
+        <EntityType Name="Image">
+          <Key>
+            <PropertyRef Name="ImageId" />
+          </Key>
+          <Property Name="ImageId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AlbumId" Type="Int64" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Album" Relationship="Self.FK_Image_Album" FromRole="Images" ToRole="Albums" />
+        </EntityType>
+        <EntityType Name="KhuPho">
+          <Key>
+            <PropertyRef Name="KhuPhoId" />
+          </Key>
+          <Property Name="KhuPhoId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ten" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="SanPhams" Relationship="Self.FK_SanPham_KhuPho" FromRole="KhuPho" ToRole="SanPham" />
+        </EntityType>
+        <EntityType Name="LoginLog">
+          <Key>
+            <PropertyRef Name="LoginLogId" />
+          </Key>
+          <Property Name="LoginLogId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="IPAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_LoginLog_Account" FromRole="LoginLog" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryId" Type="Int64" />
+          <Property Name="VendorId" Type="Int64" />
+          <Property Name="AlbumId" Type="Int64" />
+          <Property Name="ProductCode" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ProductName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="BasePrice" Type="Double" />
+          <Property Name="SalePrice" Type="Double" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int64" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedBy" Type="Int64" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="MetaKeywords" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="MetaDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MetaTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Alias" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="AllowComments" Type="Boolean" />
+          <Property Name="Tags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Album" Relationship="Self.FK_Products_Albums" FromRole="Products" ToRole="Albums" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Product_Category" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="Vendor" Relationship="Self.FK_Products_Vendors" FromRole="Products" ToRole="Vendors" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="AccountRoles" Relationship="Self.FK_AccountRoles_Roles" FromRole="Roles" ToRole="AccountRoles" />
+        </EntityType>
+        <EntityType Name="SanPham">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="KhuPhoId" Type="Int64" />
+          <Property Name="BanChoThue" Type="Int32" />
+          <Property Name="KyHieu" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="DienTich" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="GiaBan" Type="Double" />
+          <Property Name="DonViBanId" Type="Int64" />
+          <Property Name="GiaThue" Type="Double" />
+          <Property Name="DonViThueId" Type="Int64" />
+          <Property Name="SoNha" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MaLo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SoDienThoai" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TenChuNha" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="NgayNhap" Type="DateTime" Precision="0" />
+          <Property Name="NgaySua" Type="DateTime" Precision="0" />
+          <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsHot" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_SanPham_Account" FromRole="SanPham" ToRole="Account" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_SanPham" FromRole="SanPham" ToRole="Comment" />
+          <NavigationProperty Name="DonViBan" Relationship="Self.FK_SanPham_DonViBan" FromRole="SanPham" ToRole="DonViBan" />
+          <NavigationProperty Name="DonViThue" Relationship="Self.FK_SanPham_DonViThue" FromRole="SanPham" ToRole="DonViThue" />
+          <NavigationProperty Name="KhuPho" Relationship="Self.FK_SanPham_KhuPho" FromRole="SanPham" ToRole="KhuPho" />
+          <Property Name="LogBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ThongBao">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TieuDe" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountId" Type="Int64" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="AllowComment" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_ThongBao_Account" FromRole="ThongBao" ToRole="Account" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comment_ThongBao" FromRole="ThongBao" ToRole="Comment" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="VendorId" />
+          </Key>
+          <Property Name="VendorId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VendorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Vendors" FromRole="Vendors" ToRole="Products" />
+        </EntityType>
+        <Association Name="FK_Account_Departments">
+          <End Role="Departments" Type="Self.Department" Multiplicity="0..1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountRoles_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="AccountRoles" Type="Self.AccountRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="AccountRoles">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="CreateById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LoginLog_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="LoginLog" Type="Self.LoginLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="LoginLog">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThongBao_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="ThongBao" Type="Self.ThongBao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="ThongBao">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AccountRoles_Roles">
+          <End Role="Roles" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="AccountRoles" Type="Self.AccountRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="AccountRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Image_Album">
+          <End Role="Albums" Type="Self.Album" Multiplicity="0..1" />
+          <End Role="Images" Type="Self.Image" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="Images">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Albums">
+          <End Role="Albums" Type="Self.Album" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albums">
+              <PropertyRef Name="AlbumId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="AlbumId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Articles_Categories">
+          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Articles" Type="Self.Article" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Articles">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_CategoryType">
+          <End Role="CategoryTypes" Type="Self.CategoryType" Multiplicity="0..1" />
+          <End Role="Categories" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CategoryTypes">
+              <PropertyRef Name="CategoryTypeId" />
+            </Principal>
+            <Dependent Role="Categories">
+              <PropertyRef Name="CategoryTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Category_GroupCategory">
+          <End Role="GroupCategories" Type="Self.GroupCategory" Multiplicity="1" />
+          <End Role="Categories" Type="Self.Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GroupCategories">
+              <PropertyRef Name="GroupCategoryId" />
+            </Principal>
+            <Dependent Role="Categories">
+              <PropertyRef Name="GroupCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Category">
+          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_SanPham">
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="SanPhamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_ThongBao">
+          <End Role="ThongBao" Type="Self.ThongBao" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThongBao">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="ThongBaoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_DonViBan">
+          <End Role="DonViBan" Type="Self.DonViBan" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonViBan">
+              <PropertyRef Name="DonViBanId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="DonViBanId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_DonViThue">
+          <End Role="DonViThue" Type="Self.DonViThue" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonViThue">
+              <PropertyRef Name="DonViThueId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="DonViThueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SanPham_KhuPho">
+          <End Role="KhuPho" Type="Self.KhuPho" Multiplicity="0..1" />
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KhuPho">
+              <PropertyRef Name="KhuPhoId" />
+            </Principal>
+            <Dependent Role="SanPham">
+              <PropertyRef Name="KhuPhoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Vendors">
+          <End Role="Vendors" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendors">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="db_bdsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="AccountRoles" EntityType="Self.AccountRole" />
+          <EntitySet Name="Albums" EntityType="Self.Album" />
+          <EntitySet Name="Articles" EntityType="Self.Article" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="CategoryTypes" EntityType="Self.CategoryType" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="DonViBans" EntityType="Self.DonViBan" />
+          <EntitySet Name="DonViThues" EntityType="Self.DonViThue" />
+          <EntitySet Name="GroupCategories" EntityType="Self.GroupCategory" />
+          <EntitySet Name="Images" EntityType="Self.Image" />
+          <EntitySet Name="KhuPhoes" EntityType="Self.KhuPho" />
+          <EntitySet Name="LoginLogs" EntityType="Self.LoginLog" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="SanPhams" EntityType="Self.SanPham" />
+          <EntitySet Name="ThongBaos" EntityType="Self.ThongBao" />
+          <EntitySet Name="Vendors" EntityType="Self.Vendor" />
+          <AssociationSet Name="FK_Account_Departments" Association="Self.FK_Account_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountRoles_Account" Association="Self.FK_AccountRoles_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="AccountRoles" EntitySet="AccountRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Account" Association="Self.FK_Comment_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LoginLog_Account" Association="Self.FK_LoginLog_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="LoginLog" EntitySet="LoginLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_Account" Association="Self.FK_SanPham_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="SanPham" EntitySet="SanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThongBao_Account" Association="Self.FK_ThongBao_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="ThongBao" EntitySet="ThongBaos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AccountRoles_Roles" Association="Self.FK_AccountRoles_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="AccountRoles" EntitySet="AccountRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Image_Album" Association="Self.FK_Image_Album">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="Images" EntitySet="Images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Albums" Association="Self.FK_Products_Albums">
+            <End Role="Albums" EntitySet="Albums" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Articles_Categories" Association="Self.FK_Articles_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Articles" EntitySet="Articles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_CategoryType" Association="Self.FK_Category_CategoryType">
+            <End Role="CategoryTypes" EntitySet="CategoryTypes" />
+            <End Role="Categories" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Category_GroupCategory" Association="Self.FK_Category_GroupCategory">
+            <End Role="GroupCategories" EntitySet="GroupCategories" />
+            <End Role="Categories" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_SanPham" Association="Self.FK_Comment_SanPham">
+            <End Role="SanPham" EntitySet="SanPhams" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_ThongBao" Association="Self.FK_Comment_ThongBao">
+            <End Role="ThongBao" EntitySet="ThongBaos" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_DonViBan" Association="Self.FK_SanPham_DonViBan">
+            <End Role="DonViBan" EntitySet="DonViBans" />
+            <End Role="SanPham" EntitySet="SanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_DonViThue" Association="Self.FK_SanPham_DonViThue">
+            <End Role="DonViThue" EntitySet="DonViThues" />
+            <End Role="SanPham" EntitySet="SanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SanPham_KhuPho" Association="Self.FK_SanPham_KhuPho">
+            <End Role="KhuPho" EntitySet="KhuPhoes" />
+            <End Role="SanPham" EntitySet="SanPhams" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Vendors" Association="Self.FK_Products_Vendors">
+            <End Role="Vendors" EntitySet="Vendors" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_bdsModelStoreContainer" CdmEntityContainer="db_bdsEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="db_bdsModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="LastSignIn" ColumnName="LastSignIn" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccountRoles">
+            <EntityTypeMapping TypeName="db_bdsModel.AccountRole">
+              <MappingFragment StoreEntitySet="AccountRoles">
+                <ScalarProperty Name="AccountRoleId" ColumnName="AccountRoleId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Albums">
+            <EntityTypeMapping TypeName="db_bdsModel.Album">
+              <MappingFragment StoreEntitySet="Albums">
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Articles">
+            <EntityTypeMapping TypeName="db_bdsModel.Article">
+              <MappingFragment StoreEntitySet="Articles">
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Short" ColumnName="Short" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="AllowComments" ColumnName="AllowComments" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="db_bdsModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryTypeId" ColumnName="CategoryTypeId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CateLevel" ColumnName="CateLevel" />
+                <ScalarProperty Name="ParentCategoryId" ColumnName="ParentCategoryId" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="GroupCategoryId" ColumnName="GroupCategoryId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CategoryTypes">
+            <EntityTypeMapping TypeName="db_bdsModel.CategoryType">
+              <MappingFragment StoreEntitySet="CategoryTypes">
+                <ScalarProperty Name="CategoryTypeId" ColumnName="CategoryTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="db_bdsModel.Comment">
+              <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="CreateById" ColumnName="CreateById" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="SanPhamId" ColumnName="SanPhamId" />
+                <ScalarProperty Name="ThongBaoId" ColumnName="ThongBaoId" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="db_bdsModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LicensePlates" ColumnName="LicensePlates" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="db_bdsModel.Department">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="CreatDate" ColumnName="CreatDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonViBans">
+            <EntityTypeMapping TypeName="db_bdsModel.DonViBan">
+              <MappingFragment StoreEntitySet="DonViBan">
+                <ScalarProperty Name="DonViBanId" ColumnName="DonViBanId" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonViThues">
+            <EntityTypeMapping TypeName="db_bdsModel.DonViThue">
+              <MappingFragment StoreEntitySet="DonViThue">
+                <ScalarProperty Name="DonViThueId" ColumnName="DonViThueId" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GroupCategories">
+            <EntityTypeMapping TypeName="db_bdsModel.GroupCategory">
+              <MappingFragment StoreEntitySet="GroupCategories">
+                <ScalarProperty Name="GroupCategoryId" ColumnName="GroupCategoryId" />
+                <ScalarProperty Name="GroupCategoryName" ColumnName="GroupCategoryName" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreateBy" ColumnName="CreateBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Images">
+            <EntityTypeMapping TypeName="db_bdsModel.Image">
+              <MappingFragment StoreEntitySet="Images">
+                <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KhuPhoes">
+            <EntityTypeMapping TypeName="db_bdsModel.KhuPho">
+              <MappingFragment StoreEntitySet="KhuPho">
+                <ScalarProperty Name="KhuPhoId" ColumnName="KhuPhoId" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoginLogs">
+            <EntityTypeMapping TypeName="db_bdsModel.LoginLog">
+              <MappingFragment StoreEntitySet="LoginLog">
+                <ScalarProperty Name="LoginLogId" ColumnName="LoginLogId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="db_bdsModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="BasePrice" ColumnName="BasePrice" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="MetaKeywords" ColumnName="MetaKeywords" />
+                <ScalarProperty Name="MetaDescription" ColumnName="MetaDescription" />
+                <ScalarProperty Name="MetaTitle" ColumnName="MetaTitle" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="AllowComments" ColumnName="AllowComments" />
+                <ScalarProperty Name="Tags" ColumnName="Tags" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="db_bdsModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SanPhams">
+            <EntityTypeMapping TypeName="db_bdsModel.SanPham">
+              <MappingFragment StoreEntitySet="SanPham">
+                <ScalarProperty Name="LogBy" ColumnName="LogBy" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="KhuPhoId" ColumnName="KhuPhoId" />
+                <ScalarProperty Name="BanChoThue" ColumnName="BanChoThue" />
+                <ScalarProperty Name="KyHieu" ColumnName="KyHieu" />
+                <ScalarProperty Name="DienTich" ColumnName="DienTich" />
+                <ScalarProperty Name="GiaBan" ColumnName="GiaBan" />
+                <ScalarProperty Name="DonViBanId" ColumnName="DonViBanId" />
+                <ScalarProperty Name="GiaThue" ColumnName="GiaThue" />
+                <ScalarProperty Name="DonViThueId" ColumnName="DonViThueId" />
+                <ScalarProperty Name="SoNha" ColumnName="SoNha" />
+                <ScalarProperty Name="MaLo" ColumnName="MaLo" />
+                <ScalarProperty Name="SoDienThoai" ColumnName="SoDienThoai" />
+                <ScalarProperty Name="TenChuNha" ColumnName="TenChuNha" />
+                <ScalarProperty Name="NgayNhap" ColumnName="NgayNhap" />
+                <ScalarProperty Name="NgaySua" ColumnName="NgaySua" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="IsHot" ColumnName="IsHot" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThongBaos">
+            <EntityTypeMapping TypeName="db_bdsModel.ThongBao">
+              <MappingFragment StoreEntitySet="ThongBao">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
+                <ScalarProperty Name="NoiDung" ColumnName="NoiDung" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="AllowComment" ColumnName="AllowComment" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="db_bdsModel.Vendor">
+              <MappingFragment StoreEntitySet="Vendors">
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="VendorName" ColumnName="VendorName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

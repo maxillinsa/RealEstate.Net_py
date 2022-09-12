@@ -1,0 +1,383 @@
+﻿@model RealEstate.Models.Product
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function changeImageView(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imageUser').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#BasePrice").val(Number($("#BasePrice").val().replace(/[^0-9\.]+/g, "")));
+            $("#SalePrice").val(Number($("#SalePrice").val().replace(/[^0-9\.]+/g, "")));
+
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    function initProductTags() {
+        var lst = '@Html.Raw(ViewBag.ListTags)';
+        lst = lst.split(',');
+        var jSon = [];
+        $.map(lst, function (item) {
+            if (item != "") {
+                jSon.push({ id: item, label: item, value: item });
+            }
+        });
+        $('#txtTag').tagsInput({
+            autocomplete_url: jSon
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ProductCode').focus();
+        initProductTags();
+    });
+</script>
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.ProductId)
+    @*@Html.HiddenFor(model => model.ProductDetailId)*@
+    <div class="row">
+        <h5 style="color:red">@ViewBag.error</h5>
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">Product information</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab_ab">Image Album (Gallery)</a></li>
+                    @*<li class=""><a data-toggle="tab" href="#tab_2">Special Detail</a></li>*@
+                    <li class=""><a data-toggle="tab" href="#tab_3">SEO</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success">SAVE</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-header">
+                                <h3 class="box-title">Create New Product</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-3">
+                                            <label>Vendor</label>
+                                            @Html.DropDownList("VendorId", (SelectList)ViewBag.Vendor, " -- Select Vendor-- ", new { style = "width: 250px;", id = "combo-product", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.VendorId)
+                                        </div>
+                                        <div class="col-md-6 col-sm-3">
+                                            <label>Category</label>
+                                            @Html.DropDownList("CategoryId", (SelectList)ViewBag.Category, " -- Select category-- ", new { style = "width: 250px;", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.CategoryId)
+                                        </div>
+                                        @*<div class="col-md-3 col-sm-3">
+                                            <label>Kho</label>
+                                            @Html.DropDownList("WarehouseId", (SelectList)ViewBag.Warehouse, " -- Select Warehouse-- ", new { style = "width: 250px;", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.WarehouseId)
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Product name</label>
+                                        @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", placeholder = "Input Name..." })
+                                        @Html.ValidationMessageFor(model => model.ProductName)
+                                    </div>
+                                    @if (Model.ProductCode != null || Model.ProductCode != "")
+                                    {
+                                        <div class="col-md-3 form-group">
+                                            <label>Barcode</label>
+                                            @if (Model.ProductCode != null && Model.ProductCode != "")
+                                            {
+                                                @Html.Raw(RealEstate.Common.BarCodeToHTML.get39(Model.ProductCode, 2, 40))
+                                            }
+                                            @*<img id="img" src="/Barcode.ashx?m=0&h=60&vCode=@Model.ProductCode" alt="@Model.ProductCode" />*@
+                                        </div>
+                                    }
+
+                                    <div class="col-md-3 form-group">
+                                        <label>Product ID</label>
+                                        @Html.TextBoxFor(model => model.ProductCode, new { @class = "form-control", placeholder = "Input Code..." })
+                                        @Html.ValidationMessageFor(model => model.ProductCode)
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        <label>Tags</label>
+                                        @Html.TextBoxFor(model => model.Tags, new { @class = "form-control", placeholder = " Tag...", id = "txtTag" })
+                                        @Html.ValidationMessageFor(model => model.Tags)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label>Floor Price</label>
+                                        @Html.TextBoxFor(model => model.BasePrice, new { @class = "required numeric form-control", maxlength = "13", onkeyup = "return FormatNumber(this);", id = "BasePrice", placeholder = "Enter base price ...", Value = String.Format("{0:0,0}", Model.BasePrice) })
+
+                                        @Html.ValidationMessageFor(model => model.BasePrice)
+
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label>Sale Price (USD)</label>
+                                        @Html.TextBoxFor(model => model.SalePrice, new { @class = "required numeric form-control", maxlength = "13", onkeyup = "return FormatNumber(this);", id = "SalePrice", placeholder = "Input sale price ...", Value = String.Format("{0:0,0}", Model.SalePrice) })
+                                        @Html.ValidationMessageFor(model => model.SalePrice)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 form-group">
+                                        <label for="ShowInStorePage">Allow comments</label>
+                                        <div class="form-control">
+                                          
+                                                @if (Model.AllowComments == null || Model.AllowComments == false)
+                                                {
+                                                    @Html.RadioButtonFor(model => model.AllowComments, true, new { value = true }) <span>Yes</span>
+                                                    @Html.RadioButtonFor(model => model.AllowComments, false, new { value = false, @checked = "checked" }) <span>No</span>
+                                                }
+                                                else
+                                                {
+                                                    @Html.RadioButtonFor(model => model.AllowComments, true, new { value = true, @checked = "checked" }) <span>Yes</span>
+                                                    @Html.RadioButtonFor(model => model.AllowComments, false, new { value = false }) <span>No</span>
+                                                }
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="ShowInStorePage">Delete Status</label>
+                                        <div class="form-control">
+                                            @if (Model.IsDelete == null || Model.IsDelete == false)
+                                            {
+                                                @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true }) <span>Yes</span>
+                                                @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false, @checked = "checked" }) <span>No</span>
+                                            }
+                                            else
+                                            {
+                                                @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true, @checked = "checked" }) <span>Yes</span>
+                                                @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false }) <span>No</span>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title"> Listing details<small>Details</small></h3>
+                                        <!-- tools box -->
+                                        <div class="pull-right box-tools">
+                                            <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                        </div><!-- /. tools -->
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body pad">
+                                        @Html.TextAreaFor(model => model.Detail, new { @id = "Detail" })
+                                    </div>
+                                </div><!-- /.box -->
+                                <div class="clearfix"></div>
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title"> Product descriptions<small>Descriptions.</small></h3>
+                                        <!-- tools box -->
+                                        <div class="pull-right box-tools">
+                                            <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                        </div><!-- /. tools -->
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body pad">
+                                        @Html.TextAreaFor(model => model.Description, new { @id = "Decription" })
+
+                                    </div>
+                                </div><!-- /.box -->
+                                <div class="form-group">
+                                    <img id="imageUser" style="float:left; margin-right:20px" src="/Media/Images/product/@Model.Image" alt="@Model.Image" height="100" width="100" />
+                                    <label for="exampleInputFile">Profile Image</label>
+                                    <input type="file" accept="jpg|png|jpeg" class="btn btn-primary" name="txtFile" id="uploadFile" size="40" onchange="changeImageView(this)" />
+                                    @Html.ValidationSummary(true)
+                                    @Html.ValidationMessage("txtFile")
+                                    @Html.ValidationMessageFor(model => model.Image)
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-Product Info -->
+
+                    <div id="tab_ab" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-3">
+                                            <label>Album</label>
+                                            @Html.DropDownList("AlbumId", (SelectList)ViewBag.Albums, " -- Select Album Gallery-- ", new { style = "width: 250px;", id = "combo-product", @class = "form-control" })
+                                            @Html.ValidationMessageFor(model => model.AlbumId)
+                                        </div>
+                                        <div class="col-md-6 col-sm-3">
+                                            <label> Gallery </label>
+                                            @Html.ActionLink("Click Create Album", "Create", "Album")
+                                            <p>(If Album on Demand not existed, please create Album first.)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div id="tab_2" class="tab-pane">
+                        <div class="box box-warning">
+                            <div class="box-header">
+                                <h3 class="box-title">Special Detail (Special Information)</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-3 form-group">
+                                            <label>Diện tích</label>
+                                            @Html.TextBoxFor(model => model.ProductDetail.Area, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter Area  ..." })
+
+                                            @Html.ValidationMessageFor(model => model.ProductDetail.Area)
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Phòng Ngủ</label>
+                                            @Html.TextBoxFor(model => model.ProductDetail.Beds, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter Beds  ..." })
+                                            @Html.ValidationMessageFor(model => model.ProductDetail.Beds)
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Phòng Tắm</label>
+                                            @Html.TextBoxFor(model => model.ProductDetail.Baths, new { @class = "form-control", id = "MetaKeywords", placeholder = "Enter Baths  ..." })
+                                            @Html.ValidationMessageFor(model => model.ProductDetail.Baths)
+                                        </div>
+                                        <div class="col-md-3 form-group">
+                                            <label>Bãi đậu xe</label>
+                                            @Html.TextBoxFor(model => model.ProductDetail.Parking, new { @class = "form-control", id = "MetaKeywords", placeholder = "Enter Baths  ..." })
+                                            @Html.ValidationMessageFor(model => model.ProductDetail.Parking)
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>*@<!-- /.tab-Special Detail -->
+                    <div id="tab_3" class="tab-pane">
+                        <div class="box box-warning">
+                            <div class="box-header">
+                                <h3 class="box-title">SEO</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label>MetaTitle</label>
+                                            @Html.TextBoxFor(model => model.MetaTitle, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter MetaTitle  ..." })
+
+                                            @Html.ValidationMessageFor(model => model.MetaTitle)
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Alias</label>
+                                            @Html.TextBoxFor(model => model.Alias, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter Alias  ..." })
+                                            @Html.ValidationMessageFor(model => model.Alias)
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>MetaKeywords</label>
+                                            @Html.TextBoxFor(model => model.MetaKeywords, new { @class = "form-control", id = "MetaKeywords", placeholder = "Enter MetaKeywords  ..." })
+                                            @Html.ValidationMessageFor(model => model.MetaKeywords)
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <label>MetaDescription</label>
+                                            @Html.TextAreaFor(model => model.MetaDescription, new { @class = "form-control", id = "MetaDescription", placeholder = "Enter MetaDescription  ..." })
+                                            @Html.ValidationMessageFor(model => model.MetaDescription)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div><!-- /.tab-SEO -->
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+    <script>
+
+
+        $(function () {
+            tinyMCE.init({
+                selector: '#Decription',
+                height: 300,
+                theme: 'modern',
+                plugins: [
+                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                     "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                content_css: "css/content.css",
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                style_formats: [
+                     { title: 'Bold text', inline: 'b' },
+                     { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } },
+                     { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } },
+                     { title: 'Example 1', inline: 'span', classes: 'example1' },
+                     { title: 'Example 2', inline: 'span', classes: 'example2' },
+                     { title: 'Table styles' },
+                     { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+                ], file_browser_callback: RoxyFileBrowser
+            });
+            tinyMCE.init({
+                selector: '#Detail',
+                height: 300,
+                theme: 'modern',
+                plugins: [
+                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                     "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                content_css: "css/content.css",
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                style_formats: [
+                     { title: 'Bold text', inline: 'b' },
+                     { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } },
+                     { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } },
+                     { title: 'Example 1', inline: 'span', classes: 'example1' },
+                     { title: 'Example 2', inline: 'span', classes: 'example2' },
+                     { title: 'Table styles' },
+                     { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+                ], file_browser_callback: RoxyFileBrowser
+            });
+        });
+        function RoxyFileBrowser(field_name, url, type, win) {
+            var roxyFileman = '@Url.Content("~/Content/AdminDashboard/filebrowser/index.html")';
+            if (roxyFileman.indexOf("?") < 0) {
+                roxyFileman += "?type=" + type;
+            }
+            else {
+                roxyFileman += "&type=" + type;
+            }
+            roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+            tinyMCE.activeEditor.windowManager.open({
+                file: roxyFileman,
+                title: 'File manager',
+                width: 850,
+                height: 650,
+                resizable: "yes",
+                plugins: "media",
+                inline: "yes",
+                close_previous: "no"
+            }, { window: win, input: field_name });
+            return false;
+        }
+    </script>
+}

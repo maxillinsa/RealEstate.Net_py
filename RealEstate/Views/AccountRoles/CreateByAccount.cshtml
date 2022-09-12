@@ -1,0 +1,121 @@
+﻿@model RealEstate.Models.AccountRole
+
+@{
+    ViewBag.Title = " Role to Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("CreateByAccount", "AccountRoles", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <input type="hidden" name="AccountId" value="@ViewBag.id" />
+    <div class="row">
+        <h5 style="color:red"> @ViewBag.error</h5>
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1"> Role to Account</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                  
+                                    <div class="col-md-12 form-group">
+                                        <label>Select Role</label>
+                                        @Html.DropDownList("RoleId", (SelectList)ViewBag.RoleId, " -- Select access role-- ", new { id = "combo-SanPham", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoleId)
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-SanPham Info -->
+                    <table class="table table-hover" id="SanPhams">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Role Name</th>
+                                <th>Account Name</th>
+                                <th>Created date</th>
+                                <th>Deleted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in @ViewBag.lstAccountRoleByAccountId)
+                            {
+                                <tr>
+                                    <td>@j</td>
+                                    <td>@item.Role.RoleName</td>
+                                    <td>
+                                        @item.Account.UserName
+                                    </td>
+                                    <td>
+                                        @item.CreateDate
+                                    </td>
+
+                                    <td>
+                                        @if (item.IsDelete == true)
+                                        {
+                                            <label class="label label-danger">
+                                                Deleted
+                                            </label>
+                                        }
+
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", new { id = item.AccountRoleId})" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                                        @if (item.IsDelete == false)
+                                        {
+                                            <a href="@Url.Action("Delete", new { id = item.AccountRoleId })" title="Delete" class="btn btn-danger padding-2" onclick="return confirm('Delete this role?')"> Delete</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("UnDelete", new { id = item.AccountRoleId })" title="Restore " class="btn btn-warning padding-2" onclick="return confirm('Restore this role?')"> Restore</a>
+                                        }
+                                    </td>
+
+                                </tr>
+                                        j++;
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>No.</th>
+                                <th>Role Name</th>
+                                <th>Account Name</th>
+                                <th>Created date</th>
+                                <th>Deleted</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                 
+                </div><!-- /.tab-content -->
+
+            </div>
+        </div>
+    </div>
+}

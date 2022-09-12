@@ -1,0 +1,60 @@
+﻿@model List<RealEstate.Models.Comment>
+@{
+    ViewBag.Title = "Comments";
+}
+
+<div class="row">
+    <h3> Comments Report </h3>
+    <div class="col-md-12">
+        <!-- The time line -->
+        <ul class="timeline">
+            @foreach (var item in Model)
+            {
+                <!-- timeline item -->
+                if (item.EstateId != null)
+                {
+                    <li>
+                        <i class="fa fa-envelope bg-blue"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> @item.CreateDate</span>
+                            <h3 class="timeline-header">
+                                @*<a href="/Account/Edit/@item.CreateById">@item.Account.Email</a>*@
+                                <a href="/Estates/Detail/@item.Estate.Id"> | Id: @item.Estate.Code</a>
+                            </h3>
+                            <div class="timeline-body">
+                                @item.Contents
+                            </div>
+                            <div class='timeline-footer'>
+                                <a href="/Estates/Detail/@item.EstateId" class="btn btn-primary btn-xs">View details</a>
+
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (@item.NotificationId != null)
+                {
+                    <li>
+                        <i class="fa fa-comments bg-yellow"></i>
+                        <div class="timeline-item">
+                            <span class="time"><i class="fa fa-clock-o"></i> @item.CreateDate</span>
+                            <h3 class="timeline-header">
+                                <a href="/Account/Edit/@item.CreateById">@item.Account.Email</a>
+                                <a href="/Notification/Detail/@item.NotificationId"> |  @item.Notification.Title</a>
+                            </h3>
+                            <div class="timeline-body">
+                                @item.Contents
+                            </div>
+                            <div class='timeline-footer'>
+                                <a href="/Notification/Detail/@item.NotificationId" class="btn btn-warning btn-flat btn-xs">View details</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            }
+
+            @*<li>
+                    <i class="fa fa-clock-o"></i>
+                </li>*@
+        </ul>
+    </div><!-- /.col -->
+</div><!-- /.row -->

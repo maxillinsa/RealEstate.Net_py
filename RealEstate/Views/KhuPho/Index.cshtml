@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Town Mangement - Real Estate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@using PagedList.Mvc;
+@model PagedList.IPagedList<RealEstate.Models.Town>
+@using PagedList;
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Town</h3>
+    </div><!-- /.box-header -->
+    <a style="color:white;font-weight:bold" class="btn btn-success" href="/Town/Create"></a>
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="products">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Project</th>
+                    <th>Name</th>
+                    <th>ress</th>
+                    <th>Created Date</th>
+                    <th>Delete</th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@j</td>
+                    <td>
+                        @if (item.EstateProjectId != null)
+                        {
+
+                        <label class="label label-warning" title="@item.Estate_Projects.Name">@item.Estate_Projects.Name</label>
+
+                        }
+                                    </td>
+                    <td>
+                        @if (item.Name != null)
+                        {
+                            if (item.Name.Length > 55)
+                            {
+                                <label class="label label-primary" title="@item.Name">@item.Name.Substring(0, 55) ...</label>
+                            }
+                            else
+                            {
+                                <label class="label label-primary">@item.Name</label>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (item.Address != null)
+                        {
+                            if (item.Address.Length > 55)
+                            {
+                                <label class="label label-primary" title="@item.Address">@item.Address.Substring(0, 55) ...</label>
+                            }
+                            else
+                            {
+                                <label class="label label-primary">@item.Address</label>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @item.CreateDate
+                    </td>
+                    <td>
+                        @if (item.IsDelete == false)
+                        {
+                            <label class="label label-success">
+                                Normal
+                            </label>
+                        }
+                        else
+                        {
+                            <label class="label label-danger">
+                                Deleted
+                            </label>
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Index", "Estates", new { khuPhoId = item.TownId })" class="btn btn-primary padding-2" title="Edit"> Product Lists</a>
+                        <a href="@Url.Action("Edit", "Town", new { id = item.TownId })" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                        @if (item.IsDelete == false)
+                        {
+                            <a href="@Url.Action("Delete", "Town", new { id = item.TownId })" class="btn btn-primary padding-2" title="Delete" onclick="return confirm('Delete this town ?')"> Delete</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("UnDelete", "Town", new { id = item.TownId })" class="btn btn-warning padding-2" title="Delete" onclick="return confirm('Restore this town ?')"> Restore</a>
+                        }
+
+                    </td>
+                </tr>
+                            j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>ress</th>
+                    <th>Created Date</th>
+                    <th>Delete</th>
+
+                    <th> </th>
+                </tr>
+
+            </tfoot>
+        </table>
+        @*@Html.Pager(Model.PageSize, Model.PageNumber, Model.TotalItemCount)*@
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+    </div><!-- /.box-body -->
+</div>
+

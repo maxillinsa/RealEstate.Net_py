@@ -1,0 +1,64 @@
+﻿@model PagedList.IPagedList<RealEstate.Models.CategoryType>
+@{
+    ViewBag.Title = "Category Group Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using PagedList;
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Category Type</h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/CategoryType/Create"> category type</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-Category-content">
+        <table class="table table-hover" id="stores">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Category type name</th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CategoryTypeId</td>
+
+                        <td>
+                            @if (item.Name != null)
+                            {
+                                if (item.Name.Length > 55)
+                                {
+                                    <label class="label label-primary" title="@item.Name">@item.Name.Substring(0, 55) ...</label>
+                                }
+                                else
+                                {
+                                    <label class="label label-primary">@item.Name</label>
+                                }
+                            }
+                        </td>
+                       
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.CategoryTypeId })" class="btn btn-primary padding-2" title="Edit">Edit</a>
+                         
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

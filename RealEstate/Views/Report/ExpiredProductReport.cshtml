@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Modification Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.Estate>
+
+<div class="clearfix">
+</div>
+@using (Ajax.BeginForm("ExpiredProductReport", "Report", new { flag = false },
+                 new AjaxOptions { UpdateTargetId = "grid-list", HttpMethod = "get", LoadingElementId = "loading", OnBegin = "beginPaging", OnSuccess = "successPaging", OnFailure = "failurePaging" }, new { id = "OK" }))
+{
+    <div class="col-xs-12">
+        <div id="searchBox" class="search-form " style="display:block ">
+            <div class="col-md-3 form-group">
+                <input class="form-control" id="appendedInputButton" type="text" name="kyHieu" placeholder="Input ID" />
+            </div>
+            @*<div class="col-md-2 form-group">
+
+                        <input required type="date" value="@ViewBag.FromDate" placeholder="Select date" name="FromDate" class="form-control" />
+
+                </div>
+                <div class="col-lg-2 form-group">
+                    <select class="form-control" name="LocTheo" id="LocTheo">
+                        <option selected value="0">All  </option>
+                        <option selected value="1">Edit Date  </option>
+                        <option value="2">Created Date</option>
+                    </select>
+                </div>*@
+            @* <input type="hidden" name="accountId" value="@ViewBag.accountId" />*@
+            <div class="col-md-3 col-md-3  col-xs-4">
+
+                <select class="form-control" data-val="true" data-val-number="The field TownId must be a number." id="combo-Estate" name="accountId" style="float: left; position: relative; margin-right: 10px;">
+                    <option value=""> -- Select Account -- </option>
+
+                    @foreach (var i in ViewBag.account)
+                    {
+                        <option value="@i.AccountId">@i.Email</option>
+
+                    }
+                </select>
+            </div>
+          <div class="col-md-3 form-group">
+
+                <input value="Search" type="submit" class="btn btn-warning" />
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-list">
+        @{ Html.RenderPartial("AjaxExpiredProduct", Model); }
+    </div>
+}
+<script type="text/javascript">
+
+    function beginPaging(args) {
+        // Animate
+        $('#grid-list').fadeOut('normal');
+    }
+
+    function successPaging() {
+        // Animate
+        $('#grid-list').fadeIn('normal');
+        $('a').tooltip();
+    }
+
+    function failurePaging() {
+        alert("Error. can not access data, please contact administrator for support..");
+    }
+
+</script>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>

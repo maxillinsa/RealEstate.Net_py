@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d9c405762f374e6b882105c2e1b1e213" Name="Diagram1">
+        <EntityTypeShape EntityType="db_bdsModel.Account" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.AccountRole" Width="1.5" PointX="5.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Album" Width="1.5" PointX="16" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Article" Width="1.5" PointX="15.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Category" Width="1.5" PointX="13" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.CategoryType" Width="1.5" PointX="10.75" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Comment" Width="1.5" PointX="7.5" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Customer" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Department" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.DonViBan" Width="1.5" PointX="6" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.DonViThue" Width="1.5" PointX="6" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.GroupCategory" Width="1.5" PointX="10.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Image" Width="1.5" PointX="18.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.KhuPho" Width="1.5" PointX="6" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.LoginLog" Width="1.5" PointX="5.25" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Product" Width="1.5" PointX="18.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Role" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.SanPham" Width="1.5" PointX="8.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.ThongBao" Width="1.5" PointX="5.25" PointY="25.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_bdsModel.Vendor" Width="1.5" PointX="16" PointY="10.875" IsExpanded="true" />
+        <AssociationConnector Association="db_bdsModel.FK_Account_Departments" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_AccountRoles_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Comment_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_LoginLog_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_SanPham_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_ThongBao_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_AccountRoles_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Image_Album" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Products_Albums" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Articles_Categories" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Category_CategoryType" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Category_GroupCategory" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Product_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Comment_SanPham" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Comment_ThongBao" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_SanPham_DonViBan" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_SanPham_DonViThue" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_SanPham_KhuPho" ManuallyRouted="false" />
+        <AssociationConnector Association="db_bdsModel.FK_Products_Vendors" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

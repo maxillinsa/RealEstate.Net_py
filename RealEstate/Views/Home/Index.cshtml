@@ -1,0 +1,511 @@
+﻿@{
+    ViewBag.Title = "Homepage - Real Estate Management System";
+    int j = 1;
+}
+@model PagedList.IPagedList<RealEstate.Models.Estate>
+@using PagedList;
+@using PagedList.Mvc;
+@using RealEstate.Models.ViewModels;
+@{
+    var config = (CompanyViewModel)HttpContext.Current.Cache.Get("MyConfig");
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajaxSetup({ cache: false });
+        $('.ky-hieu').focus();
+        PriceDropDownList(1)
+        $("#Estate_GroupId").change(function () {
+            var estateGroupId = $(this).find(":selected").val();
+            $("#typePriceList").empty();
+            PriceDropDownList(estateGroupId);
+        });
+    });
+    //function CreateNew() {
+    //    if (!ValidateInputsEstate())
+    //        return;
+    //    var Estate = {
+    //        kyHieu: $('#KyHieu').val(),
+    //        khuPhoId: $('#TownId').val(),
+    //        accountId: $('#AccountId').val(),
+    //        Estate_TypeId: $('#Estate_TypeId').val(),
+    //        dienTich: $('#DienTich').val(),
+    //        soNha: $('#HouseNo').val(),
+    //        giaBan: $('#SalePrice').val(),
+    //        giaThue: $('#RentPrice').val(),
+    //        donViBanId: $('#SaleUnitId').val(),
+    //        donViThueId: $('#RentUnitId').val(),
+    //        soDienThoai: $('#Mobile').val(),
+    //        tenChuNha: $('#TenChuNha').val(),
+    //        ghiChu: $('#GhiChu').val(),
+    //        isHot: $('#IsHot:checked').val()
+    //    }
+    //    $.ajax({
+    //        url: '/Estates/CreateEstate',
+    //        type: 'POST',
+    //        data: JSON.stringify(Estate),
+    //        contentType: "application/json;charset=utf-8",
+    //        success: function (response) {
+    //            if (response.Id == 0) {
+    //                var kyHieu = $('#KyHieu');
+    //                if ($.trim(kyHieu.val()) != '') {
+    //                    kyHieu.closest('.form-group').addClass('has-error');
+    //                    kyHieu.closest('.form-group').addClass('has-error');
+    //                }
+    //                var soNha = $('#HouseNo');
+    //                if ($.trim(soNha.val()) != '') {
+    //                    soNha.closest('.form-group').addClass('has-error');
+    //                    soNha.closest('.form-group').addClass('has-error');
+    //                }
+    //                showError("Duplicated product. please check again! No phân biệt dấu: '-' và '.' ");
+    //                return;
+    //            }
+    //            Clean();
+    //            $('#btnCloseModal').click();
+    //            notifyer();
+    //        },
+    //        error: function (err) { alert("Error: " + err.responseText); }
+    //    });
+    //};
+</script>
+
+<div class="row">
+    <section class="col-lg-4 col-md-4 col-xs-12 connectedsortable">
+        @using (Html.BeginForm("Index", "Estates", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div class="box box-success">
+                <div class="box-header">
+                    <i class="fa fa-search"></i>
+                    <h3 class="box-title">Search</h3>
+                    <div class="box-tools pull-right" data-toggle="tooltip" title="Create new">
+                        <div class="btn-group" data-toggle="btn-toggle">
+                            @*     <a data-toggle="modal" onclick="RenderActions('/Estates/CreateEstate')" data-target="#modalCrud" class="pull-left btn btn-success"> <i class="fa fa-plus-square"></i></a>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body chat" id="chat-box" style="width: auto; height: 250px;">
+                    <div class="col-lg-12  col-md-12  col-xs-12 form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            <input class=" form-control ky-hieu" type="text" name="kyHieu" placeholder="ID ..." />
+                        </div>
+                    </div>
+                    <div class="col-lg-12  col-md-12  col-xs-12 col-sm-12">
+                        <div class="form-group">
+                            <select class="form-control select2" data-val="true" data-val-number="The field TownId must be a number." name="khuPho">
+                                <option value=""> -- Town -- </option>
+
+                                @foreach (var i in ViewBag.Khupho)
+                                {
+                                    <option value="@i.TownId">@i.Name</option>
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" col-lg-6  col-md-6 col-xs-6 col-sm-6 form-group">
+                        <select class="form-control" data-val="true" data-val-number="The field Estate_TypeId must be a number." name="Estate_TypeId">
+                            <option value=""> -- Estate Type -- </option>
+                            @foreach (var i in ViewBag.Estate_Types)
+                            {
+                                <option value="@i.ItemId">@i.Name</option>
+
+                            }
+                        </select>
+                    </div>
+                    <div class=" col-lg-6  col-md-6 col-xs-6 col-sm-6 form-group">
+                        <select class="form-control" id="Estate_GroupId" name="Estate_GroupId">
+                            <option value="0"> --Select all-- </option>
+                            <option value="1"> For Sale</option>
+                            <option value="2">For Rent</option>
+                        </select>
+                    </div>
+                    <div class=" col-lg-12  col-md-12 col-xs-12 form-group">
+                        <select class="form-control " id="acreage" name="acreage">
+                            <option value="0"> -- Select sqrt -- </option>
+                            <option value="1"> <= 30 m2</option>
+                            <option value="2">  30 - 80 m2</option>
+                            <option value="3">  80 - 100 m2</option>
+                            <option value="4">  100 - 150 m2</option>
+                            <option value="5">  150 - 200 m2</option>
+                            <option value="6">  200 - 300 m2</option>
+                            <option value="7">  300 - 500 m2</option>
+                            <option value="8">  500 - 800 m2</option>
+                            <option value="9"> >= 800 m2</option>
+                        </select>
+                    </div>
+                    <div class=" col-lg-12  col-md-12 col-xs-12 form-group">
+                        <select class="form-control" id="typePriceList" name="typePriceList"></select>
+
+                    </div>
+
+                </div><!-- /.search -->
+                <div class="box-footer clearfix">
+                    <button class=" pull-right btn btn-danger" type="submit" name="SearchBtn"> Search <i class="fa fa-search-plus"></i> </button>
+                    @*<a data-toggle="modal" onclick="RenderActions('/Estates/CreateEstate')" data-target="#modalCrud" class="pull-left btn btn-success">Create new <i class="fa fa-arrow-circle-right"></i></a>*@
+                </div>
+            </div>
+            <!-- /.search (search box) -->
+        }
+    </section><!-- /.Right col -->
+    <section class="col-lg-3 col-md-3  col-xs-12">
+        <div class="box box-success">
+            <div class="box-body chat">
+                <div class="col-lg-12 col-xs-12 col-md-12">
+                    <div class="small-box " style="text-align:center">
+                        <img src="@config.ImageUrlLogo" alt="user image" class="online" width="180" height="180">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    <!-- small box -->
+                    <div class="small-box bg-blue">
+                        <div class="inner">
+                            <h3>
+                                2 milions
+                            </h3>
+                            <p>
+                                View customer data
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="/Customer/" class="small-box-footer">
+                            View details <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div><!-- ./col -->
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </section>
+    <section class="col-lg-5 col-md-5  col-xs-12">
+        <div class="box box-success">
+            <div class="box-body chat" id="chat-box" style="width: auto; height: auto;">
+
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>
+                                @ViewBag.tongSoSP
+                            </h3>
+                            <p>
+                                Products
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="/Estates/" class="small-box-footer">
+                            View details <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>
+                                @ViewBag.tongSoSPHot
+                            </h3>
+                            <p>
+                                Hot Product
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="/Estates/" class="small-box-footer">
+                            View details <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>
+                                @ViewBag.allAccount.Count
+                            </h3>
+                            <p>
+                                Account
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="/Account" class="small-box-footer">
+                            View details <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div><!-- ./col -->
+                <div class="col-lg-6 col-md-6 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3>
+                                @ViewBag.tongSoNotification<sup style="font-size: 20px"> Notice </sup>
+                            </h3>
+                            <p>
+                                Notification
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="/Notification" class="small-box-footer">
+                            View details <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </div>
+                </div><!-- ./col -->
+            </div>
+            <div class="clearfix">
+            </div>
+        </div>
+    </section><!-- /.Right col -->
+</div>
+
+
+<div class="row">
+    <!-- right col (We are only adding the ID to make the widgets sortable)-->
+    <section class="col-lg-5 connectedSortable">
+        <!-- Chat box -->
+        <div class="box box-success">
+            <div class="box-header">
+                <i class="fa fa-comments-o"></i>
+                <h3 class="box-title">Notification</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i></button>
+                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body chat" id="chat-box" style="width:auto; height:250px; overflow:auto">
+                <div class="item">
+                    @foreach (RealEstate.Models.Notification tb in ViewBag.allNotification)
+                    {
+                        <img src="/Content/logo.jpg" class="img-circle online" alt="User Image">
+                        <p class="message">
+                            <a href="/Notification/Detail/@tb.Id" class="name">
+                                <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> @tb.CreateDate @*|<span style="color:blue"> View details</span>*@</small>
+                                @if (tb.Title != null)
+                                {
+                                    if (tb.Title.Length > 55)
+                                    {
+                                        @tb.Title.Substring(0, 55)
+                                    }
+                                    else
+                                    {
+                                        @tb.Title
+                                    }
+                                }
+                            </a>
+                            <span style=" margin-left: 55px; margin-top: -40px;">
+                                @if (tb.Content != null)
+                                {
+                                    if (tb.Content.Length > 125)
+                                    {
+                                        @MvcHtmlString.Create(tb.Content.Substring(0, 125))
+                                    }
+                                    else
+                                    {
+                                        @MvcHtmlString.Create(@tb.Content)
+                                    }
+                                }
+                            </span>
+                        </p>
+                    }
+                </div>
+            </div><!-- /.chat -->
+            <div class="box-footer clearfix">
+                <a href="/Notification/" class="pull-left" id="sendEmail">All <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="/Notification/Create" class="pull-right btn btn-default" id="sendEmail"> Notification <i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div><!-- /.box (chat box) -->
+    </section><!-- /.Right col -->
+    <!-- Left col -->
+    <section class="col-lg-7 connectedSortable">
+        <div class="box box-info">
+            <div class="box-header">
+                <i class="fa fa-archive"></i>
+                <h3 class="box-title">Hot Product</h3>
+                <!-- tools box -->
+                <div class="pull-right box-tools">
+                    <button class="btn btn-info btn-sm" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                </div><!-- /. tools -->
+            </div>
+            <div class="box-body">
+                <table class="table table-hover" id="products">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Town</th>
+                            <th>ID</th>
+                            <th>House No.</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@j</td>
+                                <td>
+                                    @if (@item.TownId != null)
+                                    {
+                                        @item.Town.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Code != null)
+                                    {
+                                        if (item.Code.Length > 55)
+                                        {
+                                            <label class="label label-primary" title="@item.Code">@item.Code.Substring(0, 55) ...</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-primary">@item.Code</label>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @item.HouseNo
+                                </td>
+
+                                <td>
+                                    <a style="font-weight:bold" href="/Estates/Detail/@item.Id"> Comments</a>
+
+                                </td>
+                            </tr>
+                            j++;
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>No.</th>
+                            <th>Town</th>
+                            <th>ID</th>
+                            <th>House No.</th>
+
+                            <th> </th>
+                        </tr>
+
+                    </tfoot>
+                </table>
+                @Html.PagedListPager(Model, page => Url.Action("index", new { page = page, khuPhoId = ViewBag.khuPhoId, donViId = ViewBag.donViId, isDelete = ViewBag.isDelete, accountId = ViewBag.accountId }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+
+            </div>
+
+        </div>
+    </section><!-- /.Left col -->
+
+</div>
+
+@foreach (var item in ViewBag.EstateMoi)
+{
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 ">
+        <div class="panel panel-default">
+            <div class="row padall">
+                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                    <span></span>
+                    <img src="/Content/logo.jpg" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                    <div class="clearfix">
+                        <div class="pull-left">
+                            <span class="fa fa-dollar icon">
+                                <a href="/Estates/Detail/@item.Id">
+                                    @item.Code -
+
+                                    @if (item.SalePrice != 0)
+                                    {
+                                        @item.SalePrice
+                                        if (item.SaleUnitId != null)
+                                        {
+                                            @item.SaleUnit.Name
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @item.RentPrice
+                                        if (item.RentUnitId != null)
+                                        {
+                                            @item.RentUnit.Name
+                                        }
+                                    }
+                                </a>
+                            </span>
+                        </div>
+                        <div class="pull-right">
+                            @if (item.AccountId != null)
+                            {
+                                if (item.Account.FirstName != null)
+                                {
+                                    @item.Account.FirstName
+                                    <span> - </span>
+                                    <a href="tel:@item.Account.Mobile">@item.Account.Mobile</a>
+                                }
+                                else
+                                {
+                                    @item.Account.Email
+
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <h4>
+                            <span class="fa fa-map-marker icon"></span>
+                            @if (@item.TownId != null)
+                            {
+                                @item.Town.Name
+                            }
+                        </h4>
+                        @if (@item.Note != null)
+                        {
+                            <a id="send-@item.Id" class="label label-success send-sp">@item.HouseNo</a>
+                        }
+                        else
+                        {
+                            <a id="send-@item.Id" class="label label-primary">@item.HouseNo</a>
+                        } <span class="fa fa-home icon pull-right">   @item.LandArea <span> m2</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    img {
+        max-width: 80%;
+        height: auto;
+    }
+
+    .clearfix {
+        clear: both;
+    }
+
+    .rowcolor {
+        background-color: #CCCCCC;
+    }
+
+    .padall {
+        padding: 5px;
+    }
+
+    .icon {
+        font-size: 18px;
+        font-weight: bold;
+        color: #197BB5;
+    }
+</style>
+

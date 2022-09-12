@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@model PagedList.IPagedList<RealEstate.Models.Product>
+@using PagedList;
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Products</h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/Product/Create"> product</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="stores">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Product ID</th>
+                    <th>Product name</th>
+                    <th>Category</th>
+                    <th>Images</th>
+                    <th>Vendor</th>
+                    @*<th>Kho</th>*@
+                    <th>Purchase price </th>
+                    <th>Sale Price</th>
+                    <th>Delete</th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>@item.ProductId</td>
+                        <td>
+                            @if (item.ProductName != null)
+                            {
+                                if (item.ProductName.Length > 55)
+                                {
+                                    <label class="label label-primary" title="@item.ProductName">@item.ProductName.Substring(0, 55) ...</label>
+                                }
+                                else
+                                {
+                                    <label class="label label-primary">@item.ProductName</label>
+                                }
+                            }
+                        </td>
+                        <td>
+
+                            @item.Category.CategoryName
+                        </td>
+                        <td>
+                            @{
+                                <img src="/Media/Images/product/@item.Image" alt="@item.ProductName" height="50" width="50" />
+                            }
+                        </td>
+                        <td>
+                            @foreach (RealEstate.Models.Vendor item1 in ViewBag.Vendor)
+                            {
+                                if (item1.VendorId == item.VendorId)
+                                {
+                                    @item1.VendorName.ToString()
+                                }
+                            }
+                        </td>
+                        @*<td>
+                            @if(item.WarehouseId != null)
+                            { 
+                            @item.Warehouse.WarehouseName
+                            }
+                        </td>*@
+                        <td>@String.Format("{0:0,0}", @item.BasePrice) $</td>
+                        <td>@String.Format("{0:0,0}", @item.SalePrice) $</td>
+                        <td>
+                            @if (item.IsDelete == false)
+                            {
+                                <label class="label label-success">
+                                    Normal
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    Deleted
+                                </label>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = item.ProductId})" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.ProductId})" class="btn btn-primary padding-2" title="Delete" onclick="return confirm('Delete this product ?')"> Delete</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("UnDelete", new { id = item.ProductId})" class="btn btn-warning padding-2" title="Delete" onclick="return confirm('Restore this product ?')"> Restore</a>
+                            }
+
+                        </td>
+                    </tr>
+                            j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>Product ID</th>
+                    <th>Product name</th>
+                    <th>Images</th>
+                    <th>Vendor</th>
+                    @*<th>Kho</th>*@
+                    <th>Purchase price </th>
+                    <th>Sale Price</th>
+                    <th>Delete</th>
+
+                    <th> </th>
+                </tr>
+
+            </tfoot>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

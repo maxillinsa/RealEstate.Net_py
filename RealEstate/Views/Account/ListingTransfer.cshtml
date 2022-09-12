@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Transfer Listing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        function showLoader(txt) {
+            $("#Loader").fadeIn(400);
+            var loaderTxt = txt;
+            $("#LoaderTxt").fadeIn(400).html(loaderTxt);
+        };
+        function showError(txt) {
+            $("#showError").show();
+            var errorTxt = '<strong>Error!</strong>' + txt;
+            $("#ErrorTxt").fadeIn(400).html(errorTxt);
+        };
+        $('#chuyenQuyen').bind('click', function () {
+            showLoader("Saving listing transfer...");
+            if ($('#AccountIdChuyen').val() == 0) {
+                showError("Please select user account to transfer!!!.");
+                $("#Loader").fadeOut(200);
+                return;
+            }
+            if ($('#AccountIdNhan').val() == 0) {
+                showError("Please select user account to receive!!!.");
+                $("#Loader").fadeOut(200);
+                return;
+            }
+            $("#FormAccount").submit();
+        });
+    });
+</script>
+@if (@ViewBag.flag != 0)
+{
+    <div  style="display:block" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p > Listing transfered successfully!! </p>
+      
+    </div>
+    <a title="click to continue" class="btn btn-success" href="/Account/ListingTransfer"> New Transfer </a>
+}
+else
+{
+    using (Html.BeginForm("ListingTransfer", "Account", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormAccount" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="row">
+            <div class="box box-warning">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab_1">Transfer Listings.</a></li>
+                        <li class="pull-right">
+                            <button type="button" id="chuyenQuyen" class="btn btn-success">TRANSFER</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab_1" class="tab-pane active">
+                            <div class="box box-warning">
+                                <br />
+                                <div id="Loader" style="display: none" class="alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <i class="fa fa-refresh fa-spin"></i>
+                                    <p id="LoaderTxt"> </p>
+                                </div>
+
+                                <div id="showError" style="display: none" class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <p id="ErrorTxt"></p>
+                                </div>
+                                <div class="box-body">
+                                    <p> Note: This function is used to transfer Estate from account to account</p>
+                                    <div class="form-group">
+                                        <div class="col-md-6 form-group">
+                                            <label> From account (@ViewBag.total1) </label>
+                                            <select class="form-control" name="accountIdChuyen" id="accountIdChuyen">
+                                                <option selected value="0"> -- Select account to transfer-- </option>
+                                                @foreach (var i in ViewBag.account1)
+                                                {
+                                                    <option value="@i.AccountId">@i.Email (@i.AccountId)</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label> To account (@ViewBag.total) </label>
+                                            <select class="form-control" name="accountIdNhan" id="accountIdNhan">
+                                                <option selected value="0"> -- Select account to receive -- </option>
+                                                @foreach (var i in ViewBag.account)
+                                                {
+                                                    <option value="@i.AccountId">@i.Email (@i.AccountId)</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div><!-- /.tab-SanPham Info -->
+
+                    </div><!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    }
+}

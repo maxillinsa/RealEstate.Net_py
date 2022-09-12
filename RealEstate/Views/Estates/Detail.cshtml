@@ -1,0 +1,669 @@
+﻿@model RealEstate.Models.ViewModels.EstateDetailViewModel
+@{
+    ViewBag.Title = "Comment detail";
+}
+@using RealEstate.Models.ViewModels;
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#content').focus();
+
+        $('#submitComment').bind('click', function () {
+            showLoader();
+            $("#FormComment").submit();
+        });
+
+    });
+</script>
+
+<script>window.DEBUG = false;</script>
+<link rel="stylesheet" href="https://cdn.pannellum.org/2.4/pannellum.css" />
+<script type="text/javascript" src="https://cdn.pannellum.org/2.4/pannellum.js"></script>
+<style>
+    #panorama {
+        /*width: 600px;
+        height: 400px;*/
+    }
+
+    #controls {
+        position: absolute;
+        bottom: 0;
+        z-index: 2;
+        text-align: center;
+        width: 100%;
+        padding-bottom: 3px;
+    }
+
+    .ctrl {
+        padding: 8px 5px;
+        width: 30px;
+        text-align: center;
+        background: rgba(200, 200, 200, 0.8);
+        display: inline-block;
+        cursor: pointer;
+    }
+
+        .ctrl:hover {
+            background: rgba(200, 200, 200, 1);
+        }
+</style>
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Profile Image -->
+        <div class="box box-primary">
+            <div class="box-body box-profile">
+
+                @if (Model.Account.Image == null)
+                {
+                    <img class="profile-user-img img-responsive img-circle"  src="/Content/logo.jpg" alt="User profile picture">
+
+                }
+                else
+                {
+                    <img class="profile-user-img img-responsive img-circle" style="width: 150px;height: 150px; text-align: center; margin: 2px 35px;" src="/Media/Images/account/@Model.Account.Image" alt="User profile picture">
+
+                }
+                <h3 class="profile-username text-center">@Model.Account.FirstName @Model.Account.LastName</h3>
+                <p class="text-muted text-center">@Model.Account.Department.DepartmentName</p>
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                        <b>Total estates</b> <a class="pull-right"> @Model.TotalEstates </a>
+                    </li>
+
+                </ul>
+                <a href="tel:@Model.Account.Mobile" class="btn btn-primary btn-block"><b>@Model.Account.Mobile</b></a>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+        <!-- About Me Box -->
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">About Me</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <strong><i class="fa fa-book margin-r-5"></i> Department</strong>
+                <p class="text-muted">
+                    @Model.Account.Department.DepartmentName
+                </p>
+                <hr>
+                <strong><i class="fa fa-map-marker margin-r-5"></i> Login time</strong>
+                <p class="text-muted">@Model.Account.LastSignIn</p>
+                <hr>
+                <strong><i class="fa fa-pencil margin-r-5"></i> Information</strong>
+                <p>
+                    <span class="label label-danger">@Model.Account.Email</span>
+                    <span class="label label-success">@Model.Account.Mobile</span>
+
+                </p>
+                <hr>
+                <strong><i class="fa fa-file-text-o margin-r-5"></i> Note</strong>
+                <p>@Model.Account.Detail</p>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="box box-success">
+            <div class="box-header with-border" style="cursor: move;">
+                <i class="fa fa-th"></i>
+                <h3 class="box-title">Listing details (  @Model.CreateDate)</h3>
+
+
+                <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+
+                    <h4 class="text-bold text-blue"> Address @Model.Estate_Address </h4>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 form-group">
+
+                    <div class="box-header with-border" style="cursor: move;">
+
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+
+                            <h3 class="box-title text-bold">  <i class="fa fa-globe"></i> Brief info </h3>
+
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="border-right: 1px solid #d6d5d5;">
+                            <!-- edit featured listings house #2 left-side details content here -->
+                            <div class="left-tab-wrapper">
+                                <table class="table" style="border-color: grey;">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>House No.</strong></td>
+                                            <td>
+                                                @if (Model.HouseNo != null)
+                                                {
+                                                    @Model.HouseNo;
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Town:</strong></td>
+                                            <td>
+                                                @if (Model.Town != null)
+                                                {
+                                                    @Model.Town.Name
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Estate Type</strong></td>
+                                            <td>
+                                                @if (Model.Estate_Types != null)
+                                                {
+                                                    @Model.Estate_Types.Name
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Group:</strong></td>
+                                            <td>
+                                                @if (Model.Estate_Groups != null)
+                                                {
+                                                    @Model.Estate_Groups.Name
+                                                }
+
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Project:</strong></td>
+                                            <td>
+                                                @if (Model.Estate_Projects != null)
+                                                {
+                                                    @Model.Estate_Projects.Name
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> Is Delete</strong></td>
+                                            <td>
+                                                @if (Model.Estate_Statuses != null)
+                                                {
+                                                    @Model.Estate_Statuses.Name
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> Is Hot:</strong></td>
+                                            <td>
+                                                @if (Model.IsHot != null)
+                                                {
+                                                    if (Model.IsHot == true)
+                                                    {
+                                                        <p> Hot product</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p> General product</p>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <!-- edit featured listings house #2 right-side details content here -->
+                            <div class="right-tab-wrapper">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Id:</strong></td>
+                                            <td>@Model.Code</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Lot No.</strong></td>
+                                            <td>@Model.LotId</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Sqrt</strong></td>
+                                            <td>@Model.LandArea (m2)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Sale Price:</strong></td>
+                                            <td>@Model.SalePrice USD</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rent price:</strong></td>
+                                            <td>@Model.RentPrice USD</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Owner:</strong></td>
+                                            <td>@Model.OwnerName - @Model.Mobile </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Views:</strong></td>
+                                            <td>@Model.Views (views) </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 form-group">
+
+                    <div class="box-header with-border" style="cursor: move;">
+
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+
+                            <h3 class="box-title text-bold">  <i class="fa fa-gears"></i> Construction information </h3>
+
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="border-right: 1px solid #d6d5d5;">
+                            <!-- edit featured listings house #2 left-side details content here -->
+                            <div class="left-tab-wrapper">
+                                <table class="table" style="border-color: grey;">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Bed room qty :</strong></td>
+                                            <td>
+                                                @if (Model.Number_Bedrooms != null)
+                                                {
+                                                    @Model.Number_Bedrooms
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Living room qty :</strong></td>
+                                            <td>@Model.Number_Livingrooms </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Frontispiece:</strong></td>
+                                            <td>@Model.Frontispiece (m)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Land area (m2):</strong></td>
+                                            <td>
+                                                @Model.LandArea (m2)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> Construction Sqrt:</strong></td>
+                                            <td>
+                                                @if (Model.ConstructionArea != null)
+                                                {
+                                                    @Model.ConstructionArea
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <!-- edit featured listings house #2 right-side details content here -->
+                            <div class="right-tab-wrapper">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Floors/ Levels:</strong></td>
+                                            <td>@Model.Number_Floors (floors)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rest Room:</strong></td>
+                                            <td>@Model.Number_Toilets (room)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Position:</strong></td>
+                                            <td>@Model.DriectionOfTheHouse</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Usable sqrt:</strong></td>
+                                            <td>
+                                                @if (Model.AreaOffUse != null)
+                                                {
+                                                    <p> @Model.AreaOffUse  (m2) </p>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Street descriptions:</strong></td>
+                                            <td>@Model.FrontOfHouse (m)  - @Model.AlleyOfHouse (m)  </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 form-group">
+
+                    <div class="box-header with-border" style="cursor: move;">
+
+                        <div class="col-lg-12 col-md-12 col-xs-12">
+
+                            <h3 class="box-title text-bold">  <i class="fa fa-gears"></i> Details information </h3>
+
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="border-right: 1px solid #d6d5d5;">
+                            <!-- edit featured listings house #2 left-side details content here -->
+                            <div class="left-tab-wrapper">
+                                <table class="table" style="border-color: grey;">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Latitude:</strong></td>
+                                            <td>
+                                                @if (Model.Latitude != null)
+                                                {
+                                                    @Model.Latitude
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Paper No.:</strong></td>
+                                            <td>@Model.Number_Paper </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Frontispiece:</strong></td>
+                                            <td>@Model.Frontispiece (m)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Rear expanding:</strong></td>
+                                            <td>
+                                                @if (Model.ExpandAfter != null)
+                                                {
+                                                    if (Model.ExpandAfter == true)
+                                                    {
+                                                        <p> Rear expanding</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p> Non rear-expanding</p>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong> Updated date:</strong></td>
+                                            <td>
+                                                @if (Model.UpdateDate != null)
+                                                {
+                                                    @Model.UpdateDate
+                                                }
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <!-- edit featured listings house #2 right-side details content here -->
+                            <div class="right-tab-wrapper">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Longitude:</strong></td>
+                                            <td>@Model.Longitude</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Lot No.:</strong></td>
+                                            <td>@Model.Number_Lot (m2)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Long (Height):</strong></td>
+                                            <td>@Model.LotLength (m)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Certificates Type:</strong></td>
+                                            <td>
+                                                @if (Model.Certificate_Types != null)
+                                                {
+                                                    @Model.Certificate_Types.Name
+                                                }
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Created date:</strong></td>
+                                            <td>@Model.CreateDate </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                    <!-- Custom Tabs -->
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_1" data-toggle="tab">Images</a></li>
+                            <li ><a href="#tab_2" data-toggle="tab">Legal Paper</a></li>
+                            <li><a href="#tab_3" data-toggle="tab"> Draws  </a></li>
+                            <li><a href="#tab_4" data-toggle="tab">3D Images</a></li>
+                            <li><a href="#tab_5" data-toggle="tab"> Map (google map)  </a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1">
+
+                                <div class="col-md-12 col-lg-12 form-group">
+                                    <div class="carousel slide media-carousel" id="media">
+                                        @{
+                                            var list = Model.Estate_Images.Where(x => x.Type == 1).ToList() as IList<Estate_ImageViewModel>;
+                                            var items = list.Take(6);
+                                            var iterations1 = 0;
+                                            var iterations2 = 0;
+                                        }
+                                        <ol class="carousel-indicators">
+                                            @foreach (var item in items)
+                                            {
+                                                var active = iterations1 == 0 ? "active" : "";
+                                                <li data-target="#myCarousel" data-slide-to="@item.ItemId" class="@active"></li>
+                                                iterations1++;
+                                            }
+                                        </ol>
+                                        <div class="carousel-inner">
+
+                                            @foreach (var item in items)
+                                            {
+                                                var active = iterations2 == 0 ? "active" : "";
+                                                <div class="item @active">
+                                                    <img class="d-block w-100" src="@item.Url" alt=" @item.Title" style="width:100%; height:450px">
+
+                                                    <div class="carousel-caption">
+                                                        @item.Title
+                                                    </div>
+                                                </div>
+                                                iterations2++;
+                                            }
+                                        </div>
+                                        <a data-slide="prev" href="#media" class="left carousel-control">‹</a>
+                                        <a data-slide="next" href="#media" class="right carousel-control">›</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane" id="tab_2">
+                                @foreach (var i in Model.Estate_Images.Where(x => x.Type == 4).ToList())
+                                {
+                                    <img src="@i.Url" alt=" @i.Title" style="width:100%; height:450px">
+
+                                }
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_3">
+                                @foreach (var i in Model.Estate_Images.Where(x => x.Type == 2).ToList())
+                                {
+                                    <img src="@i.Url" alt=" @i.Title" style="width:100%; height:450px">
+
+                                }
+                            </div>
+                            <div class="tab-pane" id="tab_4" style="height:400px">
+                                <b>3D Images</b>
+                                <div id="panorama" class="col-lg-12 col-md-12 col-sm-12">
+                                    <div id="controls">
+                                        <div class="ctrl" id="pan-up">&#9650;</div>
+                                        <div class="ctrl" id="pan-down">&#9660;</div>
+                                        <div class="ctrl" id="pan-left">&#9664;</div>
+                                        <div class="ctrl" id="pan-right">&#9654;</div>
+                                        <div class="ctrl" id="zoom-in">&plus;</div>
+                                        <div class="ctrl" id="zoom-out">&minus;</div>
+                                        <div class="ctrl" id="fullscreen">&#x2922;</div>
+                                    </div>
+                                </div>
+                                <script>
+                                    viewer = pannellum.viewer('panorama',@MvcHtmlString.Create(Model.Link360))
+                                    function getInfo() {
+                                        var pitch = viewer.getPitch();
+                                        var jaw = viewer.getYaw();
+                                        var hFov = viewer.getHfov();
+                                    }
+                                    // Make buttons work
+                                    document.getElementById('pan-up').addEventListener('click', function (e) {
+                                        viewer.setPitch(viewer.getPitch() + 10);
+                                        getInfo();
+                                    });
+                                    document.getElementById('pan-down').addEventListener('click', function (e) {
+                                        viewer.setPitch(viewer.getPitch() - 10);
+                                        getInfo();
+                                    });
+                                    document.getElementById('pan-left').addEventListener('click', function (e) {
+                                        viewer.setYaw(viewer.getYaw() - 10);
+                                        getInfo();
+                                    });
+                                    document.getElementById('pan-right').addEventListener('click', function (e) {
+                                        viewer.setYaw(viewer.getYaw() + 10);
+                                        getInfo();
+                                    });
+                                    document.getElementById('zoom-in').addEventListener('click', function (e) {
+                                        viewer.setHfov(viewer.getHfov() - 10);
+                                    });
+                                    document.getElementById('zoom-out').addEventListener('click', function (e) {
+                                        viewer.setHfov(viewer.getHfov() + 10);
+                                    });
+                                    document.getElementById('fullscreen').addEventListener('click', function (e) {
+                                        viewer.toggleFullscreen();
+                                    });
+                                </script>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_5">
+                                <style>
+                                    /* Set the size of the div element that contains the map */
+                                    #map {
+                                        height: 400px; /* The height is 400 pixels */
+                                        width: 100%; /* The width is the width of the web page */
+                                    }
+                                </style>
+                                <div id="map"></div>
+                                @{ 
+                                    var lati2 = "10.723665";
+                                    var longi2 = "106.728235";
+                                    if (Model.Latitude !=null)
+                                    {
+                                        lati2 = Model.Latitude;
+                                    }
+                                    if (Model.Longitude != null)
+                                    {
+                                        longi2 = Model.Longitude;
+                                    }
+                                }
+                                <script>
+                                    // Initialize and add the map
+                                    function initMap() {
+                                        // The location of Uluru     
+                                          uluru = { lat: @lati2, lng: @longi2 };                                       
+                                        // The map, centered at Uluru
+                                        var map = new google.maps.Map(
+                                            document.getElementById('map'), { zoom: 18, center: uluru });
+                                        // The marker, positioned at Uluru
+                                        var marker = new google.maps.Marker({ position: uluru, map: map });
+                                    }
+                                </script>
+                                @{
+                                    var config = (CompanyViewModel)HttpContext.Current.Cache.Get("MyConfig");
+                                    var mapApi = config.GoogleMapAPI;
+                                    var scr = mapApi + "&libraries=places&callback=initMap";
+                                }
+                                    <script src="https://maps.googleapis.com/maps/api/js?key=@scr"   async defer></script>
+                               
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+
+                    <!-- nav-tabs-custom -->
+                </div>
+                @if (Model.Note != null)
+                {
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                        <div class="alert alert-info alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-warning"></i> Note!</h4>
+                            @MvcHtmlString.Create(Model.Note)
+                        </div>
+                    </div>
+                }
+                @if (Model.FullDescription != null)
+                {
+                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+                        @MvcHtmlString.Create(Model.FullDescription)
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <div class="box-header" style="cursor: move;">
+                <i class="fa fa-comments-o"></i>
+                <h3 class="box-title">Comments</h3>
+                <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
+                    <div class="btn-group" data-toggle="btn-toggle">
+                        <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i></button>
+                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="slimScrollDiv" style="position: relative; overflow: auto; width: auto; height: auto;">
+                <div class="box-body chat" id="chat-box" style="overflow: auto; width: auto; height: auto;">
+                    <!-- chat item -->
+                    @foreach (var i in Model.lstComments)
+                    {
+                        <div class="item">
+                            <img src="/Content/AdminDashboard/img/avatar.png" alt="user image" class="online">
+                            <p class="message">
+                                <a href="#" class="name">
+                                    <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> @i.CreateDate</small>
+                                    @i.Account.Email
+                                </a>
+                                @i.Contents
+                            </p>
+                        </div><!-- /.item -->
+                    }
+                    <!-- chat item -->
+                </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 184.91124260355px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div>
+            </div><!-- /.chat -->
+            <div class="box-footer">
+                @using (Html.BeginForm("Detail", "Estates", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormComment" }))
+                {
+
+                    <input type="hidden" name="EstateId" value="@Model.Id" />
+                    <div class="input-group">
+                        <input class="form-control" name="content" placeholder="Type message...">
+                        <div class="input-group-btn">
+                            <button id="submitComment" type="submit" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+

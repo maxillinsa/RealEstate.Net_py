@@ -1,0 +1,212 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.ViewModels.Estate_StatusViewModel>
+@{
+    Layout = null;
+    int j = 1;
+}
+
+<script>
+    $(document).ready(function () {
+          $(".delete-Estate_Status").click(function () {
+            var id = $(this).attr("id").replace('deleteId-', '');
+              $("#ItemIdDelete").val(id);
+              showLoader("Updating data...");
+            $("#DeleteEstate_StatusModal").modal();
+        });
+
+        $("#DeleteEstate_StatusOk").click(function () {
+            var id = $("#ItemIdDelete").val();
+            var xoaBtn = '#deleteId-' + id;
+            var trId = '#ItemId-' + id;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UpdateIsDelete", "Estate_Statuses")",
+                data: { itemId: id },
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $(trId).css("color", "red");;
+                    $(xoaBtn).hide(400);
+                    $("#DeleteEstate_StatusModal").modal("hide");
+                    hideLoader();
+                }
+            }); //end save call
+        });
+          $(".undelete-Estate_Status").click(function () {
+            var id = $(this).attr("id").replace('undeleteId-', '');
+              $("#UnItemIdDelete").val(id);
+              $("#UnDeleteEstate_StatusModal").modal();
+              showLoader("Updating data...");
+        });
+
+        $("#UnDeleteEstate_StatusOk").click(function () {
+            var id = $("#UnItemIdDelete").val();
+            var xoaBtn = '#undeleteId-' + id;
+            var trId = '#ItemId-' + id;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("UnUpdateIsDelete", "Estate_Statuses")",
+                data: { itemId: id },
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $(trId).css("color", "green");;
+                    $(xoaBtn).hide(400);
+                    $("#UnDeleteEstate_StatusModal").modal("hide");
+                    hideLoader();
+                }
+            }); //end save call
+        });
+
+
+    });
+</script>
+<div class="modal fade" id="DeleteEstate_StatusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure to delete ? </h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="ItemIdDelete" name="ItemIdDelete" value="0" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="hideLoader()" data-dismiss="modal">Close</button>
+                <button type="button" id="DeleteEstate_StatusOk" class="btn btn-primary">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="UnDeleteEstate_StatusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure to restore? </h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="UnItemIdDelete" name="UnItemIdDelete" value="0" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="hideLoader()" data-dismiss="modal">Close</button>
+                <button type="button" id="UnDeleteEstate_StatusOk" class="btn btn-primary">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 col-md-12">
+    <div id="Loader" style="display:none" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-refresh fa-spin"></i>
+        <p id="LoaderTxt"> </p>
+    </div>
+
+    <div id="showError" style="display:none" class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p id="ErrorTxt"></p>
+    </div>
+</div>
+<table class="table table-bordered table-hover table-striped" id="dataTable">
+    <thead>
+        <tr class="alert-info">
+            <th>No.</th>
+            <th>Name</th>
+            <th>Created Date</th>
+            <th>Updated date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="indexTbody">
+        @foreach (var item in Model)
+        {
+
+            <tr id="ItemId-@item.ItemId">
+                <td>@j </td>
+                <td>
+                    @if (item.Name != null)
+                    {
+                        if (item.Name.Length > 55)
+                        {
+                            <a data-toggle="modal" onclick="RenderActions('/Estate_Statuses/EditAjax')" title="@item.Name" data-target="#modalCrud" class="label label-primary pull-left"> @item.Name.Substring(0, 55) ...    <i class="glyphicon glyphicon-edit"></i></a>
+
+                        }
+                        else
+                        {
+                            <a data-toggle="modal" onclick="RenderActions('/Estate_Statuses/EditAjax/@item.ItemId')" data-target="#modalCrud" class="label label-primary pull-left"> @item.Name     <i class="glyphicon glyphicon-edit"></i> </a>
+
+                        }
+                    }
+                </td>
+
+                <td>
+                    @item.Created
+                </td>
+                <td>
+                    @item.Modified
+                </td>
+                <td>
+
+                    @if (@item.IsDelete == true)
+                    {
+                        <a id="undeleteId-@item.ItemId" title="Is Delete" class="btn btn-sm btn-danger undelete-Estate_Status"><i class="ion-android-close"></i> Deleted</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-info padding-2 " title="Click to view details." style="font-weight:bold" href="/Estate_Statuses/Details/@item.ItemId"> <i class="glyphicon glyphicon-eye-open "></i> View</a>
+                        <a href="/Estate_Statuses/Edit/@item.ItemId" title="Click to edit" class="btn btn-primary btn-sm padding-2"> <i class="fa fa-edit"></i>Edit</a>
+
+                        <a id="deleteId-@item.ItemId" class="btn btn-sm btn-danger padding-2 delete-Estate_Status" title="Delete"> <i class=" fa fa-trash-o"></i> Delete</a>
+
+                        @*<a href="@Url.Action("UpdateIsDelete", "Estate_Statuses", new { id = item.ItemId })" class="btn btn-primary btn-sm" title="Delete" onclick="return confirm('Delete this item ?')"> <i class=" fa fa-trash-o"></i> Delete</a>*@
+
+                    }
+
+                </td>
+
+            </tr>
+            j++;
+        }
+    </tbody>
+</table>
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Estate_Statuses", action = "Index",  name = ViewData["name"] }))
+    <div class="well">
+        Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+        of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#dataTable').dataTable({
+            "bPaginate": false,
+            "bAutoWidth": false,
+            "bFilter": true,
+
+        });
+    });
+</script>
+

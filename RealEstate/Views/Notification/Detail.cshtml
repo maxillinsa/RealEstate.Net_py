@@ -1,0 +1,305 @@
+﻿@model RealEstate.Models.Tb_Comment
+@{
+    ViewBag.Title = "Comment detail";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#content').focus();
+       
+        $('#submitComment').bind('click', function () {
+            showLoader();
+            $("#FormComment").submit();
+        });
+
+    });
+</script>
+
+
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $('#sdtBox').focus(function () {
+                if($('#sdtBox').val()=="Số Điện Thoại")
+                $('#sdtBox').val('');
+            });
+            $('#dcrBox').focus(function () {
+                if($('#dcrBox').val()=="")
+                 $(this).val('');
+            });
+            $('#reload').click(function() {
+                window.location.reload();
+                });
+            function DateFormate(dateFormate) {
+                return $.datepicker.formatDate('dd/mm/yy', new Date());
+            };
+             function showLoader(txt) {
+                 $("#flash").show();
+                     var loader = '<img src="@Url.Content("~/Content/emo/css/images/ajax-loader.gif")" align="absmiddle">&nbsp;<span class="loading">' + txt + '...</span>';
+                     $("#flash").fadeIn(400).html(loader);
+                };
+            function showError(messsage) {
+                $("#error-message").html(messsage);
+                $("#error-message").dialog({
+                    modal: true,
+                    buttons: {
+                        Ok: function () {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            };
+
+             setInterval(function() {
+                 window.location.reload();
+           }, 900000);
+             $(".edittc-dv").live("click", function (e) {
+            e.preventDefault();
+            showLoader('Updating data...');
+            //var noteId = $(this).attr("id").replace('edit-', '');
+             var maKhachHang = $(this).attr("id").replace('edittc-', '');
+            var tagTC = '#edittc-'+maKhachHang;
+            //load note from db and open in dialog
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("NhapTCBy", "BanVe")",
+                data: { },
+                cache: false,
+                dataType: "json",
+                success: function (mynote) {
+                    $("#send-popup").html(mynote.Html);
+                    $("#send-popup").dialog({
+                        resizable: true,
+                        height: 220,
+                        width: 450,
+                        modal: true,
+                        buttons: {
+                            OK: function () {
+                               var nhanVienRuoc = $("#NhanVienRuoc").val();
+                                if (!nhanVienRuoc) {
+                                    showError("Vui Lòng Nhập Nhân Viên Trung Chuyển Khách!");
+                                    return;
+                                }
+                               $("#flash4").show();
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.Action("UpDateNhanVienRuocKhach", "BanVe")",
+                                    data: { maKhachHang : maKhachHang, nhanVienRuoc : nhanVienRuoc},
+                                    cache: false,
+                                    dataType: "json",
+                                    success: function (data) {
+                                            $("#flash4").hide();
+                                              $(tagTC).html(nhanVienRuoc);
+                                            $("#send-popup").dialog("close");
+
+                                    }
+                                }); //end save call
+                            }, // end ok button
+                            Cancel: function () {
+                                $("#flash").hide();
+                                $(this).dialog("close");
+                            }
+                        },
+                        close: function () {
+                            $("#flash").hide();
+                        } //end buttons
+                    }); //end modal edit
+                }
+            }); //end ajax call
+        }); //end edit
+
+          $(".tc-dv").live("click", function (e) {
+            e.preventDefault();
+            showLoader('Updating data...');
+            //var noteId = $(this).attr("id").replace('edit-', '');
+             var maKhachHang = $(this).attr("id").replace('tc-', '');
+            var tagTC = '#tc-'+maKhachHang;
+            //load note from db and open in dialog
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("NhapTCBy", "BanVe")",
+                data: { },
+                cache: false,
+                dataType: "json",
+                success: function (mynote) {
+                    $("#send-popup").html(mynote.Html);
+                    $("#send-popup").dialog({
+                        resizable: true,
+                        height: 220,
+                        width: 450,
+                        modal: true,
+                        buttons: {
+                            OK: function () {
+                               var nhanVienRuoc = $("#NhanVienRuoc").val();
+                                if (!nhanVienRuoc) {
+                                    showError("Vui Lòng Nhập Nhân Viên Trung Chuyển Khách!");
+                                    return;
+                                }
+                               $("#flash4").show();
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.Action("UpDateNhanVienRuocKhach", "BanVe")",
+                                    data: { maKhachHang : maKhachHang, nhanVienRuoc : nhanVienRuoc},
+                                    cache: false,
+                                    dataType: "json",
+                                    success: function (data) {
+                                            $("#flash4").hide();
+                                              $(tagTC).html(nhanVienRuoc);
+                                            $("#send-popup").dialog("close");
+
+                                    }
+                                }); //end save call
+                            }, // end ok button
+                            Cancel: function () {
+                                $("#flash").hide();
+                                $(this).dialog("close");
+                            }
+                        },
+                        close: function () {
+                            $("#flash").hide();
+                        } //end buttons
+                    }); //end modal edit
+                }
+            }); //end ajax call
+        }); //end edit
+
+            $('#nhapBtn').bind('click', function () {
+                var sdt = $('#sdtBox').val();
+                var dcr = $('#dcrBox').val();
+                $('#sdtBox').val('');
+                $('#dcrBox').val('');
+                var maNV = 24;
+                //$('#sdtBox').val('');
+                //$('#dcrBox').val('');
+                if (sdt =='')
+                {
+                    showError("Please input contact number!");
+                     $('#sdtBox').val('Số Điện Thoại');
+                     $('#dcrBox').val('');
+                    return;
+                 }
+                if (sdt == 'Số Điện Thoại') {
+                    showError("Please input contact number!");
+                     $('#sdtBox').val('Số Điện Thoại');
+                     $('#dcrBox').val('');
+                    return;
+                }
+                if (dcr == '') {
+                    showError("Vui lòng nhập !");
+                     $('#sdtBox').val('Số Điện Thoại');
+                     $('#dcrBox').val('');
+                    return;
+                }
+                if (dcr == '') {
+                    showError("Vui lòng nhập !");
+                     $('#sdtBox').val('Số Điện Thoại');
+                     $('#dcrBox').val('');
+                    return;
+                }
+
+                 $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("NewKhachHang", "BanVe")",
+                            data: {   sdt: sdt,dcr: dcr },
+                            cache: false,
+                            dataType: "json",
+                            success: function (data) {
+                                if (data.messages) {
+                                     $('#sdtBox').val('Số Điện Thoại');
+                                     $('#dcrBox').val('');
+                                      var Date =   DateFormate(data.messages.ThoiDiemNhap);
+                                     $('#myTable > tbody:first').append(' <tr class="listRow" id=" ' +data.messages.MaKhachHang+ ' "><td class="listCol"></td><td class="listCol">'+ data.messages.Mobile +'</td><td class="listCol"> '+ data.messages.DiaChiRuoc +'</td><td class="listCol">'+ data.messages.MaNVNhap +'</td><td class="listCol">'+ Date +'</td><td class="listCol">'+ data.messages.NhanVienRuoc +'</td></tr>');
+
+                                } else {
+                                     showError("Error, Nhập không thành công, Click F5!");
+                                }
+                            }
+                        }); //end ajax call
+
+            });
+
+        });
+
+            // Post to /Chat/New when submitting a message.
+</script>*@
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- The time line -->
+        <ul class="timeline">
+            <!-- timeline time label -->
+            <li class="time-label">
+                <span class="bg-red">
+                    @Model.thongBao.CreateDate
+                </span>
+            </li>
+            <!-- /.timeline-label -->
+            <!-- timeline item -->
+            <li>
+                <i class="fa fa-envelope bg-blue"></i>
+                <div class="timeline-item">
+                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+                    <h3 class="timeline-header"><a href="/Account/Edit/@Model.thongBao.AccountId">@Model.thongBao.Account.Email :</a> @Model.thongBao.Title</h3>
+                    <div class="timeline-body">
+                       @MvcHtmlString.Create(Model.thongBao.Content)
+                    </div>
+                    @*<div class="timeline-footer">
+                        <a class="btn btn-primary btn-xs">Read more</a>
+                        <a class="btn btn-danger btn-xs">Delete</a>
+                    </div>*@
+                </div>
+            </li>
+            <!-- END timeline item -->
+            <!-- timeline item -->
+       
+        </ul>
+    </div><!-- /.col -->
+</div>
+<div style=" margin-left:15px" class="col-lg-10">
+    <div class="box box-success">
+        <div class="box-header" style="cursor: move;">
+            <i class="fa fa-comments-o"></i>
+            <h3 class="box-title">Comments</h3>
+            <div class="box-tools pull-right" data-toggle="tooltip" title="" data-original-title="Status">
+                <div class="btn-group" data-toggle="btn-toggle">
+                    <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i></button>
+                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="slimScrollDiv" style="position: relative; overflow: auto; width: auto; height: 250px;">
+            <div class="box-body chat" id="chat-box" style="overflow: auto; width: auto; height: 250px;">
+                <!-- chat item -->
+            @foreach(var i in Model.lstComments)
+            { 
+                <div class="item">
+                    <img src="/Content/AdminDashboard/img/avatar.png" alt="user image" class="online">
+                    <p class="message">
+                        <a href="#" class="name">
+                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> @i.CreateDate</small>
+                           @i.Account.Email
+                        </a>
+                       @i.Contents
+                    </p>
+                </div><!-- /.item -->
+            }
+                <!-- chat item -->
+            </div><div class="slimScrollBar" style="width: 7px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 0px; z-index: 99; right: 1px; height: 184.91124260355px; background: rgb(0, 0, 0);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 0px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(51, 51, 51);"></div>
+        </div><!-- /.chat -->
+        <div class="box-footer">
+@using (Html.BeginForm("Detail", "Notification", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormComment" }))
+{
+    
+            <input type="hidden" name="thongBaoId" value="@Model.thongBao.Id"/>
+            <div class="input-group">
+                <input class="form-control" name="content" placeholder="Type message...">
+                <div class="input-group-btn">
+                    <button id="submitComment" type="submit" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+}
+        </div>
+    </div>
+
+</div>
+

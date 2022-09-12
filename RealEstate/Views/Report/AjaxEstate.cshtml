@@ -1,0 +1,446 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.Estate>
+@{
+
+    Layout = null;
+    int j = 1;
+}
+<table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr class="alert-info">
+            <th>No.</th>
+            <th>Town</th>
+            <th>ID</th>
+            <th>House No.</th>
+            <th style="width: 50px;">Sqrt</th>
+            <th>Sale Price</th>
+            <th>Sale Unit</th>
+            <th>Rent Price</th>
+            <th>Rent Unit</th>
+            <th>Staff</th>
+            <th>Created Date</th>
+            <th>Update</th>
+            <th style="max-width: 180px;">Properties Owner</th>
+            <th>Hot</th>
+            @*
+            <th>Properties Owner Name</th>
+            <th>Created Date</th>
+            <th>Edit Date</th>
+            <th>Ghi Chú</th>*@
+            @*<th>Delete</th>*@
+          
+        </tr>
+    </thead>
+    <tbody>
+       @foreach (var item in Model)
+                    {
+                        int flag = 0;
+
+                        DateTime today = DateTime.Now;
+                        TimeSpan ngay = today.Subtract(Convert.ToDateTime(item.UpdateDate));
+
+                        if (ngay.Days >= 30 && item.RentPrice != 0)
+                        {
+                            flag = 1;
+                            <tr class="alert-danger" id="Estate-@item.Id">
+                                <td>@j </td>
+                                @*<td>@item.EstateId</td>*@
+
+                                <td>
+                                    @if (@item.TownId != null)
+                                    {
+                                        @item.Town.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Code != null)
+                                    {
+                                        if (item.Code.Length > 55)
+                                        {
+                                            <a href="#" id="send-@item.Id" class="label label-primary send-sp" title="@item.Code">@item.Code.Substring(0, 55) ...</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" id="send-@item.Id" class="label label-primary send-sp">@item.Code</a>
+                                        }
+                                        <div class="modal fade" id="myModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Note </h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                @MvcHtmlString.Create(@item.Note)
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @item.HouseNo
+                                </td>
+                                @*<td>
+                                        @item.MaLo
+                                    </td>*@
+                                <td style="width: 50px;">
+                                    @item.Square
+                                </td>
+                                <td>
+                                    @String.Format("{0:0,0}", @item.SalePrice)
+
+                                </td>
+                                <td>
+                                    @if (@item.SaleUnitId != null)
+                                    {
+                                        @item.SaleUnit.Name
+                                    }
+                                </td>
+                                <td>
+                                    @String.Format("{0:0,0}", @item.RentPrice)
+
+                                </td>
+                                <td>
+                                    @if (@item.RentUnitId != null)
+                                    {
+                                        @item.RentUnit.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Account.FirstName != null)
+                                    {
+                                        @item.Account.FirstName
+                                    }
+                                    else
+                                    {
+                                        @item.Account.Email
+
+                                    }
+
+                                </td>
+                                <td>
+                                    <p title="@item.CreateDate">   @String.Format("{0:dd/MM/yyyy}", @item.CreateDate)</p>
+                                </td>
+                                <td>
+                                    <p title="@item.UpdateDate">  @String.Format("{0:dd/MM/yyyy}", @item.UpdateDate)</p>
+
+                                </td>
+                                <td style="max-width: 180px;">
+                                    @if (ViewBag.currentAccountId.AccountId == @item.AccountId)
+                                    {
+                                        @item.OwnerName <span> - </span>
+                                        @item.Mobile
+                                    }
+                                    else
+                                    {
+                                        if (ViewBag.currentAccountId.DepartmentId == 1)
+                                        {
+                                            @item.OwnerName <span> - </span>
+                                            @item.Mobile
+                                        }
+                                    }
+
+                                </td>
+
+
+                            
+
+                                <td>
+                                    <a title="Click to view history." style="font-weight:bold" href="/Report/Detail/@item.Id"> <i class="fa fa-archive"></i></a>
+                                    @*<a href="@Url.Action("CommentBy","Estates", new { id = item.Id})" class="btn btn-primary padding-2" title="Edit"> Comments</a>*@
+                                </td>
+                            
+                            </tr>
+
+                        }
+                        if (ngay.Days >= 60 && item.SalePrice != 0 && flag == 0)
+                        {
+                            flag = 1;
+                            <tr class="alert-danger" id="Estate-@item.Id">
+                                <td>@j</td>
+
+                                <td>
+                                    @if (@item.TownId != null)
+                                    {
+                                        @item.Town.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Code != null)
+                                    {
+                                        if (item.Code.Length > 55)
+                                        {
+                                            <p id="send-@item.Id" class="label label-primary send-sp" title="@item.Code">@item.Code.Substring(0, 55) ...</p>
+                                        }
+                                        else
+                                        {
+                                            <p id="send-@item.Id" class="label label-primary send-sp">@item.Code</p>
+                                        }
+                                        <div class="modal fade" id="myModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Note </h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                @MvcHtmlString.Create(@item.Note)
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @item.HouseNo
+                                </td>
+                                @*<td>
+                                        @item.MaLo
+                                    </td>*@
+                                <td style="width: 50px;">
+                                    @item.Square
+                                </td>
+                                <td>
+                                    @String.Format("{0:0,0}", @item.SalePrice)
+
+                                </td>
+                                <td>
+                                    @if (@item.SaleUnitId != null)
+                                    {
+                                        @item.SaleUnit.Name
+                                    }
+                                </td>
+                                <td>
+                                    @String.Format("{0:0,0}", @item.RentPrice)
+
+                                </td>
+                                <td>
+                                    @if (@item.RentUnitId != null)
+                                    {
+                                        @item.RentUnit.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Account.FirstName != null)
+                                    {
+                                        @item.Account.FirstName
+                                    }
+                                    else
+                                    {
+                                        @item.Account.Email
+
+                                    }
+
+                                </td>
+                                <td>
+                                    <p title="@item.CreateDate">   @String.Format("{0:dd/MM/yyyy}", @item.CreateDate)</p>
+                                </td>
+                                <td>
+                                    <p title="@item.UpdateDate">  @String.Format("{0:dd/MM/yyyy}", @item.UpdateDate)</p>
+
+                                </td>
+                                <td style="max-width: 180px;">
+                                    @if (ViewBag.currentAccountId.AccountId == @item.AccountId)
+                                    {
+                                        @item.OwnerName <span> - </span>
+                                        @item.Mobile
+                                    }
+                                    else
+                                    {
+                                        if (ViewBag.currentAccountId.DepartmentId == 1)
+                                        {
+                                            @item.OwnerName <span> - </span>
+                                            @item.Mobile
+                                        }
+                                    }
+
+                                </td>
+
+                                <td>
+                                    <a title="Click to view history." style="font-weight:bold" href="/Report/Detail/@item.Id"> <i class="fa fa-archive"></i></a>
+                                  
+                                </td>
+                            
+                            </tr>
+                        }
+                        if (flag == 0)
+                        {
+                            <tr class="" id="Estate-@item.Id">
+                                <td>@j</td>
+
+                                <td>
+                                    @if (@item.TownId != null)
+                                    {
+                                        @item.Town.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Code != null)
+                                    {
+                                        if (item.Code.Length > 55)
+                                        {
+                                            <p id="send-@item.Id" class="label label-primary send-sp" title="@item.Code">@item.Code.Substring(0, 55) ...</p>
+                                        }
+                                        else
+                                        {
+                                            <p id="send-@item.Id" class="label label-primary send-sp">@item.Code</p>
+                                        }
+                                        <div class="modal fade" id="myModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Note </h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                @MvcHtmlString.Create(@item.Note)
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @item.HouseNo
+                                </td>
+                                @*<td>
+                                        @item.MaLo
+                                    </td>*@
+                                <td style="width: 50px;">
+                                    @item.Square
+                                </td>
+                                <td>
+                                    @String.Format("{0:0,0}", @item.SalePrice)
+
+                                </td>
+                                <td>
+                                    @if (@item.SaleUnitId != null)
+                                    {
+                                        @item.SaleUnit.Name
+                                    }
+                                </td>
+                                <td>
+                                    @String.Format("{0:0,0}", @item.RentPrice)
+
+                                </td>
+                                <td>
+                                    @if (@item.RentUnitId != null)
+                                    {
+                                        @item.RentUnit.Name
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Account.FirstName != null)
+                                    {
+                                        @item.Account.FirstName
+                                    }
+                                    else
+                                    {
+                                        @item.Account.Email
+
+                                    }
+
+                                </td>
+                                <td>
+                                    <p title="@item.CreateDate">   @String.Format("{0:dd/MM/yyyy}", @item.CreateDate)</p>
+                                </td>
+                                <td>
+                                    <p title="@item.UpdateDate">  @String.Format("{0:dd/MM/yyyy}", @item.UpdateDate)</p>
+
+                                </td>
+                                <td style="max-width: 180px;">
+                                    @if (ViewBag.currentAccountId.AccountId == @item.AccountId)
+                                    {
+                                        @item.OwnerName <span> - </span>
+                                        @item.Mobile
+                                    }
+                                    else
+                                    {
+                                        if (ViewBag.currentAccountId.DepartmentId == 1)
+                                        {
+                                            @item.OwnerName <span> - </span>
+                                            @item.Mobile
+                                        }
+                                    }
+
+                                </td>
+
+                            
+
+                                <td>
+                                    <a title="Click to view history." style="font-weight:bold" href="/Report/Detail/@item.Id"> <i class="fa fa-archive"></i></a>
+                                 
+                                </td>
+                             
+                            </tr>
+                        }
+                        j++;
+                    }
+    </tbody>
+</table>
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Report", action = "ModificationReport" ,kyHieu = ViewData["kyHieu"], FromDate = ViewData["FromDate"], LocTheo = ViewData["LocTheo"] }))
+    <div class="well">
+        Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+        of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+    </div>
+</div>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>

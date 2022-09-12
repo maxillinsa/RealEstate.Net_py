@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Login Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@model PagedList.IPagedList<RealEstate.Models.LoginLog>
+@using PagedList;
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Login Info Management </h3>
+    </div><!-- /.box-header -->
+   
+    <div class="box-body table-responsive no-padding" id="div-store-content">
+        <table class="table table-hover" id="SanPhams">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>UserName</th>
+                    <th>Address Ip</th>
+                    <th>Loged in time</th>
+                 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                        <td>@item.Account.UserName</td>
+                        <td>
+                          @item.IPAddress
+                        </td>                       
+                        <td>@item.CreateDate</td>
+                    </tr>
+                            j++;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>No.</th>
+                    <th>UserName</th>
+                    <th>Address Ip</th>
+                    <th>Loged in time</th>
+                </tr>
+
+            </tfoot>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

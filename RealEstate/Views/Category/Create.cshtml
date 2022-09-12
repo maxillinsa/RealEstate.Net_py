@@ -1,0 +1,200 @@
+﻿@model RealEstate.Models.Category
+@{
+    ViewBag.Title = " category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function changeImageView(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imageUser').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("Create", "Category", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1"> Category info</a></li>
+                    <li ><a data-toggle="tab" href="#tab_2">SEO</a></li>
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label>Select Category Group</label>
+                                       @Html.DropDownList("GroupCategoryId", (SelectList)ViewBag.GroupCategory, " -- Select category group-- ", new {id = "combo-product", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.GroupCategoryId)
+                                    </div>
+                                 
+                                    <div class="col-md-3 form-group">
+                                        <label>Category Type</label>
+                                        @Html.DropDownList("CategoryTypeId", (SelectList)ViewBag.CategoryType, " -- Select category type-- ", new { id = "combo-product", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CategoryTypeId)
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label>Parent Category</label>
+                                        @Html.DropDownList("ParentCategoryId", (SelectList)ViewBag.CategoryParent, " -- Select parent category-- ", new { id = "combo-product", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ParentCategoryId)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                   
+                                    <div class="col-md-12 form-group">
+                                        <label>Category/ project name</label>
+                                        @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control", placeholder = "Input Name..." })
+                                        @Html.ValidationMessageFor(model => model.CategoryName)
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-6 form-group">
+                                        <label>Category Level</label>
+                                        @Html.TextBoxFor(model => model.CateLevel, new { @class = "form-control", placeholder = "Input category level..." })
+                                        @Html.ValidationMessageFor(model => model.CategoryName)
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label>No.</label>
+                                        @Html.TextBoxFor(model => model.OrderNumber, new { @class = "form-control", placeholder = "Input Order Number of category..." })
+                                        @Html.ValidationMessageFor(model => model.OrderNumber)
+                                    </div>
+                                </div>
+                                <div class="box box-info">
+                                    <div class="box-header">
+                                        <h3 class="box-title"> Category descriptions<small>Descriptions</small></h3>
+                                        <!-- tools box -->
+                                        <div class="pull-right box-tools">
+                                            <button type="button" class="btn btn-info btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><i class="fa fa-minus"></i></button>
+                                        </div><!-- /. tools -->
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body pad">
+                                        @Html.TextAreaFor(model => model.Description, new { @id = "Description" })
+                                    </div>
+                                </div><!-- /.box -->
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Profile Image</label>
+                                    <img src="~/Media/Images/category/noImage.jpg" id="imageUser" width="128" height="128" class="float-left" style="border-radius:50%" />
+                                    @*<input type="file" id="uploadFile" onchange="changeImageView(this)" value="" style="display:none" accept="image/x-png, image/jpeg" />*@
+                                    <input type="file" accept="jpg|png|jpeg" class="btn btn-primary" name="txtFile" id="uploadFile" size="40" onchange="changeImageView(this)" />
+                                    @Html.ValidationSummary(true)
+                                    @Html.ValidationMessage("txtFile")
+                                    @Html.ValidationMessageFor(model => model.Image)
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-Product Info -->
+                    <div id="tab_2" class="tab-pane">
+                        <div class="box box-warning">
+                            <div class="box-header">
+                                <h3 class="box-title">SEO</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label>MetaTitle</label>
+                                            @Html.TextBoxFor(model => model.MetaTitle, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter MetaTitle  ..." })
+
+                                            @Html.ValidationMessageFor(model => model.MetaTitle)
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>Alias</label>
+                                            @Html.TextBoxFor(model => model.Alias, new { @class = "form-control", id = "MetaTitle", placeholder = "Enter Alias  ..." })
+                                            @Html.ValidationMessageFor(model => model.Alias)
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label>MetaKeywords</label>
+                                            @Html.TextBoxFor(model => model.MetaKeywords, new { @class = "form-control", id = "MetaKeywords", placeholder = "Enter MetaKeywords  ..." })
+                                            @Html.ValidationMessageFor(model => model.MetaKeywords)
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 form-group">
+                                            <label>MetaDescription</label>
+                                            @Html.TextAreaFor(model => model.MetaDescription, new { @class = "form-control", id = "MetaDescription", placeholder = "Enter MetaDescription  ..." })
+                                            @Html.ValidationMessageFor(model => model.MetaDescription)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div><!-- /.tab-SEO -->
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(function () {
+            tinyMCE.init({
+                selector: '#Description',
+                height: 300,
+                theme: 'modern',
+                plugins: [
+                     "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                     "save table contextmenu directionality emoticons template paste textcolor"
+                ],
+                content_css: "css/content.css",
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                style_formats: [
+                     { title: 'Bold text', inline: 'b' },
+                     { title: 'Red text', inline: 'span', styles: { color: '#ff0000' } },
+                     { title: 'Red header', block: 'h1', styles: { color: '#ff0000' } },
+                     { title: 'Example 1', inline: 'span', classes: 'example1' },
+                     { title: 'Example 2', inline: 'span', classes: 'example2' },
+                     { title: 'Table styles' },
+                     { title: 'Table row 1', selector: 'tr', classes: 'tablerow1' }
+                ], file_browser_callback: RoxyFileBrowser
+            });
+        
+        });
+        function RoxyFileBrowser(field_name, url, type, win) {
+            var roxyFileman = '@Url.Content("~/Content/AdminDashboard/filebrowser/index.html")';
+            if (roxyFileman.indexOf("?") < 0) {
+                roxyFileman += "?type=" + type;
+            }
+            else {
+                roxyFileman += "&type=" + type;
+            }
+            roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+            tinyMCE.activeEditor.windowManager.open({
+                file: roxyFileman,
+                title: 'File manager',
+                width: 850,
+                height: 650,
+                resizable: "yes",
+                plugins: "media",
+                inline: "yes",
+                close_previous: "no"
+            }, { window: win, input: field_name });
+            return false;
+        }
+    </script>
+}

@@ -1,0 +1,61 @@
+﻿@model RealEstate.Models.Department
+
+@{
+    ViewBag.Title = " Department";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        function showLoader() {
+            var loader = '<i class="fa-li fa fa-spinner fa-2x fa-spin">';
+            $(".show-spin").fadeIn(400).html(loader);
+        };
+        $('#Save').bind('click', function () {
+            showLoader();
+            $("#FormProCreate").submit();
+        });
+
+    });
+</script>
+
+@using (Html.BeginForm("Create", "Departments", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">  Department </a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 form-group">
+                                        <label>Company <i class="fa fa-asterisk text-red"></i></label>
+                                        @Html.DropDownList("CompanyId", (SelectList)ViewBag.Companies, " -- Select Company-- ", new { id = "CompanyId", @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CompanyId)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Department name</label>
+                                        @Html.TextBoxFor(model => model.DepartmentName, new { @class = "form-control", placeholder = "Department name..." })
+                                        @Html.ValidationMessageFor(model => model.DepartmentName)
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-SanPham Info -->
+
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+    </div>
+
+}

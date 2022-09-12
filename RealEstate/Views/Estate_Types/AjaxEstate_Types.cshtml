@@ -1,0 +1,93 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.Estate_Types>
+@{
+
+    Layout = null;
+    int j = 1;
+}
+
+<table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr class="alert-info">
+            <th>No.</th>
+            <th>Name</th>
+            <th>Created Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="indexTbody">
+        @foreach (var item in Model)
+        {
+
+            <tr id="@item.ItemId">
+                <td>@j </td>
+                <td>
+                    @if (item.Name != null)
+                    {
+                        @item.Name
+                    }
+                </td>
+
+                <td>
+                    @item.CreateDate
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-info " title="Click to view details." style="font-weight:bold" href="/Estate_Types/Detail/@item.ItemId"> <i class="fa fa-archive"></i></a>
+                    @if (@item.IsDelete == true)
+                    {
+                        <button type="button" title="Is Delete" class="btn btn-sm btn-danger "><i class="ion-android-close"></i></button>
+                    }
+                    else
+                    {
+                        <button type="button" title="Active" class="btn btn-sm btn-success "><i class="ion-checkmark-circled"> </i> </button>
+                    }
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" onclick="RenderActions('/Estate_Types/Edit/@item.ItemId')" data-target="#modalCrud">Edit</button>
+                </td>
+
+            </tr>
+                    j++;
+        }
+    </tbody>
+</table>
+
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Index", action = "Estate_Type" }))
+    <div class="well">
+        Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+        of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+    </div>
+</div>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>

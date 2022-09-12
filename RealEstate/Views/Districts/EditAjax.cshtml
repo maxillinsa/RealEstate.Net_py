@@ -1,0 +1,79 @@
+﻿
+@model RealEstate.Models.ViewModels.DistrictViewModel
+@{
+    ViewBag.Title = @ViewBag.Title;
+    Layout = null;
+}
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({ cache: false });
+        $('#Name').focus();
+        // Class add select2 
+        $('.select2').select2();
+    });
+</script>
+<div class="box box-info">
+    <div id="showError" style="display:none" class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p id="ErrorTxt"></p>
+    </div>
+    <div class="box-header with-border">
+        <button class="btn btn-sm pull-right btn-danger" type="button" id="btnCloseModal" aria-label="Close" data-dismiss="modal">X</button>
+        <h3 class="box-title">@ViewBag.Title</h3>
+    </div>
+    <!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("EditAjax", "Districts", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCrud", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(m => m.ItemId)
+        <div class="box-body">
+            <div class=" col-md-12 form-group">
+                <label class="col-sm-2 control-label">State/City<sup><i class="fa fa-star text-red"></i> </sup>:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="ProvinceId" id="ProvinceId">
+                        @foreach (var i in (SelectList)ViewBag.Provinces)
+                        {
+                            if (i.Value != null)
+                            {
+                                if (Model.ProvinceId == Convert.ToInt32(i.Value))
+                                {
+                                    <option selected value="@i.Value">@i.Text</option>
+                                }
+                                else
+                                {
+                                    <option value="@i.Value">@i.Text</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Name<sup><i class="fa fa-star text-red"></i> </sup>:</label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", maxlength = "200", placeholder = "Input name..." })
+                        @Html.ValidationMessageFor(model => model.Name)
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Content:</label>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(model => model.Content, new { @class = "form-control", placeholder = "Input details..." })
+                        @Html.ValidationMessageFor(model => model.Content)
+                    </div>
+                </div>
+
+            </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button class="btn btn-success pull-right" type="button" onclick="EditAjax()"> Save </button>
+        </div>
+        <!-- /.box-footer -->
+    }
+
+</div>

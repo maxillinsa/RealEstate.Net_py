@@ -1,0 +1,89 @@
+﻿@model List<Web.Models.Category>
+
+
+<div class="nav-search-outer">
+    <!-- nav start -->
+
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-16">
+                    <a href="javascript:;" class="toggle-search pull-right"><span class="ion-ios7-search"></span></a>
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <ul class="nav navbar-nav text-uppercase main-nav ">
+                            @foreach (var i in Model)
+                            {
+                                if (i.CateLevel == 1)
+                                {
+                                    List<Web.Models.Category> lst2 = new List<Web.Models.Category>();
+                                    foreach (var j in Model)
+                                    {
+                                        if (j.ParentCategoryId == i.CategoryId)
+                                        {
+                                            lst2.Add(j);
+                                        }
+                                    }
+                                    if (lst2.Count == 0)
+                                    {
+                                        <li><a href="/Category/Index/@i.CategoryId">@i.CategoryName</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="dropdown">
+                                            <a href="/Category/Index/@i.CategoryId" class="dropdown-toggle" data-toggle="dropdown">@i.CategoryName<span class="ion-ios7-arrow-down nav-icn"></span></a>
+                                            <ul class="dropdown-menu text-capitalize" role="menu">
+                                                @foreach(var x in lst2)
+                                             {
+                                                     <li><a href="/Category/Index/@x.CategoryId"><span class="ion-ios7-arrow-right nav-sub-icn"></span>@x.CategoryName</a></li>
+                                             }
+                                            </ul>
+                                        </li>
+                                    }
+                                   
+                                }
+                            }
+
+                      
+                            @*<li class="dropdown">
+                                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Pages<span class="ion-ios7-arrow-down nav-icn"></span></a>
+                                <ul class="dropdown-menu text-capitalize" role="menu">
+                                    <li><a href="sections-page-style-1.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>sections page style 1</a></li>
+                                    <li><a href="sections-page-style-2.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>sections page style 2</a></li>
+                                    <li><a href="section-topic-details.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>section topic details</a></li>
+                                    <li><a href="404.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>404</a></li>
+                                    <li><a href="author-page.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>author page</a></li>
+                                    <li><a href="contact-us.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>contact us</a></li>
+                                    <li><a href="search-result-found.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>search result found</a></li>
+                                    <li><a href="search-result-not-found.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>search result not found</a></li>
+                                    <li><a href="faqs.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>FAQ's</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">blog<span class="ion-ios7-arrow-down nav-icn"></span></a>
+                                <ul class="dropdown-menu text-capitalize" role="menu">
+                                    <li><a href="blog-masonry.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>blog masonry</a></li>
+                                    <li><a href="post-item-details.html"><span class="ion-ios7-arrow-right nav-sub-icn"></span>post item details</a></li>
+                                </ul>
+                            </li>*@
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- nav end -->
+        <!-- search start -->
+
+        <div class="search-container ">
+            <div class="container">
+                <form action="#" method="post" role="search">
+                    <input id="search-bar" placeholder="Type & Hit Enter.." autocomplete="off">
+                </form>
+            </div>
+        </div>
+        <!-- search end -->
+    </nav>
+    <!--nav end-->
+</div>

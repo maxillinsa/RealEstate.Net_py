@@ -1,0 +1,36 @@
+﻿@model RealEstate.Models.Account
+
+    <!-- User Account: style can be found in dropdown.less -->
+    <li class="dropdown user user-menu">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="glyphicon glyphicon-user"></i>
+            <span>@Model.Email <i class="caret"></i></span>
+        </a>
+        <ul class="dropdown-menu">
+            <!-- User image -->
+            <li class="user-header bg-light-blue">
+                <img src="/Content/logo.jpg" class="img-circle" alt="User Image" />
+                <p>
+                    <a class="btn btn-sm btn-bitbucket padding-2" href="/Account/Profile/@Model.AccountId">  @Model.FirstName - @Model.LastName </a>                  
+                    <small>@Model.Email</small>
+                </p>
+            </li>
+            <!-- Menu Body -->
+            <li class="user-body">               
+                <div class="col-xs-8 col-md-8 text-center">
+                    <a href="/Estates/?accountId=@Model.AccountId">You have <p class="label label-primary"> @ViewBag.totalByAccount estate in the list </p></a>
+                </div>              
+            </li>
+            <!-- Menu Footer-->
+            <li class="user-footer">
+                <div class="pull-left">
+                    <!--@Url.Action("ChangePassword","Account")-->
+                    <a href="#" class="btn btn-default btn-flat">Change Password</a>
+                </div>
+                <div class="pull-right">
+                    <a href="@Url.Action("LogOut", "Account")" class="btn btn-default btn-flat">Sign out</a>
+                </div>
+            </li>
+        </ul>
+    </li>
+

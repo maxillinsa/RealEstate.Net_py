@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "User Account";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int j = 1;
+}
+@model PagedList.IPagedList<RealEstate.Models.Account>
+@using PagedList.Mvc;
+<div class="box-tools" style="margin-bottom:10px">
+    <div class="input-group">
+        <input type="text" name="table_search" id="txt-search-store" class="form-control input-sm pull-right" style="width: 200px;" placeholder="Input minium 2 character" />
+        <div class="input-group-btn">
+            <span class="btn btn-sm btn-default" id="btn-search-store"><i class="fa fa-search"></i></span>
+        </div>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Accounts</h3>
+    </div><!-- /.box-header -->
+    <p>
+        <a class="btn btn-success" href="/Account/Create"> Account</a>
+    </p>
+    <div class="box-body table-responsive no-padding" id="div-Category-content">
+        <table class="table table-hover" id="accounts">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                   
+                    <th>Department</th>
+                    <th>UserName</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Log History</th>
+                    <th>Status?</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@j</td>
+                      
+                          @*  <a href="/Conpanies/Edit/@item.Department.CompanyId"> @item.Department.Company.CompanyName </a>*@
+
+                        
+                        <td>
+                            @if (item.Department != null)
+                            {
+                                <a href="/Departments/Edit/@item.DepartmentId"> @item.Department.DepartmentName </a>
+                            }
+                        </td>
+                        <td>
+                            <label class="label label-primary">@item.UserName</label>
+                        </td>
+                        <td>
+                            @item.FirstName @item.LastName
+
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            <a href="tel:@item.Mobile">@item.Mobile</a>
+                        </td>
+                        <td>
+                            @item.LastSignIn
+                        </td>
+                        <td>
+                            @if (item.IsDelete == true)
+                            {
+                                <label class="label label-danger">
+                                    Is deleted?
+                                </label>
+                            }
+
+                        </td>
+                        <td>
+
+                            <a href="@Url.Action("Index","Estates", new { accountId = item.AccountId})" class="btn btn-default padding-2" style="font-weight:bold; color:blue" title="Edit">Product</a>
+                            <a href="@Url.Action("CreateByAccount","AccountRoles", new { id = item.AccountId})" class="btn btn-success padding-2" title="Edit"> Role</a>
+
+                            <a href="@Url.Action("ChangePassword", new { id = item.AccountId})" class="btn btn-warning padding-2" title="Password Change"> Password Change </a>
+                            <a href="@Url.Action("Edit", new { id = item.AccountId})" class="btn btn-primary padding-2" title="Edit"> Edit</a>
+                            @if (item.IsDelete == false)
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.AccountId, isDelete = true})" class="btn btn-danger padding-2" title="Delete account" onclick="return confirm('Delete this account?')">Delete</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Delete", new { id = item.AccountId, isDelete = false})" class="btn btn-success padding-2" title="Restore account" onclick="return confirm('Restore this account?')">Restore</a>
+                            }
+                                <a class="btn btn-sm btn-bitbucket padding-2" href="/Account/Profile/@item.AccountId"> <i class="glyphicon glyphicon-user"></i> </a>
+                        </td>
+                    </tr>
+                    j++;
+                }
+            </tbody>
+            <tfoot>
+
+                <tr>
+                    <th>No.</th>
+                   
+                    <th>Department</th>
+                    <th>UserName</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Log History</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+        @Html.PagedListPager(Model, page => Url.Action("index", new { page = page }), PagedListRenderOptions.OnlyShowFivePagesAtATime)
+
+    </div><!-- /.box-body -->
+</div>

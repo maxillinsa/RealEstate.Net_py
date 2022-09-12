@@ -1,0 +1,132 @@
+﻿
+@model RealEstate.Models.ViewModels.CompanyViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#Save').bind('click', function () {
+            $("#FormProCrud").submit();
+        });
+        $("#Name").focus();
+    });
+</script>
+@using (Html.BeginForm("Edit", "Companies", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCrud" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(x=> x.Id)
+
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">@ViewBag.Title</a></li>
+
+                    <li class="pull-right">
+                        <button type="button" id="Save" class="btn btn-success"> Save </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.CompanyName, new { @class = "form-control", placeholder = "Company Name..." })
+                                        @Html.ValidationMessageFor(model => model.CompanyName)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Address..." })
+                                        @Html.ValidationMessageFor(model => model.Address)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.TaxCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.TaxCode, new { @class = "form-control", placeholder = "Tax ID..." })
+                                        @Html.ValidationMessageFor(model => model.TaxCode)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.ExchageRateUSD, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.ExchageRateUSD, new { @class = "form-control", placeholder = "USD exchange rate..." })
+                                        @Html.ValidationMessageFor(model => model.ExchageRateUSD)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.CallCenter, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.CallCenter, new { @class = "form-control", placeholder = "Call center..." })
+                                        @Html.ValidationMessageFor(model => model.CallCenter)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", placeholder = "Email..." })
+                                        @Html.ValidationMessageFor(model => model.EmailAddress)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.FacebookPage, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.FacebookPage, new { @class = "form-control", placeholder = "Address FanPage Facebook..." })
+                                        @Html.ValidationMessageFor(model => model.FacebookPage)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.YoutubeChanel, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.YoutubeChanel, new { @class = "form-control", placeholder = "Youtube channel..." })
+                                        @Html.ValidationMessageFor(model => model.YoutubeChanel)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.TwitterPage, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.TwitterPage, new { @class = "form-control", placeholder = "TwitterPage..." })
+                                        @Html.ValidationMessageFor(model => model.TwitterPage)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.GoogleAnalytics, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.GoogleAnalytics, new { @class = "form-control", placeholder = "GoogleAnalytics..." })
+                                        @Html.ValidationMessageFor(model => model.GoogleAnalytics)
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.NumberOfExpirationDates, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.NumberOfExpirationDates, new { @class = "form-control", placeholder = "Exprity date..." })
+                                        @Html.ValidationMessageFor(model => model.NumberOfExpirationDates)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.DefaulPageSize, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.DefaulPageSize, new { @class = "form-control", placeholder = "Total estates default page size..." })
+                                        @Html.ValidationMessageFor(model => model.DefaulPageSize)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.GoogleMapAPI, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.GoogleMapAPI, new { @class = "form-control", placeholder = "GoogleMapAPI..." })
+                                        @Html.ValidationMessageFor(model => model.GoogleMapAPI)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.ImageUrlLogo, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextBoxFor(model => model.ImageUrlLogo, new { @class = "form-control", placeholder = "Logo Url" })
+                                        @Html.ValidationMessageFor(model => model.ImageUrlLogo)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.TextAreaFor(model => model.Content, new { @class = "form-control", placeholder = "Content" })
+                                        @Html.ValidationMessageFor(model => model.Content)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        @Html.LabelFor(model => model.IsMaintenance, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.IsMaintenance)
+                                            @Html.ValidationMessageFor(model => model.IsMaintenance)
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!-- /.tab-Product Info -->
+
+            </div><!-- /.tab-content -->
+        </div>
+    </div>
+}
+

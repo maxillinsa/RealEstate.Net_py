@@ -1,0 +1,427 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.ViewModels.EstateViewModel>
+@{
+
+    Layout = null;
+    int j = 1;
+}
+<script>
+    $(document).ready(function () {
+        // Call Note show modal
+        $(".send-sp").click(function () {
+            var productId = $(this).attr("id").replace('send-', '');
+            var modalId = '#myModal-' + productId;
+            $(modalId).modal();
+        });
+        $(".delete-sp").click(function () {
+            var productId = $(this).attr("id").replace('delete-', '');
+            $("#maSPXoa").val(productId);
+            $("#xoaModal").modal();
+        });
+
+        $("#xoaData").click(function () {
+            // var productId = $(this).attr("id").replace('delete-', '');
+            var productId = $("#maSPXoa").val();
+            var xoaBtn = '#delete-' + productId;
+            var trId = '#Estate-' + productId;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("XoaEstate", "Estates")",
+                data: { productId: productId },
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $(trId).addClass("daXoaSP");
+                    $(xoaBtn).hide(400);
+                    $("#xoaModal").modal("hide");
+                }
+            }); //end save call
+        });
+        $(".undelete-sp").click(function () {
+            var productId = $(this).attr("id").replace('undelete-', '');
+            $("#maSPPhucHoi").val(productId);
+            $("#phucHoiModal").modal();
+
+        });
+        $("#phucHoiData").click(function () {
+            // var productId = $(this).attr("id").replace('delete-', '');
+            var productId = $("#maSPPhucHoi").val();
+            var phBtn = '#undelete-' + productId;
+            var trId = '#Estate-' + productId;
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PhucHoiEstate", "Estates")",
+                data: { productId: productId },
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    $(trId).removeClass("daXoaSP");
+                    $(phBtn).hide(400);
+                    $("#phucHoiModal").modal("hide");
+                }
+            }); //end save call
+        });
+
+        $("#suaData").click(function () {
+            var productId = $("#maSPPhucHoi").val();
+            var url = '@Url.Action("Edit", "Estates")';
+            window.location.href = url + "/" + productId;
+        });
+
+    });
+</script>
+<div class="modal fade" id="xoaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Are you sure to delete this product? </h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="maSPXoa" name="maSPXoa" value="0" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="xoaData" class="btn btn-primary">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="phucHoiModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Please select action </h4>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="maSPPhucHoi" name="maSPPhucHoi" value="0" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" id="suaData" class="btn btn-success">Edit</button>
+                <button type="button" id="phucHoiData" class="btn btn-warning">Restore</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover table-striped" id="Estates1">
+    <thead>
+        <tr class="alert-info">
+            <th>No.</th>
+            <th>State/City/Region</th>
+            <th>Town</th>
+            <th>ID</th>
+            <th>House No.</th>
+            <th>Sqrt</th>
+            <th>For Sale</th>
+            <th>For Rent</th>
+            <th>Staff</th>          
+            <th>Update</th>
+            <th style="max-width: 120px;">Properties Owner</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody id="indexTbody">
+        @foreach (var item in Model)
+        {
+            int flag = 0;
+
+            DateTime today = DateTime.Now;
+            TimeSpan ngay = today.Subtract(Convert.ToDateTime(item.UpdateDate));
+
+            if (ngay.Days >= 30 && item.RentPrice != 0)
+            {
+                flag = 1;
+            }
+            if (ngay.Days >= 60 && item.SalePrice != 0 && flag == 0)
+            {
+                flag = 2;
+            }
+        <tr class="alert-@flag" id="Estate-@item.Id">
+            @if (item.IsOutSide.HasValue && item.IsOutSide.Value)
+            {
+            <td class="bg-green color-palette">
+                @if (@item.Note != null)
+                {
+                    <a id="send-@item.Id" class="label label-success send-sp">@j</a>
+                }
+                else
+                {
+                    <a id="send-@item.Id" class="label label-primary">@j</a>
+                }                
+            </td>
+            }
+            else
+            {
+                <td>
+                    @if (@item.Note != null)
+                    {
+                        <a id="send-@item.Id" class="label label-success send-sp">@j</a>
+                    }
+                    else
+                    {
+                        <a id="send-@item.Id" class="label label-primary">@j</a>
+                    }
+                </td>
+            }
+            <td>
+                @{
+                    var source = " ";
+                    if (item.Province != null)
+                    {
+                        source += @item.Province.Name + " / ";
+                    }
+                    if (item.District != null)
+                    {
+                        source += @item.District.Name + " / ";
+
+                    }
+                    if (item.WardId != null)
+                    {
+                        source += @item.Ward.Name;
+
+                    }
+                }
+                @source
+            </td>
+            <td>
+                @if (@item.TownId != null)
+                {
+                    @item.Town.Name
+                }
+            </td>
+            <td>
+                @if (item.Code != null)
+                {
+                    if (item.Code.Length > 55)
+                    {
+                        if (@item.Note != null)
+                        {
+                            <a id="send-@item.Id" class="label label-success send-sp" title="@item.Code">@item.Code.Substring(0, 55) ...</a>
+                        }
+                        else
+                        {
+                            <a id="send-@item.Id" class="label label-primary send-sp" title="@item.Code">@item.Code.Substring(0, 55) ...</a>
+                        }
+                    }
+                    else
+                    {
+                        if (@item.Note != null)
+                        {
+                            <a id="send-@item.Id" class="label label-success send-sp">@item.Code</a>
+                        }
+                        else
+                        {
+                            <a id="send-@item.Id" class="label label-primary">@item.Code</a>
+                        }
+                    }
+                    <div class="modal fade" id="myModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Note </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            @MvcHtmlString.Create(@item.Note)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </td>
+            <td>
+                <a class="label">@item.HouseNo</a>
+            </td>
+            <td style="width: 50px;">
+                @item.LandArea <span> m2</span>
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.FinalSalePriceStr))
+                {
+                    <span class="label label-danger"> @item.FinalSalePriceStr</span><br />
+                    if (item.ShowSaleUnit)
+                    {
+                        @item.SalePrice
+                        if (@item.SaleUnitId != null)
+                        {
+                            <span>@item.SaleUnit.Name</span>
+                        }
+                    }
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.FinalRentPriceStr))
+                {
+                    <span class="label label-danger"> @item.FinalRentPriceStr</span><br />
+                    if (item.ShowRentUnit)
+                    {
+                        @item.RentPrice
+                        if (@item.RentUnitId != null)
+                        {
+                            <span>@item.RentUnit.Name</span>
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(item.RentPriceInUSD))
+                    {
+                        <span>@item.RentPriceInUSD</span>
+                    }
+                }
+            </td>
+            <td>
+                @if (item.AccountId != null)
+                {
+                    if (item.Account.FirstName != null)
+                    {
+                        @item.Account.FirstName
+                        <span> - </span>
+                        <a href="tel:@item.Account.Mobile">@item.Account.Mobile</a>
+                    }
+                    else
+                    {
+                        @item.Account.Email
+
+                    }
+                }
+            </td>
+            <td>
+                <p title="@item.UpdateDate (@ngay.Days)">  @String.Format("{0:dd/MM/yyyy}", @item.UpdateDate) </p>
+
+            </td>
+            <td style="max-width: 180px;">
+                @if (ViewBag.currentAccountId.AccountId == @item.AccountId)
+                {
+                    @item.OwnerName <span> - </span>
+                    <a href="tel:@item.Mobile">@item.Mobile</a>
+                }
+                else
+                {
+                    if (ViewBag.currentAccountId.DepartmentId == 1)
+                    {
+                        @item.OwnerName <span> - </span>
+                        <a href="tel:@item.Mobile">@item.Mobile</a>
+                    }
+                }
+            </td>
+
+            <td>
+                <a class="btn btn-sm btn-info padding-2" title="Click to view details." style="font-weight:bold" href="/Estates/Detail/@item.Id"> <i class="glyphicon glyphicon-align-justify"> </i></a>
+
+
+                @if (ViewBag.currentAccountId.AccountId == @item.AccountId)
+                {
+                    if (item.IsDelete == false)
+                    {
+                        <a data-toggle="modal" onclick="RenderActions('/Estates/EditEstate/@item.Id')" data-target="#modalCrud" class="btn btn-sm padding-2 btn-success"> <i class="fa fa-edit"></i></a>
+                    }
+                }
+                else
+                {
+                    if (ViewBag.currentAccountId.DepartmentId == 1)
+                    {
+                        <a data-toggle="modal" onclick="RenderActions('/Estates/EditEstate/@item.Id')" data-target="#modalCrud" class="btn btn-sm padding-2 btn-success"> <i class="fa fa-edit"></i></a>
+                    }
+                }
+                @if (ViewBag.currentAccountId.AccountId == @item.AccountId)
+                {
+                    if (item.IsDelete == false)
+                    {
+
+                        <a id="delete-@item.Id" class="btn btn-sm btn-danger padding-2 delete-sp" title="Delete"> <i class="fa fa-trash-o"></i></a>
+                    }
+                    else
+                    {
+                        <a id="undelete-@item.Id" href="#" class="btn btn-sm btn-warning padding-2 undelete-sp" title="Delete"> Restore</a>
+                    }
+                }
+                else
+                {
+                    if (ViewBag.currentAccountId.DepartmentId == 1)
+                    {
+                        if (item.IsDelete == false)
+                        {
+
+                            <p id="delete-@item.Id" class="btn btn-sm btn-danger padding-2 delete-sp" title="Delete"> <i class="fa fa-trash-o"></i></p>
+
+                        }
+                        else
+                        {
+
+                            <p id="undelete-@item.Id" class="btn btn-sm btn-warning padding-2 undelete-sp" title="Delete"> Restore</p>
+                        }
+                    }
+                }
+            </td>
+
+        </tr>
+            j++;
+        }
+    </tbody>
+</table>
+
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Estates", action = "Index", kyHieu = ViewData["kyHieu"], khuPho = ViewData["khuPho"], Estate_TypeId = ViewData["Estate_TypeId"], loaiMucGia = ViewData["loaiMucGia"], Estate_GroupId = ViewData["Estate_GroupId"], acreage = ViewData["acreage"], IsHot = ViewData["IsHot"], Estate_StatusId = ViewData["Estate_StatusId"], Estate_ProjectId = ViewData["Estate_ProjectId"] , Number_Lot = ViewData["Number_Lot"] , houseNumber = ViewData["houseNumber"] , Number_Paper = ViewData["Number_Paper"], accountId = ViewData["accountId"] ,SortId = ViewData["SortId"] }))
+    <div class="well">
+        Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+        of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+    </div>
+</div>
+<style>
+    #products_info {
+        display: none;
+    }
+
+    .pagination {
+        display: inherit;
+    }
+
+    .pager1 {
+        text-align: center;
+    }
+</style>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#Estates1').dataTable({
+            "bPaginate": false,
+            "bAutoWidth": false,
+            "bFilter": true,
+
+        });
+    });
+</script>

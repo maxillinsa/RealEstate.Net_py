@@ -1,0 +1,84 @@
+﻿@model RealEstate.Models.Customer
+@{
+    ViewBag.Title = " customer";
+    Layout = null;
+}
+
+@using (Html.BeginForm("Edit", "Customer", FormMethod.Post, new { enctype = "multipart/form-data", id = "FormProCreate" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.CustomerId)
+    <div class="row">
+        <div class="box box-warning">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab_1">Edit Customer Details</a></li>
+                    <li class="pull-right">
+                        <button class="btn btn-sm pull-right btn-danger" type="button" id="btnCloseModal" data-dismiss="modal">X</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="tab_1" class="tab-pane active">
+                        <div class="box box-warning">
+                            <br />
+                            <div id="Loader" style="display:none" class="alert alert-success alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <i class="fa fa-refresh fa-spin"></i>
+                                <p id="LoaderTxt"> </p>
+                            </div>
+
+                            <div id="showError" style="display:none" class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <p id="ErrorTxt"></p>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class=" col-md-12 form-group">
+                                        <label class="col-sm-3 control-label">Category<sup><i class="fa fa-star text-red"></i> </sup>:</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" name="CustomerCategoryId" id="CustomerCategoryId">
+                                                @foreach (var i in (SelectList)ViewBag.CustomerCategories)
+                                                {
+                                                    if (i.Value != null)
+                                                    {
+                                                        if (Model.CustomerCategoryId == Convert.ToInt32(i.Value))
+                                                        {
+                                                            <option selected value="@i.Value">@i.Text</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@i.Value">@i.Text</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Customer name</label>
+                                        @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", placeholder = "Input Name..." })
+                                        @Html.ValidationMessageFor(model => model.CustomerName)
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Contact number</label>
+                                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", placeholder = "Contact number ..." })
+                                        @Html.ValidationMessageFor(model => model.Mobile)
+                                    </div>
+
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!-- /.tab-SanPham Info -->
+
+                </div><!-- /.tab-content -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button class="btn btn-success" type="button" onclick="Edit()"> Save </button>
+        </div>
+    </div>
+
+}

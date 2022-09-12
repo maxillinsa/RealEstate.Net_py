@@ -1,0 +1,48 @@
+﻿
+@model RealEstate.Models.Estate_Types
+@{
+    Layout = null;
+}
+<div class="modal-header">
+    <button class="btn btn-sm pull-right btn-danger" type="button" id="btnCloseModal" data-dismiss="modal">X</button>
+    <h2 class="pull-left">Edit</h2>
+</div>
+<div class="modal-body">
+    @using (Html.BeginForm("Edit", "Estate_Types", FormMethod.Post))
+    {
+        <div class="form-horizontal" id="CreateForm">
+            @Html.AntiForgeryToken()
+          
+            <input type="hidden" name="ItemId" value="@Model.ItemId" id="Estate_TypesId" />
+           
+            <div class="form-group">
+                <label for="Name" class="col-sm-4 control-label">Name </label>
+                <div class="col-sm-8">
+
+                    @Html.TextBoxFor(model => model.Name, new { @class = "form-control", placeholder = "Estate Type name" })
+                  
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="IsDelete" class="col-sm-4 control-label">Delete Status</label>
+                <div class="col-sm-8">
+                    @if (Model.IsDelete == null || Model.IsDelete == false)
+                    {
+                        @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true }) <span>Yes</span>
+                        @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false, @checked = "checked" }) <span>No</span>
+                    }
+                    else
+                    {
+                        @Html.RadioButtonFor(model => model.IsDelete, true, new { value = true, @checked = "checked" }) <span>Yes</span>
+                        @Html.RadioButtonFor(model => model.IsDelete, false, new { value = false }) <span>No</span>
+                    }
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button class="btn btn-success" type="button" onclick="Edit()"> Save </button>
+        </div>
+    }
+</div>

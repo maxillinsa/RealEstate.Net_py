@@ -1,0 +1,139 @@
+﻿@using MvcPaging
+@model  MvcPaging.IPagedList<RealEstate.Models.ViewModels.CompanyViewModel>
+@{
+    Layout = null;
+    int j = 1;
+}
+
+<div class="col-lg-12 col-md-12">
+    <div id="Loader" style="display:none" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <i class="fa fa-refresh fa-spin"></i>
+        <p id="LoaderTxt"> </p>
+    </div>
+
+    <div id="showError" style="display:none" class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p id="ErrorTxt"></p>
+    </div>
+</div>
+<table class="table table-bordered table-hover table-striped" id="dataTable">
+    <thead>
+        <tr class="alert-info">
+            <th>No.</th>
+            <th>CompanyName</th>
+            <th>ExchageRateUSD</th>
+            <th>Email address</th>
+            <th>IsMaintenance</th>
+            <th>Google Map API</th>
+            <th>IsActive</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="indexTbody">
+        @foreach (var item in Model)
+        {
+
+        <tr id="ItemId-@item.Id">
+            <td>@j </td>
+            <td>
+                @if (item.CompanyName != null)
+                {
+                    if (item.CompanyName.Length > 55)
+                    {
+                        <a data-toggle="modal" title="@item.CompanyName" class="label label-primary pull-left"> @item.CompanyName.Substring(0, 55) ...    <i class="glyphicon glyphicon-edit"></i></a>
+
+                    }
+                    else
+                    {
+                        <a data-toggle="modal"class="label label-primary pull-left"> @item.CompanyName     <i class="glyphicon glyphicon-edit"></i> </a>
+
+                    }
+                }
+            </td>
+
+            <td>
+                @item.ExchageRateUSD
+            </td>
+            <td>
+                @item.EmailAddress
+            </td>
+            <td>
+
+                @if (@item.IsMaintenance == true)
+                {
+                    <a id="unMaintenanceId-@item.Id" title="Is Delete" class="btn btn-sm btn-danger undelete-country"> Under Maintenance</a>
+                }
+                else
+                {
+
+                    <a id="MaintenanceId-@item.Id" class="btn btn-sm btn-success padding-2 " title="Click for maintenance system"> Maintenanced</a>
+                }
+
+            </td>
+            <td>
+                @item.GoogleMapAPI
+            </td>
+            <td>
+
+                @if (@item.IsActive == true)
+                {
+                    <a id="unActiveId-@item.Id" title="Is Delete" class="btn btn-sm btn-danger undelete-country">  Inactive</a>
+                }
+                else
+                {
+
+                    <a id="ActiveId-@item.Id" class="btn btn-sm btn-success padding-2 " > Active</a>
+                }
+
+            </td>
+            <td>
+                @* <a class="btn btn-sm btn-info padding-2 " title="Click to view details." style="font-weight:bold" href="/Countries/Details/@item.Id"> <i class="glyphicon glyphicon-eye-open "></i> View</a>*@
+
+                <a href="/Companies/Edit/@item.Id" title="Click to edit" class="btn btn-primary btn-sm padding-2"> <i class="fa fa-edit"></i>Edit</a>
+
+            </td>
+        </tr>
+            j++;
+        }
+    </tbody>
+</table>
+<div class="pager1">
+    @Html.Raw(Ajax.Pager(
+            new Options
+            {
+                PageSize = Model.PageSize,
+                TotalItemCount = Model.TotalItemCount,
+                CurrentPage = Model.PageNumber,
+                ItemTexts = new ItemTexts() { Next = "Next", Previous = "Previous", Page = "P" },
+                ItemIcon = new ItemIcon() { First = "icon-backward", Previous = "icon-chevron-left", Next = "icon-chevron-right", Last = "icon-forward" },
+                TooltipTitles = new TooltipTitles() { Next = "Next page", Previous = "Previous page", Page = "Page {0}." },
+                Size = Size.normal,
+                Alignment = Alignment.centered,
+                IsShowControls = true,
+                IsShowFirstLast = true,
+                CssClass = "light-theme"
+            },
+            new AjaxOptions
+            {
+                UpdateTargetId = "grid-list",
+                OnBegin = "beginPaging",
+                OnSuccess = "successPaging",
+                OnFailure = "failurePaging"
+            }, new { controller = "Countries", action = "Index",  name = ViewData["name"] }))
+    <div class="well">
+        Showing <span class="badge badge-success">@Model.ItemStart</span> to <span class="badge badge-success">@Model.ItemEnd</span>
+        of <span class="badge badge-info">@Model.TotalItemCount</span> entries
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#dataTable').dataTable({
+            "bPaginate": false,
+            "bAutoWidth": false,
+            "bFilter": true,
+
+        });
+    });
+</script>
+

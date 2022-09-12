@@ -1,0 +1,469 @@
+﻿@model List<Web.Models.Article>
+
+<div class="col-md-11 col-sm-11">
+    <div class="row">
+        <!-- business start -->
+        <div class="col-sm-16 business  wow fadeInDown animated" data-wow-delay="1s" data-wow-offset="50">
+            <div class="main-title-outer pull-left">
+                <div class="main-title">
+              
+                    <a class="main-title1" style="color:white; " href="/Category/Index/ @ViewBag.view1.category.CategoryId">@ViewBag.view1.category.CategoryName </a>  
+           
+                </div>
+                <div class="span-outer"><span class="pull-right text-danger last-update"><span class="ion-android-data icon"></span>Last update: 2 days ago</span> </div>
+            </div>
+            <div class="row">
+                <div class="col-md-11 col-sm-16">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-9 col-xs-16">
+                            <div class="topic">
+                                <a href="/Product/Detail/@ViewBag.view1.productTop.ProductId">
+                                    <img class="img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/product/")@ViewBag.view1.productTop.Image" width="600" height="398" alt="" />
+                                    <h3>@ViewBag.view1.productTop.ProductName</h3>
+                                    <div class="text-danger sub-info-bordered">
+                                        <div class="time"><span class="ion-android-data icon"></span>@ViewBag.view1.productTop.CreatedDate</div>
+                                        <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                        <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                    </div>
+                                </a>
+                                @if (ViewBag.view1.productTop.Description != null)
+                                {
+                                    if (ViewBag.view1.productTop.Description.Length > 250)
+                                    {
+                                        <p>@MvcHtmlString.Create(ViewBag.view1.productTop.Description.Substring(0, 250))...</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@MvcHtmlString.Create(ViewBag.view1.productTop.Description)</p>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-sm-7 col-xs-16">
+                            <ul class="list-unstyled">
+
+                                @foreach (var item in ViewBag.view1.ListPro)
+                                {
+                                    <li>
+                                        <a href="/Product/Detail/@item.ProductId">
+                                            <div class="row">
+                                                <div class="col-sm-5 hidden-sm hidden-md"><img class="img-thumbnail pull-left" src="@Url.Content("~/Content/images/")/business/business-th-1.jpg" width="76" height="76" alt="" /> </div>
+                                                <div class="col-sm-16 col-md-16 col-lg-11">
+                                                    <h4>
+                                                        @item.ProductName
+                                                    </h4>
+                                                    <div class="text-danger sub-info">
+                                                        <div class="time"><span class="ion-android-data icon"></span>@item.CreatedDate</div>
+                                                        <div class="comments"><span class="ion-chatbubbles icon"></span>351</div>
+                                                        <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-16 hidden-sm hidden-xs  left-bordered">
+                    <div id="vid-thumbs" class="owl-carousel">
+                        <div class="item">
+                            <div class="vid-thumb-outer">
+                                <div class="vid-thumb">
+                                    <a class="popup-youtube" href="https://www.youtube.com/watch?v=GvsiogHKTUc">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-1.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Phim giới thiệu về khu đô thị Phú Mỹ Hưng</h4>
+                                    </a>
+                                </div>
+                                <div class="vid-thumb">
+                                    <a class="popup-youtube" href="https://www.youtube.com/watch?v=YO8pLiVY5Rk">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-2.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Toàn cảnh khu đô thị Phú Mỹ Hưng - đô thị thịnh vượng và an toàn.</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="vid-thumb-outer">
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-1.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Phim giới thiệu về khu đô thị Phú Mỹ Hưng</h4>
+                                    </a>
+                                </div>
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-2.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Cras tincidunt enim non metus ultricies.</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="vid-thumb-outer">
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-1.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Perspiciatis unde omnis iste natus</h4>
+                                    </a>
+                                </div>
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-2.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Cras tincidunt enim non metus ultricies.</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+        </div>
+        <div class="col-sm-16 business  wow fadeInDown animated" data-wow-delay="1s" data-wow-offset="50">
+            <div class="main-title-outer pull-left">
+                <div class="main-title"><a class="main-title1" style="color:white; " href="/Category/Index/ @ViewBag.view2.category.CategoryId">@ViewBag.view2.category.CategoryName </a>
+</div>
+                <div class="span-outer"><span class="pull-right text-danger last-update"><span class="ion-android-data icon"></span>Last update: 2 days ago</span> </div>
+            </div>
+            <div class="row">
+                <div class="col-md-11 col-sm-16">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-9 col-xs-16">
+                            <div class="topic">
+                                <a href="/Product/Detail/@ViewBag.view2.productTop.ProductId">
+                                    <img class="img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/product/")@ViewBag.view2.productTop.Image" width="600" height="398" alt="" />
+                                    <h3>@ViewBag.view2.productTop.ProductName</h3>
+                                    <div class="text-danger sub-info-bordered">
+                                        <div class="time"><span class="ion-android-data icon"></span>@ViewBag.view2.productTop.CreatedDate</div>
+                                        <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                        <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                    </div>
+                                </a>
+                                @if (ViewBag.view2.productTop.Description != null)
+                                {
+                                    if (ViewBag.view2.productTop.Description.Length > 250)
+                                    {
+                                        <p>@MvcHtmlString.Create(ViewBag.view2.productTop.Description.Substring(0, 250))...</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@MvcHtmlString.Create(ViewBag.view2.productTop.Description)</p>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-md-8 col-sm-7 col-xs-16">
+                            <ul class="list-unstyled">
+
+                                @foreach (var item in ViewBag.view2.ListPro)
+                                {
+                                    <li>
+                                        <a href="/Product/Detail/@item.ProductId">
+                                            <div class="row">
+                                                <div class="col-sm-5 hidden-sm hidden-md"><img class="img-thumbnail pull-left" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/product/")@item.Image" width="76" height="76" alt="" /> </div>
+                                                <div class="col-sm-16 col-md-16 col-lg-11">
+                                                    <h4>
+                                                        @item.ProductName
+                                                    </h4>
+                                                    <div class="text-danger sub-info">
+                                                        <div class="time"><span class="ion-android-data icon"></span>@item.CreatedDate</div>
+                                                        <div class="comments"><span class="ion-chatbubbles icon"></span>351</div>
+                                                        <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-16 hidden-sm hidden-xs  left-bordered">
+                    <div id="vid-thumbs" class="owl-carousel">
+                        <div class="item">
+                            <div class="vid-thumb-outer">
+                                <div class="vid-thumb">
+                                    <a class="popup-youtube" href="https://www.youtube.com/watch?v=GvsiogHKTUc">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-1.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Phim giới thiệu về khu đô thị Phú Mỹ Hưng</h4>
+                                    </a>
+                                </div>
+                                <div class="vid-thumb">
+                                    <a class="popup-youtube" href="https://www.youtube.com/watch?v=YO8pLiVY5Rk">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-2.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Toàn cảnh khu đô thị Phú Mỹ Hưng - đô thị thịnh vượng và an toàn.</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="vid-thumb-outer">
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-1.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Phim giới thiệu về khu đô thị Phú Mỹ Hưng</h4>
+                                    </a>
+                                </div>
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-2.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Cras tincidunt enim non metus ultricies.</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="vid-thumb-outer">
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-1.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Perspiciatis unde omnis iste natus</h4>
+                                    </a>
+                                </div>
+                                <div class="vid-thumb">
+                                    <a href="#">
+                                        <div class="vid-box"><span class="ion-ios7-film"></span><img class="img-thumbnail img-responsive" src="@Url.Content("~/Content/images/")/business/business-vid-2.jpg" width="250" height="143" alt="" /> </div>
+                                        <h4>Cras tincidunt enim non metus ultricies.</h4>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- business end -->
+        <!-- Science & Travel start -->
+
+        <div class="col-sm-16">
+            <div class="row">
+                <div class="col-xs-16 col-sm-8  wow fadeInLeft animated science" data-wow-delay="0.5s" data-wow-offset="130">
+                    <div class="main-title-outer pull-left">
+                        <div class="main-title">@ViewBag.view3.category.CategoryName</div>
+                        <div class="span-outer"><span class="pull-right text-danger last-update"><span class="ion-android-data icon"></span>Last update: 2 days ago</span> </div>
+                    </div>
+                    <div class="row">
+                        <div class="topic col-sm-16">
+                            <a href="/Article/Detail/@ViewBag.view3.articleTop.ArticleId">
+                                <img class=" img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@ViewBag.view3.articleTop.Image" width="600" height="227" alt="" />
+                                @if (ViewBag.view3.articleTop.Title != null)
+                                {
+                                    if (ViewBag.view3.articleTop.Title.Length > 150)
+                                    {
+                                        <h3> @ViewBag.view3.articleTop.Title.Substring(0, 150)...</h3>
+                                    }
+                                    else
+                                    {
+                                        <h3> @ViewBag.view3.articleTop.Title</h3>
+                                    }
+                                }
+                                <div class="text-danger sub-info-bordered ">
+                                    <div class="time"><span class="ion-android-data icon"></span>Dec 9 2014</div>
+                                    <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                    <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                </div>
+                            </a>
+
+                            @if (ViewBag.view3.articleTop.Short != null)
+                            {
+                                if (ViewBag.view3.articleTop.Short.Length > 180)
+                                {
+                                    @MvcHtmlString.Create(ViewBag.view3.articleTop.Short.Substring(0, 180))
+                                }
+                                else
+                                {
+                                    @MvcHtmlString.Create(ViewBag.view3.articleTop.Short)
+                                }
+                            }
+
+
+                        </div>
+                        <div class="col-sm-16">
+                            <ul class="list-unstyled  top-bordered ex-top-padding">
+
+                                @foreach (var item in ViewBag.view3.ListArt)
+                                {
+                                    <li>
+                                        <a href="/Article/Detail/@item.ArticleId">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 hidden-sm  "><img width="76" height="76" alt="" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@item.Image" class="img-thumbnail pull-left"> </div>
+                                                <div class="col-lg-13 col-md-12">
+                                                    <h4>
+                                                        @item.Title
+                                                    </h4>
+                                                    <div class="text-danger sub-info">
+                                                        <div class="time"><span class="ion-android-data icon"></span>@item.CreateDate</div>
+                                                        <div class="comments"><span class="ion-chatbubbles icon"></span>351</div>
+                                                        <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8 col-xs-16 wow fadeInRight animated" data-wow-delay="0.5s" data-wow-offset="130">
+                    <div class="main-title-outer pull-left">
+                        <div class="main-title">@ViewBag.view4.category.CategoryName</div>
+                        <div class="span-outer"><span class="pull-right text-danger last-update"><span class="ion-android-data icon"></span>Last update: 2 days ago</span> </div>
+                    </div>
+                    <div class="row left-bordered">
+                        <div class="topic col-sm-16">
+                            <a href="/Article/Detail/@ViewBag.view4.articleTop.ArticleId">
+                                <img class="img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@ViewBag.view4.articleTop.Image" width="600" height="227" alt="" />
+                                @if (ViewBag.view4.articleTop.Title != null)
+                                {
+                                    if (ViewBag.view4.articleTop.Title.Length > 150)
+                                    {
+                                        <h3> @ViewBag.view4.articleTop.Title.Substring(0, 150)...</h3>
+                                    }
+                                    else
+                                    {
+                                        <h3> @ViewBag.view4.articleTop.Title</h3>
+                                    }
+                                }
+                                <div class="text-danger sub-info-bordered">
+                                    <div class="time"><span class="ion-android-data icon"></span>Dec 9 2014</div>
+                                    <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                    <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                </div>
+                            </a>
+                            @if (ViewBag.view4.articleTop.Short != null)
+                            {
+                                if (ViewBag.view4.articleTop.Short.Length > 180)
+                                {
+                                    @MvcHtmlString.Create(ViewBag.view4.articleTop.Short.Substring(0, 180))
+                                }
+                                else
+                                {
+                                    @MvcHtmlString.Create(ViewBag.view4.articleTop.Short)
+                                }
+                            }
+                        </div>
+                        <div class="col-sm-16">
+                            <ul class="list-unstyled top-bordered ex-top-padding">
+
+                                @foreach (var item in ViewBag.view4.ListArt)
+                                {
+                                    <li>
+                                        <a href="/Article/Detail/@item.ArticleId">
+                                            <div class="row">
+                                                <div class="col-lg-3 col-md-4 hidden-sm  "><img width="76" height="76" alt="" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@item.Image" class="img-thumbnail pull-left"> </div>
+                                                <div class="col-lg-13 col-md-12">
+                                                    <h4>
+                                                        @item.Title
+                                                    </h4>
+                                                    <div class="text-danger sub-info">
+                                                        <div class="time"><span class="ion-android-data icon"></span>@item.CreateDate</div>
+                                                        <div class="comments"><span class="ion-chatbubbles icon"></span>351</div>
+                                                        <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <!-- Scince & Travel end -->
+        <!-- lifestyle start-->
+        <div class="col-sm-16 wow fadeInUp animated " data-wow-delay="0.5s" data-wow-offset="100">
+            <div class="main-title-outer pull-left">
+                <div class="main-title">Thông Tin Cần Biết</div>
+                <div class="span-outer"><span class="pull-right text-danger last-update"><span class="ion-android-data icon"></span>Last update: 3 days ago</span> </div>
+            </div>
+            <div class="row">
+                <div id="owl-lifestyle" class="owl-carousel owl-theme lifestyle pull-left">
+                    @foreach(var item in Model)
+                    {
+                        <div class="item topic">
+                        <a href="/Article/Detail/@item.ArticleId">
+                            <img class="img-thumbnail" src="@Url.Content("http://admin.batdongsandaiphat.vn/Media/Images/article/")@item.Image" width="300" height="132" alt="" />
+                            <h4>@item.Title</h4>
+                            <div class="text-danger sub-info-bordered remove-borders">
+                                <div class="time"><span class="ion-android-data icon"></span>@item.CreateDate</div>
+                                <div class="comments"><span class="ion-chatbubbles icon"></span>204</div>
+                                <div class="stars"><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star"></span><span class="ion-ios7-star-half"></span></div>
+                            </div>
+                        </a>
+                    </div> 
+                    }
+                   
+                  
+                </div>
+            </div>
+            <hr>
+        </div>
+        <!-- lifestyle end -->
+        <!--Recent videos start-->
+        @*<div class="col-sm-16 recent-vid wow fadeInDown animated " data-wow-delay="0.5s" data-wow-offset="50">
+                <div class="main-title-outer pull-left">
+                    <div class="main-title">recent videos</div>
+                    <div class="span-outer"><span class="pull-right text-danger last-update"><span class="ion-android-data icon"></span>Last update: 1 day ago</span> </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-11 col-xs-16">
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div id="vid-first" class="tab-pane embed-responsive embed-responsive-16by9 active">
+                                <iframe width="514" height="289" src="http://www.youtube.com/embed/OFDAGiPJHL8?showinfo=0" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                            <div id="vid-second" class="tab-pane embed-responsive embed-responsive-16by9">
+                                <iframe width="514" height="289" frameborder="0" allowfullscreen="" src="http://www.youtube.com/embed/TEnNaUg6Vm4?rel=0&amp;showinfo=0"></iframe>
+                            </div>
+                            <div id="vid-third" class="tab-pane embed-responsive embed-responsive-16by9">
+                                <iframe width="514" height="289" src="http://www.youtube.com/embed/rDZ1AjDJjFI?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 col-xs-2">
+                        <!-- required for floating -->
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs tabs-right hidden-xs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#vid-first">
+                                    <div class="vid-thumb">
+                                        <div class="vid-box"><span class="ion-eye"></span><img class="img-thumbnail" src="@Url.Content("~/Content/images/")/recent-videos/re-vid-1.jpg" width="234" height="87" alt="" /> </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#vid-second">
+                                    <div class="vid-thumb">
+                                        <div class="vid-box"><span class="ion-eye"></span><img class="img-thumbnail" src="@Url.Content("~/Content/images/")/recent-videos/re-vid-2.jpg" width="234" height="87" alt="" /> </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#vid-third">
+                                    <div class="vid-thumb">
+                                        <div class="vid-box"><span class="ion-eye"></span><img class="img-thumbnail" src="@Url.Content("~/Content/images/")/recent-videos/re-vid-3.jpg" width="234" height="87" alt="" /> </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+            </div>*@
+        <!--Recent videos end-->
+        <!--wide ad start-->
+        <div class="col-sm-16 wow fadeInDown animated " data-wow-delay="0.5s" data-wow-offset="25"><img class="img-responsive" src="@Url.Content("~/Content/images/")/ads/728-90-ad.gif" width="728" height="90" alt="" /></div>
+        <!--wide ad end-->
+
+    </div>
+</div>
