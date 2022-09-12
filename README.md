@@ -1,7 +1,7 @@
 # Fedro RealEstate.Net_py
 ## RealEstate  is an exciting workplace for Real Estate Agencies to manage their properties listing. Manage Properties information. For hire or Sale. Maintain Property images and documents.
 
-## Built with ASP.NET/C#, Python and Bootstrap
+## Built with ASP.NET/C#, Razor MVC, Python, Bootstrap, OOP, SOLID
 
 ![This is an image](https://www.ifeapp.com/realestate2.PNG)
 
